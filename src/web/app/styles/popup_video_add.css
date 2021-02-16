@@ -1,0 +1,312 @@
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, main, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section {
+    display: block
+}
+
+[hidden] {
+    display: none
+}
+
+body {
+    line-height: 1
+}
+
+ol, ul {
+    list-style: none
+}
+
+blockquote, q {
+    quotes: none
+}
+
+blockquote:after, blockquote:before, q:after, q:before {
+    content: "";
+    content: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%
+}
+
+.cdk-overlay-container {
+    position: fixed;
+    z-index: 1000
+}
+
+.cdk-overlay-container:empty {
+    display: none
+}
+
+.cdk-global-overlay-wrapper {
+    display: flex;
+    position: absolute;
+    z-index: 1000
+}
+
+.cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 1000;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%
+}
+
+.cdk-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity .4s cubic-bezier(.25, .8, .25, 1);
+    opacity: 0
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 1
+}
+
+@media screen and (-ms-high-contrast: active) {
+    .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+        opacity: .6
+    }
+}
+
+.cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, .32)
+}
+
+.cdk-overlay-transparent-backdrop, .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 0
+}
+
+.cdk-overlay-connected-position-bounding-box {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    min-width: 1px;
+    min-height: 1px
+}
+
+.cdk-global-scrollblock {
+    position: fixed;
+    width: 100%;
+    overflow-y: scroll
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@keyframes fade-in-out {
+    0%, 100% {
+        opacity: 0
+    }
+    50% {
+        opacity: 1
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes change-dots {
+    33% {
+        content: "."
+    }
+    66% {
+        content: ".."
+    }
+    99% {
+        content: "..."
+    }
+}
+
+@keyframes wiggle {
+    from {
+        transform: rotate(-10deg)
+    }
+    to {
+        transform: rotate(10deg)
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%)
+    }
+    100% {
+        transform: translateX(-100%)
+    }
+}
+
+@keyframes slide-left {
+    0% {
+        transform: translateX(0)
+    }
+    100% {
+        transform: translateX(-100%)
+    }
+}
+
+@keyframes marquee-bounce {
+    0% {
+        transform: translateX(0)
+    }
+    100% {
+        transform: translateX(-50%)
+    }
+}
+
+* {
+    box-sizing: border-box
+}
+
+html {
+    -webkit-text-size-adjust: 100%
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    font-family: source sans pro, sans-serif;
+    font-size: 100%;
+    font-weight: 400
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 200;
+    src: local("Source Sans Pro ExtraLight"), local("SourceSansPro-ExtraLight"), url(/assets/common/fonts/source-sans-pro-extralight.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 300;
+    src: local("Source Sans Pro Light"), local("SourceSansPro-Light"), url(/assets/common/fonts/source-sans-pro-light.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 400;
+    src: local("Source Sans Pro Regular"), local("SourceSansPro-Regular"), url(/assets/common/fonts/source-sans-pro-regular.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 600;
+    src: local("Source Sans Pro SemiBold"), local("SourceSansPro-SemiBold"), url(/assets/common/fonts/source-sans-pro-semi-bold.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 700;
+    src: local("Source Sans Pro Bold"), local("SourceSansPro-Bold"), url(/assets/common/fonts/source-sans-pro-bold.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: source sans pro;
+    font-style: normal;
+    font-weight: 900;
+    src: local("Source Sans Pro Black"), local("SourceSansPro-Black"), url(/assets/common/fonts/source-sans-pro-black.ttf) format("truetype")
+}
+
+.recurly-wrapper, .stripe-wrapper {
+    border: 1px solid #d1d1d3;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    padding: 5px 8px;
+    transition: all .2s ease-in-out
+}
+
+.recurly-wrapper:hover, .stripe-wrapper:hover {
+    border-color: #a4a4a8
+}
+
+.recurly-wrapper--error, .stripe-wrapper--error {
+    border-color: #ff5157 !important
+}
+
+.recurly-wrapper--disabled, .stripe-wrapper--disabled {
+    border-color: #f2f2f2;
+    background-color: #f2f2f2
+}
+
+.stripe-wrapper {
+    padding: 14px
+}
+
+.recurly-hosted-field {
+    height: 38px
+}
+.popup_video_add_container{
+    position: fixed;
+    left: 300px;
+    right: 300px;
+    background-color: #fff;
+    top: 300px;
+    bottom: 300px;
+    min-height: 500px;
+}
+.popup_video_add_container .detail__editor__preview > img{
+    float: left;
+    width: 140px;
+    object-fit: scale-down;
+}
+.popup_video_add_container .video_search_list{
+    margin: 15px 0;
+    padding: 30px 0;
+    text-align: left;
+    text-indent: 10px;
+    font-weight: normal;
+    color: #000 !important;
+}
+.popup_video_add_container img{
+    width: 200px;
+}
+.video_search_list::after{
+    content: '';
+    clear: both;
+}
+.video_add_detail_youtube iframe{
+    height: 320px;
+    width: 480px;
+}

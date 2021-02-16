@@ -1,0 +1,130 @@
+.header {
+    width: 100%;
+    height: 66px;
+    margin: 0 0 80px;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1);
+}
+.header > .Boshow- {
+    display: inline-block;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.45;
+    text-align: left;
+    color: #000000;
+    padding: 18px 40px;
+}
+.header_mode{
+
+}
+.header_mode > button {
+    height: 34px;
+    line-height: 0;
+    border-radius: 22px;
+    background-color: #e6e6e6;
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.14px;
+    text-align: center;
+    color: #7f7f7f;
+    padding: 8px 16px;
+}
+.header_mode > .selected{
+    background-color: #4d20a3;
+    color: #fff;
+}
+
+section#content {
+    background: #eee;
+    position: fixed;
+    top: 66px;
+    bottom: 0;
+    left: 250px;
+    right: 0;
+    z-index: -999;
+    padding: 30px;
+    overflow-y: auto;
+}
+section#content > .title{
+    height: 41px;
+    margin: 0 0 24px 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.34px;
+    text-align: left;
+    color: #121212;
+}
+
+section#content > .title > span{
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.14px;
+    color: #a5a5a5;
+    margin-left: 19px;
+}
+
+.title {
+    width: 100%;
+    min-width: 400px;
+    height: 82px;
+    /*margin: 80px auto;*/
+}
+.title > h1 {
+    width: 100%;
+    height: 50px;
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 1.35;
+    letter-spacing: -0.41px;
+    text-align: center;
+    color: #121212;
+}
+.title > p {
+    width: 100%;
+    height: 20px;
+    font-size: 14px;
+    line-height: 2;
+    letter-spacing: -0.49px;
+    text-align: center;
+    color: #292929;
+}
+
+.modal{
+    overflow: auto;
+}
+.modal > .modal-dialog{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.modal > .modal-dialog > .modal-content{
+    width: 100%;
+    height: 100%;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ellipsis1{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    height: 3.6em;
+    line-height: 3.6em;
+}
+.ellipsis2{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: 3.6em;
+    line-height: 1.8em;
+}

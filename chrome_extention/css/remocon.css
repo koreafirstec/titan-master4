@@ -1,0 +1,134 @@
+/* Over */
+#nav_icon {
+    position: absolute;
+    z-index: 1000;
+    width: 4%;
+    top: 3%;
+    left: 2%;
+    cursor: pointer;
+    background-color: white;
+}
+
+.titan_remocon_over {
+    display: block;
+    position: absolute;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 40%;
+    height: 100%;
+    left: 0px;
+    max-width: 500px;
+}
+
+.titan_remocon_over #remocon_btn {
+    position: sticky;
+}
+
+.titan_remocon_over input[type="button"] {
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-bottom: 1px solid #272727;
+    color: #fff;
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+
+/* Right */
+#remocon_power_on {
+    display: block;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    top: 48%;
+    right: 0;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#remocon_power_off {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 48%;
+    left: 0;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#remocon_icon {
+    width: 100%;
+    height: 100%;
+}
+
+#size_drag_div {
+    display: block;
+    position: fixed;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+.titan_remocon_right {
+    display: block;
+    position: fixed;
+    height: 100%;
+    right: 0;
+    width: 300px;
+    z-index: 1000;
+    background-color: #343a40;
+    border-left: 1.5px solid gray;
+}
+
+.titan_remocon_right input[type="button"] {
+    background-color: #3498db !important;
+    /* width: 50%; */
+    border: 1.4px solid white;
+    /* border-color: transparent; */
+    color: #fff;
+    cursor: pointer;
+    width: calc(100% / 3);
+    height: 50px;
+    /* border-bottom: 1px solid #272727; */
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+
+/* Move */
+.titan_remocon_move {
+    display: block;
+    position: fixed;
+    top: 700px;
+    left: 1250px;
+    width: 100px;
+    height: 190px;
+    z-index: 1000;
+    cursor: move;
+    border: 1px solid gray;
+    background-color: black;
+}
+
+.titan_remocon_move #remocon_title {
+    color: white;
+    padding: 6px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.titan_remocon_move input[type="button"] {
+    background-color: silver !important;
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-bottom: 1px solid #272727;
+    color: #fff;
+    padding: 10px 0;
+    font-size: 16px;
+    border: 1px solid gray;
+}

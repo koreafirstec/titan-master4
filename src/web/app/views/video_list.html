@@ -1,0 +1,420 @@
+<i manage-nav />
+    <section id="content" class="content" data-content-provider-key="akj2995">
+        <section id="contents" class="container module-default" tabindex="1" style="overflow: hidden; outline: none;">
+            <div class="content__header content__header__library">
+                <h3 class="content__header__title">
+                    <span id="library-title">상품 목록</span>
+                    <!--					<span id="leased-channel-title" style="display: none;">대여한 채널</span>-->
+                    <!--					<span id="additional-title" style="display: inline-block;"></span>-->
+                    <div class="library__search__wrap library__search__mobile__wrap" style="margin-left: 8px">
+                        <input type="text" placeholder="검색" class="library__search" ng-model="search_video_title" autocomplete="off" value="">
+                    </div>
+                </h3>
+                <div class="content__header__action">
+                </div><!-- content__header__action -->
+            </div><!-- content__header -->
+
+
+            <section class="new_module">
+                <section id="library-tabs">
+                    <section style="display: none;"></section>
+                    <section id="library-table-wrap" style="overflow-y: auto;">
+
+                        <div id="module-library-header" class="module__library__header module-default">
+                            <div class="btn-toolbar pull-left">
+                                <div id="form-per-page" class="dropdown">
+<!--                                    <button class="btn dropdown-toggle btn__per-page" style="width: 150px;" data-toggle="dropdown" aria-haspopup="true"-->
+<!--                                            aria-expanded="false">{{selectedFilter.text}}-->
+<!--                                    </button>-->
+                                    <button class="btn" ng-click="setFilterItem(FilterItems[0])">{{FilterItems[0].text}}</button>
+                                    <button class="btn" ng-click="setFilterItem(FilterItems[1])">{{FilterItems[1].text}}</button>
+                                    <div class="library__search__wrap" style="float:left; margin-left: 8px">
+                                        <input type="text" placeholder="검색" id="form-search" class="library__search" ng-model="search_video_title" autocomplete="off" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-toolbar pull-right">
+                                <div class="btn-group">
+                                    <button type="button" id="btn-enable-all" class="btn tooltip-message"
+                                            ng-class="selectedFilter.itemValue == 0? disabled: this"
+                                            data-original-title="활성화하기" href=""
+                                            ng-click="video_enable(modify_video_idx, modify_disabled)">
+                                        <i class="fa fa-unlock"></i><span class="btn-label-hidden">활성화하기</span>
+                                    </button>
+                                    <button type="button" id="btn-disable-all" class="btn tooltip-message"
+                                            data-original-title="비활성화하기" href=""
+                                            ng-click="video_disable(modify_video_idx, modify_enabled)">
+                                        <i class="fa fa-lock"></i><span class="btn-label-hidden">비활성화하기</span>
+                                    </button>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button type="button" id="btn-delete-all" class="btn tooltip-message"
+                                            data-confirm-message="삭제하시겠습니까?" data-original-title="삭제하기"
+                                            ng-click="drop_video(modify_video_idx)">
+                                        <i class="fa fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div><!-- btn--toolbar -->
+                        </div>
+
+                        <section id="content-detail-window">
+                            <div class="detail" tabindex="11"
+                                 style="opacity: 1; overflow: hidden; outline: none; display:none;">
+                                <setion class="detail__header">
+                                    <nav class="detail__nav">
+                                        <a ng-click="detail_selected('general')" ng-class="{'active': detail_page == 'general'}">동영상</a>
+                                        <a ng-click="detail_selected('advanced')" ng-class="{'active': detail_page == 'advanced'}">상품</a>
+                                    </nav>
+                                    <button type="button" class="btn__icon btn__icon-xs js-btn-close-detail-window"
+                                            ng-click="detail_video()">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </setion>
+
+                                <!-- 일반 -->
+                                <section class="detail__content" id="detail-general" ng-show="detail_page == 'general'">
+                                    <section class="detail__preview">
+                                        <!--                                        href="/media/preview/e/12014477?mi_output=intro&amp;pf=akj2995-pc1-high&amp;autoplay&amp;purge_cache"-->
+<!--                                        <a ng-click="video_details(video_lib, 0)"-->
+<!--                                           class="content-preview content__preview" data-action="transcoding-preview"-->
+<!--                                           data-id="12014477">-->
+<!--                                            <img src="https://img.youtube.com/vi/{{video_lib.video_url.substr(32, 11)}}/hqdefault.jpg"-->
+<!--                                                 class="player-mockup ready-for-play">-->
+<!--                                            <div class="preview__status">-->
+<!--                                                <svg width="48" height="48" viewBox="0 0 48 48">-->
+<!--                                                    <g stroke-linecap="round" stroke-linejoin="round" stroke-width="3"-->
+<!--                                                       transform="translate(0.5 0.5)" fill="#ffffff" stroke="#ffffff">-->
+<!--                                                        <circle fill="none" stroke="#ffffff" stroke-miterlimit="10"-->
+<!--                                                                cx="24"-->
+<!--                                                                cy="24" r="22"></circle>-->
+<!--                                                        <polygon data-color="color-2" fill="none" stroke-miterlimit="10"-->
+<!--                                                                 points=" 19,32 19,16 32,24 "></polygon>-->
+<!--                                                    </g>-->
+<!--                                                </svg>-->
+<!--                                            </div>-->
+<!--                                        </a>-->
+<!--                                        <youtube class="content-preview content__preview" videoid="{{video_id}}" videoidx="{{video_idx}}"></youtube>-->
+                                            <img id="{{video_id}}"
+                                                     ng-src="https://img.youtube.com/vi/{{video_id}}/hqdefault.jpg"
+                                                     alt="썸네일" style="height: 300px; object-fit: scale-down; cursor: pointer" ng-click="videoDetails(video_lib, 0)"/>
+                                    </section>
+
+                                    <section class="detail__wrap">
+                                        <form class="disable-enter disable-submit" ng-submit="video_option_update(video_lib)">
+                                            <div class="form-group">
+                                                <label>제목
+                                                    <a href="{{video_lib.video_url}}" target="_blank">
+                                                        <img src="../images/common/logos/logo_youtube.png" style="width: 25px; height: 25px;">
+                                                    </a>
+                                                </label>
+                                                <input type="hidden" ng-model="video_lib.idx">
+                                                <input type="text" class="form-control" id="form-title"
+                                                       name="form-title"
+                                                       placeholder="Title" value="{{video_lib.video_title}}"
+                                                       ng-model="video_lib.video_title"
+                                                       ng-disabled="fk_group_idx != 1 && video_lib.fk_user_idx != user_idx">
+                                            </div>
+
+<!--                                            <div class="form-group">-->
+<!--                                                <label>카테고리</label>-->
+<!--                                                <select id="form-categories" class="form-select" name="form-categories" ng-model="video_lib.categories">-->
+<!--                                                    <option value="">선택해주세요</option>-->
+<!--                                                    <option value="셔츠">셔츠</option>-->
+<!--                                                    <option value="셔츠">바지</option>-->
+<!--                                                    <option value="셔츠">모자</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+
+
+
+<!--                                            <div class="form-group">-->
+<!--                                                <label>태그 (최대 10 개)</label>-->
+<!--                                                <div class="input-group-space">-->
+<!--                                                    <input type="text" class="form-control" id="form-tag"-->
+<!--                                                           name="form-tag"-->
+<!--                                                           placeholder="태그">-->
+<!--                                                    <span class="input-group-append">-->
+<!--                                                        <button class="btn" type="button"-->
+<!--                                                                id="btn-attach-tag-to-media-content">추가하기</button>-->
+<!--                                                    </span>-->
+<!--                                                </div>-->
+<!--                                                <div class="tag-cloud" id="tag-cloud"></div>-->
+<!--                                            </div>-->
+
+                                            <div class="form-group row">
+                                                <label class="col-xs-3">상태</label>
+
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="form-radio inline" style="float: left">
+                                                        <input type="radio" id="form-status-enable" name="form-status"
+                                                               value="1" ng-model="video_lib.video_status_value"
+                                                               ng-disabled="fk_group_idx != 1 && video_lib.fk_user_idx != user_idx">
+                                                        <label for="form-status-enable"><i class="fa fa-unlock"></i>활성화</label>
+                                                    </div>
+
+                                                    <div class="form-radio inline" style="float: left">
+                                                        <input type="radio" id="form-status-disable" name="form-status"
+                                                               value="0" ng-model="video_lib.video_status_value"
+                                                               ng-disabled="fk_group_idx != 1 && video_lib.fk_user_idx != user_idx">
+                                                        <label for="form-status-disable"><i class="fa fa-lock"></i>비활성화</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-xs-3">공유</label>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="form-radio inline" style="float: left">
+                                                        <input type="radio" id="form-shared-enable" name="form-shared"
+                                                               value="1" ng-model="video_lib.video_shared"
+                                                               ng-disabled="fk_group_idx != 1 && video_lib.fk_user_idx != user_idx">
+                                                        <label for="form-shared-enable"><i class="fa fa-unlock"></i>공개</label>
+                                                    </div>
+
+                                                    <div class="form-radio inline" style="float: left">
+                                                        <input type="radio" id="form-shared-disable" name="form-shared"
+                                                               value="0" ng-model="video_lib.video_shared"
+                                                               ng-disabled="fk_group_idx != 1 && video_lib.fk_user_idx != user_idx">
+                                                        <label for="form-shared-disable"><i class="fa fa-lock"></i>비공개</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="detail__edit-footer" ng-show="selectedFilter.itemValue == 0">
+                                                <button type="submit" id="btn-update-content"
+                                                        class="btn btn-primary btn-confirm">
+                                                    <i class="fa fa-edit mr-xs"></i>변경하기
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </section>
+                                </section>
+
+                                <!-- 고급 -->
+                                <section class="detail__content" id="detail-advanced" ng-show="detail_page == 'advanced' && !noItem">
+                                    <form class="disable-enter disable-submit" ng-submit="video_option_update(video_lib)">
+                                        <div ng-repeat="item in itemOfVideo">
+                                            <section class="detail__preview">
+                                                <img ng-src="{{item.item_img_path}}" class="content-preview content__preview" style="height: 300px; object-fit: scale-down">
+                                            </section>
+
+                                            <section class="detail__wrap">
+                                                <div class="form-group">
+                                                    <label>상품명</label>
+                                                    <label class="form-control"
+                                                           style="overflow: hidden;"
+                                                           name="form-title"
+                                                           placeholder="Title"
+                                                           ng-model="item.item_title">
+                                                        {{item.item_title}}
+                                                    </label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>판매주소
+                                                        <a href="{{item.item_redirect_url}}"
+                                                           target="_blank">
+                                                            <i class="fa fa-link"></i>
+                                                        </a>
+                                                    </label>
+                                                    <label class="form-control"
+                                                           style="overflow: hidden;"
+                                                           name="form-url"
+                                                           placeholder="Title"
+                                                           ng-model="item.item_redirect_url">
+                                                        {{item.item_redirect_url}}
+                                                    </label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>판매가</label>
+                                                    <label class="form-control"
+                                                           style="overflow: hidden;"
+                                                           name="form-title"
+                                                           placeholder="Title"
+                                                           ng-model="video_lib.video_title">
+                                                        {{item.item_price}}
+                                                    </label>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </form>
+                                </section>
+                                <section class="detail__content" ng-show="detail_page == 'advanced' && noItem">
+                                    <p> 상품이 존재하지 않습니다. </p>
+                                </section>
+                            </div>
+                        </section>
+
+                        <!-- 라이브러리 테이블 -->
+                        <table class="table-library">
+                            <colgroup>
+                                <col class="library__col__checkbox">
+                                <col class="library__col__thumbnail">
+                                <col>
+                                <col class="library__col__category">
+                                <col class="library__col__channel">
+                                <col class="library__col__date">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th class="js-table-checkbox">
+                                    <div class="form-checkbox">
+                                        <ui-select-all items="video_list" prop="isSelected"
+                                                       id="library-check-all"
+                                                       ng-click="video_check_all(video_list)"></ui-select-all>
+                                        <label for="library-check-all"></label>
+                                    </div>
+                                </th>
+                                <th class="library__th__thumbnail">썸네일</th>
+                                <th class="library__th__title">
+                                    <a href="" id="btn-reorder-by-title" class="btn__sort">
+                                        제목 <span class="icon-triangle-wrap">
+                            </span>
+                                    </a>
+
+                                </th>
+                                <th class="library__th__columns">카테고리</th>
+                                <th class="library__th__columns">활성화 상태</th>
+                                <th class="library__th__columns library__th__date">
+                                    <a href="" id="btn-reorder-by-date" class="btn__sort">
+                                        등록일 <span class="icon-triangle-wrap"></span>
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <!-- 컨텐츠 영역 -->
+                            <tbody>
+                                <tr ng-if="video_list.length == 0">
+                                    <td colspan="6">등록하신 영상이 존재하지 않습니다</td>
+                                </tr>
+                                <tr ng-repeat="item in video_list | filter:search_video_title"
+                                    id="library__tr__video__list__line__{{item.idx}}"
+                                    ng-click="video_library_list(item, $event)" class="library__tr">
+                                    <td id="library__td__checkbox__{{item.idx}}">
+                                        <div class="form-checkbox">
+                                            <input type="checkbox" id="checkbox-20200519-pbg5cyca-{{item.idx}}"
+                                                   ng-model="item.isSelected" ng-click="video_check_one(item)">
+                                            <label for="checkbox-20200519-pbg5cyca-{{item.idx}}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="thumbnail__wrap">
+                                            <img id="{{item.video_url.substr(32, 11)}}"
+                                                 ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg"
+                                                 alt="썸네일" style="width: 80px" ng-click="videoDetails(item, 0)"/>
+                                        </div>
+                                    </td>
+
+                                <td class="library__td__title">
+                                    <div class="td__title__wrap">
+                                        {{item.video_title}}
+                                    </div>
+                                </td>
+                                <td class="library__td__category">
+                                    <span class="library__category__wrap">없음</span>
+                                </td>
+                                <td class="library__td__channel">
+                                    <span class="library__category__wrap">{{item.video_status_value? '활성': '비활성'}}</span>
+                                </td>
+                                <td class="library__td__date">
+                                    <div class="date__wrap" style="text-align: center">
+                                        {{item.create_date | date: 'yyyy-MM-dd' || 'Empty'}}
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+</section><!-- container -->
+
+<!--    <div id="table_area" class="video_list_table_area" ng-if="video_status == 0">-->
+<!--        <ul id="video_list_item" class="video_list_item">-->
+<!--            <li ng-repeat="item in videolistData | limitTo: video_list_count | orderBy:orderProperty.id" ng-show="videolistData != undefined">-->
+<!--                <dl>-->
+<!--                    <dt ng-mouseenter="video_mouse_over(item.video_url.substr(32, 11))" ng-mouseleave="video_mouse_leave()" style="position: relative;">-->
+<!--&lt;!&ndash;                        <span ng-if="is_mouse_over && item.video_url.substr(32, 11) == video_id && (fk_group_idx == 1 || item.fk_user_idx == user_idx)" class="video_delete"><button type="button" ng-click="video_drop(item.idx)">X</button></span>&ndash;&gt;-->
+<!--                        <img id="{{item.video_url.substr(32, 11)}}" ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg" alt="썸네일" class="video_url" ng-click="details(item, video_status)"/>-->
+<!--                        <span ng-if="is_mouse_over && item.video_url.substr(32, 11) == video_id" class="item_count">-->
+<!--                            <span ng-if="item.item_count != 0" class="Netflix-Logo-3-hex"><img src="../images/item_shape/1.png" class="video_list_present" ng-click="item_list_check(item)">x{{item.item_count}}</span>-->
+<!--                            <a href="https://www.youtube.com/watch?v={{item.video_url.substr(32, 11)}}" target="_blank"><img src="../images/item_shape/youtube.png" class="logo_youtube"></a>-->
+<!--                        </span>-->
+<!--&lt;!&ndash;                        <span class="favorites_star">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <label for="id-of-input" class="custom-checkbox" ng-show="fk_group_idx == 2">&ndash;&gt;-->
+<!--&lt;!&ndash;                              <input type="checkbox" id="id-of-input" value="{{item.video_auto_preview}}" ng-model="item.selectedPreview" ng-click="favoriteVideo(item)"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                              <i class="glyphicon glyphicon-star-empty"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                              <i class="glyphicon glyphicon-star"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </label>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </span>&ndash;&gt;-->
+<!--                    </dt>-->
+<!--                    <dd class="video_list_item_name Netflix-Logo-4-hex">-->
+<!--                        {{item.video_title}}-->
+<!--                    </dd>-->
+<!--                </dl>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--        <ul style="text-align: center;">-->
+<!--            <li ng-show="videolistData == 0">-->
+<!--                <dl>-->
+<!--                    <dt>-->
+<!--                        <span>-->
+<!--                            현재 검색 결과가 존재하지 않습니다.<br>-->
+<!--                            검색값을 초기화 하고, 5초 후 홈으로 돌아갑니다.-->
+<!--                        </span>-->
+<!--                    </dt>-->
+<!--                </dl>-->
+<!--            </li>-->
+<!--&lt;!&ndash;            <button ng-show="init_search" ng-click="video_list_check()">홈으로</button>&ndash;&gt;-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div ng-show="is_mouse_over" id="preview" style="width: 640px; height: 360px; position: absolute; z-index: 999;">-->
+<!--        <youtube ng-if="is_mouse_over" videoid={{video_id}} isautoplay="1"></youtube>-->
+<!--    </div>-->
+
+<!--    <div class="video_list_table" ng-if="video_status == 1">-->
+<!--        <dl class="video_list Netflix-Logo-4-hex" ng-repeat="shape in shape_lists">-->
+<!--            <dd>-->
+<!--                <ul class="video_list_item">-->
+<!--                    <li ng-repeat="item in listData | limitTo : limit_count | orderBy:orderProperty.id" ng-if="shape.idx == item.shape_idx">-->
+<!--                        <dl>-->
+<!--                            <dt>-->
+<!--&lt;!&ndash;                                <span ng-if="fk_group_idx == 1 || item.fk_user_idx == user_idx" class="video_delete"><button type="button" ng-click="video_drop(item.idx)">X</button></span>&ndash;&gt;-->
+<!--                                <img ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg" alt="썸네일" class="video_url" ng-click="details(item, video_status)"/>-->
+<!--                                <span class="item_count">-->
+<!--                                    <span ng-if="item.item_count != 0" class="Netflix-Logo-3-hex"><img src="../images/item_shape/1.png" class="video_list_present" ng-click="item_list_check(item)">x{{item.item_count}}</span>-->
+<!--                                    <a href="https://www.youtube.com/watch?v={{item.video_url.substr(32, 11)}}" target="_blank"><img src="../images/item_shape/youtube.png" class="logo_youtube"></a>-->
+<!--                                </span>-->
+<!--                            </dt>-->
+<!--                            <dd class="video_list_item_name Netflix-Logo-4-hex">-->
+<!--                                {{item.item_title}}-->
+<!--                            </dd>-->
+<!--                        </dl>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </dd>-->
+<!--        </dl>-->
+<!--    </div>-->
+
+<!--    <div class="video_list_table_area" ng-if="video_status == 2">-->
+<!--        <ul class="video_list_item">-->
+<!--            <li ng-repeat="item in classiclistData | limitTo: classic_limit_count">-->
+<!--                <dl>-->
+<!--                    <dt>-->
+<!--&lt;!&ndash;                        <span ng-if="fk_group_idx == 1 || item.fk_user_idx == user_idx" class="video_delete"><button type="button" ng-click="video_drop(item.idx)">X</button></span>&ndash;&gt;-->
+<!--                        <img ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg" alt="썸네일" class="video_url" ng-click="details(item, video_status)"/>-->
+<!--                        <span class="item_count">-->
+<!--                            <span ng-if="item.item_count != 0" class="Netflix-Logo-3-hex"><img src="../images/item_shape/1.png" class="video_list_present" ng-click="item_list_check(item)">x{{item.item_count}}</span>-->
+<!--                            <a href="https://www.youtube.com/watch?v={{item.video_url.substr(32, 11)}}" target="_blank"><img src="../images/item_shape/youtube.png" class="logo_youtube"></a>-->
+<!--                        </span>-->
+<!--                    </dt>-->
+<!--                    <dd class="video_list_item_name Netflix-Logo-4-hex">-->
+<!--                        {{item.item_title}}-->
+<!--                    </dd>-->
+<!--                </dl>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->

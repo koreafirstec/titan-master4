@@ -1,0 +1,34 @@
+<div class="live_wrap">
+<!--    <div class="middle_input">-->
+<!--        <input type="text" maxLangth="50" class="form-control input-round" ng-model="item_index" placeholder="(한글 2~10자)" ref="id"></input>-->
+<!--    </div>-->
+    <div class="table_back_area">
+        <table ng-table="thumListParams" class="sub_content_table">
+            <thead>
+                <tr>
+                    <th ng-repeat="head in thum_list_table_headers" class="{{head.class_name}}"
+                        ng-class="{'sortable': head.sortable}"
+                        ng-click="head.sortable? thumListParams.sorting(head.field, thumListParams.isSortBy(head.field, 'asc')?'desc':'asc'):''">
+                        <div>
+                            <span>{{head.name}}</span> <i ng-if="header.sortable" class="sortable fa" ng-class="{'fa-sort-asc': thumListParams.isSortBy(header.field, 'asc'), 'fa-sort-desc': thumListParams.isSortBy(header.field, 'desc')}"></i>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in $data" ng-click="">
+                    <td class="item-wrapper">
+                        <img class="resource_slide_img ng-scope"
+                             ng-src="{{show_thum_image(item)}}" alt="remote image"  imageonload="doDraw(item,$index)"
+                             onerror="var blankSrc = '/images/common/noimg.png'; this.src = blankSrc;" sytle="position:relative">
+<!--                        <canvas id="mycanvas" width="416" height="416">-->
+
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        <canvas id="canvas_1" canvas-directive style="position:absolute;left:592px;top:236px;width:416px;height:416px;"></canvas>
+        <canvas id="canvas_2" canvas-directive style="position:absolute;left:592px;top:700px;width:416px;height:416px;"></canvas>
+    </div>
+</div>

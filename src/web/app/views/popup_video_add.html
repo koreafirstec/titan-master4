@@ -1,0 +1,91 @@
+<div class="popup_youtube_search">
+    <div class="title">
+        유튜브 검색
+        <button class="fa fa-close" ng-click="close()"></button>
+    </div>
+    <div class="popup_youtube_search_container">
+        <form method="post" name="video_search" ng-submit="search(searchTitle)" novalidate form-autofill-fix>
+            <div class="popup_youtube_searchBar">
+                <input type="text" placeholder="영상 키워드를 검색해보세요" ng-model="searchTitle"/>
+                <input type="submit" value="검색" />
+            </div>
+        </form>
+        <div class="popup_youtube_search_filter">
+            <p class="title">필터</p>
+            <ul ng-show="">
+                <li>
+                    <dl>
+                        <dt>업로드 날짜</dt>
+                        <dd>지난 1시간</dd>
+                        <dd>오늘</dd>
+                        <dd>이번 주</dd>
+                        <dd>이번 달</dd>
+                        <dd>올해</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>구분</dt>
+                        <dd>동영상</dd>
+                        <dd>채널</dd>
+                        <dd>재생목록</dd>
+                        <dd>영화</dd>
+                        <dd>프로그램</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>길이</dt>
+                        <dd>단편 (4분 이하)</dd>
+                        <dd>장편 (20분 이하)</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>기능별</dt>
+                        <dd>실시간</dd>
+                        <dd>4K</dd>
+                        <dd>HD</dd>
+                        <dd>자막</dd>
+                        <dd>크리에이티브 커먼즈</dd>
+                        <dd>360</dd>
+                        <dd>VR180</dd>
+                        <dd>3D</dd>
+                        <dd>HDR</dd>
+                        <dd>위치</dd>
+                        <dd>구입한 항목</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>정렬기준</dt>
+                        <dd>관련성</dd>
+                        <dd>업로드 날짜</dd>
+                        <dd>조회수</dd>
+                        <dd>평점</dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="video_search_list">
+            <div ng-repeat="video in video_list" class="video_search_list_item" ng-click="addDetail(video.url)">
+                <img ng-src="https://img.youtube.com/vi/{{video.id}}/hqdefault.jpg" alt="썸네일">
+                <span class="video_search_list_item_info">
+                    <div class="ellipsis2">
+                        <img src="../images/common/email.PNG" alt="">
+                        {{video.channel}}
+                    </div>
+                    <div class="ellipsis2">{{video.title}}</div>
+                    <div class="ellipsis2">조회수 6.7천회 14시간 전</div>
+                </span>
+            </div>
+            <div ng-show="search_status">
+                검색 중...
+            </div>
+            <div ng-show="search_value_status">
+                검색 결과가 존재하지 않습니다.
+            </div>
+        </div>
+
+    </div>
+</div>

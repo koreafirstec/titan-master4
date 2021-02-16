@@ -1,0 +1,123 @@
+<!--<div>-->
+<!--    <div>-->
+<!--        <div ng-repeat="video in video_list | orderBy:'-idx'">-->
+<!--            <button ng-click="changeVideo(video.video_url.substr(32, 11))">-->
+<!--                <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg"-->
+<!--                     title="{{video.video_title}}" alt="썸네일"/>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <youtube videoid="{{video_id}}"></youtube>-->
+<!--</div>-->
+
+<div class="video_make">
+<!--    video lists     -->
+    <div ng-repeat="(listName, list) in models.video_lists" class="make_list">
+        <div class="video_img_list_wrap">
+            <div>
+                <div class="sample ten">
+                    <input type="text" name="search" ng-model="search.title" placeholder="검색">
+                    <button type="submit" class="fa fa-search"></button>
+                </div>
+                <button type="button" class="video_add_btn" ng-click="VideoAdd()">+</button>
+            </div>
+            <ul dnd-list="list" class="video_img_list">
+                <li ng-repeat="item in list"
+                    dnd-draggable="item"
+                    dnd-moved="list.splice($index, 1)"
+                    dnd-effect-allowed="move"
+                    dnd-selected="models.selected = item"
+                    ng-class="{'selected': models.selected === item}">
+                    <img ng-src="https://img.youtube.com/vi/{{item.src}}/hqdefault.jpg" alt="썸네일" class="video_img"/>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-repeat="(listName, list) in models.model_lists" class="video_make_wrap">
+            <div>
+                <span style="width: 74%;margin: 0 auto;display: flex;align-items: center; font-size: 1.8rem;">공용 AI 모델</span>
+            </div>
+            <div>
+                <button class="video_list_tip" ng-click="ItemDetection()">검출</button>
+                <ul class="video_make_tool">
+                    <li ng-repeat="item in list" class="model_check_{{item.idx}}" ng-show="item.model_access == 1 && item.model_status == 1">
+                        <div><input type="checkbox" name="model_check" id="model_{{item.idx}}" ng-model="item.model_checked" ng-click="selectCheckRadio(item.idx, $index, list)" style=" position:absolute;float:right; margin: 0 auto;"></div>
+                        <label for="model_{{item.idx}}" style="position:relative; font-size: 12px; margin: 0 auto; height: 70px;">
+                            <div style="text-align: center;">{{item.model_title}}</div>
+                            <div style="text-align: center;">{{item.model_user_id}}</div>
+                        </label>
+<!--                        <img ng-src="../images/{{item.src}}"/>-->
+                    </li>
+                </ul>
+<!--                <ul dnd-list="list" class="video_make_tool">-->
+<!--                    <li ng-repeat="item in list"-->
+<!--                        dnd-draggable="item"-->
+<!--                        dnd-moved="list.splice($index, 1)"-->
+<!--                        dnd-effect-allowed="move">-->
+<!--                        <img ng-src="../images/{{item.src}}"/>-->
+<!--                    </li>-->
+<!--                </ul>-->
+            </div>
+<!-- && selectedItem.idx == video_idx.idx-->
+            <div ng-repeat="(itemName, item) in videobox.item" class="videoBox">
+<!--                <div>-->
+<!--                    <ul>-->
+<!--                        <button ng-click="" ng-if="selectedItem.src != undefined">켜져라!!!!</button>-->
+<!--                    </ul>-->
+<!--                </div>-->
+                <ul id="temp_shape_position">
+                    <li>
+<!--                        <youtube videoid="eIgbKZmGnlk" itemdetection={{item_detection}}></youtube>-->
+<!--                        <youtube videoid="{{selectedItem.src}}" itemdetection={{item_detection}}></youtube>-->
+<!--                        <div style="position:absolute; z-index: 100; top: 0; left: 0;" id="item_detection" style="border: 1px solid white; position: absolute; z-index: 100; background-color: rgba(0, 0, 0, 0.3); cursor: pointer; display: block;" ng-click="itemAdd()">-->
+
+<!--                        </div>-->
+<!--                        <youtube videoid="{{selectedItem.src}}" itemdetection={{item_detection}}></youtube>-->
+                        <youtube videoid="{{selectedItem.src}}"></youtube>
+                        <div dnd-list="item" id="mainDrag">
+                            <img dnd-list="item" src="../images/Drag-Left-icon.png" ng-hide="selectedItem.idx != undefined" class="drag_icon">
+                            <img ng-if="shape_position != undefined" id="shape_position_img" ng-src="{{shape_position}}" style="width: 640px;">
+<!--                            <div ng-repeat="box in shapebox.item.data" resizable id="DragableContent" style="left:{{box.pos_x}}px; top:{{box.pos_y}}px;height:{{box.height}}px;width:{{box.width}}px;">-->
+                            <button ng-repeat="rect in rectData" ng-click="onItemAdd(video_idx, rect.type_number)">
+<!--                                'shape_item_'+rect.shape_item_type, rect.shape_item_type-->
+                                <div id="shape_item_{{rect.shape_item_type}}" class="shape_video_position" style="position: absolute; left:{{rect.x/(1920/640) | number:0}}px; top:{{rect.y/(1080/360) | number:0}}px; height:{{(rect.height/(1080/360)-rect.y/(1080/360)) | number:0}}px; width:{{(rect.width/(1920/640)-rect.x/(1920/640)) | number:0}}px; display: inline-block;"></div>
+                            </button>
+                            <div ng-repeat="box in shapebox.item.data" resizable id="DragableContent" style="left:100px; top:100px;height:150px;width:150px;">
+                                {{box.itemType}}
+                            </div>
+                            <div ng-show="click_status" id="check_shape_item" style="border: groove; position: absolute; width: 200px; height: 150px; z-index: 999;">
+                                와 신난다!
+                                <select>
+                                    <option>전체</option>
+                                    <option>현재 아이템만</option>
+                                </select>
+                                <div>
+                                    <button>결정</button>
+                                    <button>취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="shape_video_progress">
+                <span>{{shape_none_message}}</span>
+<!--                <div class="progress">-->
+<!--                    <div class="progress-bar progress-bar-warning Netflix-Logo-4-hex" role="progressbar"-->
+<!--                         aria-valuenow="count" aria-valuemin="0" aria-valuemax="100" style="width:{{count}}%">-->
+<!--                        {{count}}%-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+            <div class="bottom" atdgn="center">
+<!--                <select id="shape_combo_box" ng-show="rectData !== undefined && item_shape_value == undefined" class="select_uo2 input-round" ng-options="data.shape_title for data in shape_check" ng-model="shapeChecks">-->
+<!--                    <option value="">선택 없음</option>-->
+<!--                </select>-->
+                <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex" ng-click="onItemAdd(video_idx, item_shape_value.index, classesNum)" ng-show="video_idx != undefined && item_shape_value != undefined">상품등록</button>
+                <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex" ng-click="initial_video()">새로 고침</button>
+            </div>
+        </div>
+    </div>
+<!-- ng-disabled="shapeChecks == undefined || shapeChecks == ''"   -->
+</div>

@@ -1,0 +1,26 @@
+/* Color Theme Swatches in Hex */
+.Netflix-Logo-1-hex { color: #400101; }
+.Netflix-Logo-2-hex { color: #DB0605; }
+.Netflix-Logo-3-hex { color: #fafafa; }
+.Netflix-Logo-4-hex { color: #000000; }
+.Netflix-Logo-5-hex { color: #ffffff; }
+
+.Netflix-Logo-1-hex-back { background-color: #400101; }
+.Netflix-Logo-2-hex-back { background-color: #DB0605; }
+.Netflix-Logo-3-hex-back { background-color: #fafafa; }
+.Netflix-Logo-4-hex-back { background-color: rgb(206,212,218); }
+.Netflix-Logo-5-hex-back { background-color: #ffffff; }
+
+/* Color Theme Swatches in RGBA */
+.Netflix-Logo-1-rgba { color: rgba(63, 1, 1, 1); }
+.Netflix-Logo-2-rgba { color: rgba(219, 5, 5, 1); }
+.Netflix-Logo-3-rgba { color: rgba(140, 7, 7, 1); }
+.Netflix-Logo-4-rgba { color: rgba(242, 242, 242, 1); }
+.Netflix-Logo-5-rgba { color: rgba(12, 12, 12, 1); }
+
+/* Color Theme Swatches in HSLA */
+.Netflix-Logo-1-hsla { color: hsla(0, 96, 12, 1); }
+.Netflix-Logo-2-hsla { color: hsla(0, 95, 43, 1); }
+.Netflix-Logo-3-hsla { color: hsla(0, 90, 28, 1); }
+.Netflix-Logo-4-hsla { color: hsla(0, 0, 94, 1); }
+.Netflix-Logo-5-hsla { color: hsla(0, 0, 5, 1); }

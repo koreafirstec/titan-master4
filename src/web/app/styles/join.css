@@ -1,0 +1,91 @@
+/* join page */
+.join_flex{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    min-height: 800px;
+    min-width: 720px;
+    background: url("../images/login_background.jpg") no-repeat center center / 100% 100%;
+}
+
+.join_wrap{
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 70%;
+    width: 30%;
+    min-width: 400px;
+    max-width: 440px;
+}
+
+.join_top .title{
+    width:100%;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 24px;
+}
+
+.join .content {
+    width: 80%;
+    margin: 80px auto 0 auto;
+}
+
+.join .content .form-control {
+    background-color: #ffffff;
+    border-radius: 6px !important;
+}
+
+.join .content .form-actions{
+    background-color: transparent;
+    clear: both;
+    border: none;
+    margin-top: 100px;
+}
+
+.join .content .form-actions .search-field {
+    display: block;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px !important;
+    padding: 0px 22px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.join .content .form-group .err-message {
+    top: 5px;
+    position: relative;
+    color: red;
+}
+
+@media screen and (max-width: 414px){
+    .join_flex{
+        min-width: unset;
+        min-height: unset;
+    }
+    .join_wrap{
+        width: 75%;
+        max-width: unset;
+        min-width: unset;
+    }
+    .join .content{
+        margin: 5% auto 0 auto;
+    }
+    .join .content .form-actions{
+        margin: 0;
+    }
+    .join_top .title{
+        margin-top: 3%;
+        font-size: 2.4rem;
+
+    }
+    .join .content .form-control{
+        padding: 2% 3%;
+        font-size: 1.2rem;
+    }
+}

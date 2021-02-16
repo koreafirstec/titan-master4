@@ -1,0 +1,12 @@
+<div>
+    <img ng-repeat="item in item_list" ng-src="{{item.item_img_path}}"  alt="" onerror="this.style.display = 'none'" class="my_item"
+         ng-click="inform_on(item.idx)"/>
+
+    <div id="item_inform_area" class="item_inform_area">
+<!--        <div class="ellipsis1 item_list_name">{{item.item_title}}</div>-->
+        <div class="ellipsis1 item_list_name">{{$scope.item_title}}</div>
+        <div class="ellipsis2">{{$scope.item_description}}</div>
+        <a href="" ng-href="https://www.youtube.com/watch?v={{item.video_id}}" target="_blank">동영상에서 보러가기</a><br>
+        <a href="" ng-href="{{$scope.item_redirect_url}}" target="_blank">사러가기</a>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="popup_user_add">
+    <p class="popup_user_add_title">{{user_title}}</p>
+    <form id="user_add" name="user_add_form" ng-submit="user_add(credentials)">
+        <table class="manage_popup_table">
+            <tr>
+                <td class="middle_text">아이디</td>
+                <td class="middle_input" colspan="3">
+                    <input type="text" class="form-control input-round" placeholder="이메일 형식으로"
+                           ng-model="credentials.user_id" ng-ref="id" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required />
+                </td>
+            </tr>
+            <tr>
+                <td class="middle_text">비밀번호</td>
+                <td class="middle_input" colspan="3">
+                    <input type="password" class="form-control input-round" name="user_pw" ng-model="credentials.user_pw">
+                </td>
+            </tr>
+            <tr>
+                <td class="middle_text">비밀번호 확인</td>
+                <td class="middle_input">
+                    <input type="password" class="form-control input-round" name="user_pw_confirm" ng-model="credentials.user_pw_confirm">
+                </td>
+            </tr>
+            <tr>
+                <td class="middle_text">이름</td>
+                <td class="middle_input">
+                    <input type="text" class="form-control input-round" name="user_name" ng-model="credentials.user_name">
+                </td>
+            </tr>
+        </table>
+        <!--        ng-disabled="popup_make_form.$invalid"-->
+        <div class="bottom">
+            <button type="submit" ng-click="user_add()" class="btn input-round">사용자 추가</button>
+            <button type="button" ng-click="close()" class="btn input-round">취소</button>
+        </div>
+    </form>
+</div>

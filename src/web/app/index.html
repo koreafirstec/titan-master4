@@ -1,0 +1,230 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <!--<title>타이탄 동영상 제작 서비스</title>-->
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, minimum-scale=1, maximum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.min.css" />
+    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+    <link rel="stylesheet" href="bower_components/select2/select2.css" />
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" />
+
+
+    <!-- endbuild -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
+<!--    <link rel="stylesheet" href="styles/common.css" />-->
+<!--    <link rel="stylesheet" href="styles/container.css" />-->
+<!--    <link rel="stylesheet" href="styles/login.css" />-->
+<!--    <link rel="stylesheet" href="styles/org.css" />-->
+<!--    <link rel="stylesheet" href="styles/admin.css" />-->
+<!--    <link rel="stylesheet" href="styles/admin_info.css" />-->
+<!--    <link rel="stylesheet" href="styles/delete.css" />-->
+<!--    <link rel="stylesheet" href="styles/alert.css" />-->
+<!--    <link rel="stylesheet" href="styles/color.css" />-->
+<!--    <link rel="stylesheet" href="styles/join.css" />-->
+<!--    <link rel="stylesheet" href="styles/temp_video_make.css" />-->
+<!--    <link rel="stylesheet" href="styles/video_editor.css" />-->
+<!--    <link rel="stylesheet" href="styles/popup_video_add.css" />-->
+<!--    <link rel="stylesheet" href="styles/progress_status.css" />-->
+<!--    <link rel="stylesheet" href="styles/video_list.css" />-->
+<!--    <link rel="stylesheet" href="styles/manage_user.css">-->
+<!--    <link rel="stylesheet" href="styles/my_item.css">-->
+<!--    <link rel="stylesheet" href="styles/item_list.css">-->
+<!--    <link rel="stylesheet" href="styles/model_make.css">-->
+<!--    <link rel="stylesheet" href="styles/video_item_list.css">-->
+<!--    <link rel="stylesheet" href="styles/sidebar.css">-->
+<!--    <link rel="stylesheet" href="styles/video_list_mobile.css">-->
+    <link rel="stylesheet" href="styles/J_reset.css">
+    <link rel="stylesheet" href="styles/J_master.css">
+    <link rel="stylesheet" href="styles/J_Login.css">
+    <link rel="stylesheet" href="styles/J_join.css">
+    <link rel="stylesheet" href="styles/J_Find_Success.css">
+    <link rel="stylesheet" href="styles/J_sidebar.css">
+    <link rel="stylesheet" href="styles/J_dashboard.css">
+    <link rel="stylesheet" href="styles/J_video_add.css">
+    <link rel="stylesheet" href="styles/J_item_add.css">
+    <!-- endbuild -->
+</head>
+
+<body id="ng-app" class="Netflix-Logo-4-hex-back" ng-app="titanApp" ng-controller="ApplicationCtrl">
+<div id="wrap">
+    <div class="header">
+        <span class="Boshow-">Boshow 통합 관리</span>
+        <span ng-show="user_id != 'user_id'" class="header_mode">
+            <button type="button" class="selected">편집모드</button>
+            <button type="button">운영자모드</button>
+        </span>
+        <span>
+            <i></i> <!-- 알림 아이콘 -->
+            <span></span>   <!--검색 창-->
+
+            <i></i> <!-- 전원 아이콘 -->
+        </span>
+    </div>
+
+<div ng-view=""></div>
+
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/json3/lib/json3.min.js"></script>
+<![endif]-->
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/json3/lib/json3.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/ng-table/dist/ng-table.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+<script src="bower_components/select2/select2.js"></script>
+<script src="bower_components/angular-ui-select2/src/select2.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+<script src="bower_components/FileSaver/FileSaver.js"></script>
+<script src="bower_components/js-xlsx-style/dist/xlsx.full.min.js"></script>
+<script src="bower_components/highcharts-ng/dist/highcharts-ng.js"></script>
+<script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+<script src="bower_components/angular-youtube-api/angular-youtube-api-factory.js"></script>
+
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/login.js"></script>
+<script src="scripts/controllers/join.js"></script>
+<script src="scripts/controllers/application.js"></script>
+<script src="scripts/controllers/logout.js"></script>
+<script src="scripts/controllers/video_list.js"></script>
+<script src="scripts/controllers/item_list.js"></script>
+<script src="scripts/controllers/video_play.js"></script>
+<script src="scripts/controllers/video_make.js"></script>
+<script src="scripts/controllers/highcharts.js"></script>
+<script src="scripts/controllers/video_list.js"></script>
+<script src="scripts/controllers/train_thum_List.js"></script>
+<script src="scripts/controllers/temp_video_make.js"></script>
+<script src="scripts/controllers/popup_make.js"></script>
+<script src="scripts/controllers/alert_modal.js"></script>
+<script src="scripts/controllers/popup_review.js"></script>
+<script src="scripts/controllers/video_add.js"></script>
+<script src="scripts/controllers/popup_item_list.js"></script>
+<script src="scripts/controllers/popup_item_update.js"></script>
+<script src="scripts/controllers/video_add_detail.js"></script>
+<script src="scripts/controllers/progress_popup.js"></script>
+<script src="scripts/controllers/manage_user.js"></script>
+<script src="scripts/controllers/manage_item_history.js"></script>
+<script src="scripts/controllers/manage_model.js"></script>
+<script src="scripts/controllers/manage_model_request.js"></script>
+<script src="scripts/controllers/prefixfree.min.js"></script>
+<script src="scripts/controllers/popup_user_update.js"></script>
+<script src="scripts/controllers/popup_user_add.js"></script>
+<script src="scripts/controllers/manage_video_check.js"></script>
+<script src="scripts/controllers/manage_item_check.js"></script>
+<script src="scripts/controllers/video_drop_popup.js"></script>
+<script src="scripts/controllers/video_editor.js"></script>
+<script src="scripts/controllers/video_editor_modify.js"></script>
+<!--<script src="scripts/controllers/confirm_user_drop.js"></script>-->
+<script src="scripts/controllers/my_item.js"></script>
+<script src="scripts/controllers/manage_user_access_history.js"></script>
+<!--<script src="scripts/controllers/angular-moment.min.js"></script>-->
+<script src="scripts/controllers/chart_by_item.js"></script>
+<script src="scripts/controllers/chart_by_user.js"></script>
+<script src="scripts/controllers/model_make.js"></script>
+<script src="scripts/controllers/popup_model_make.js"></script>
+<script src="scripts/controllers/popup_user_role.js"></script>
+<script src="scripts/controllers/item_add.js"></script>
+<script src="scripts/controllers/popup_item_position_update.js"></script>
+<script src="scripts/controllers/popup_new_password.js"></script>
+<script src="scripts/controllers/popup_video_capture.js"></script>
+<script src="scripts/controllers/loading.js"></script>
+
+
+<script src="scripts/services/authservice.js"></script>
+<script src="scripts/services/session.js"></script>
+<script src="scripts/services/api_login.js"></script>
+<script src="scripts/services/api_logout.js"></script>
+<script src="scripts/services/api_join.js"></script>
+<script src="scripts/services/api_user.js"></script>
+<script src="scripts/services/api_role.js"></script>
+<script src="scripts/services/api_user_role.js"></script>
+<script src="scripts/services/api_user_access_hist.js"></script>
+<script src="scripts/services/api_video.js"></script>
+<script src="scripts/services/api_item.js"></script>
+<script src="scripts/services/api_item_type.js"></script>
+<script src="scripts/services/api_item_history.js"></script>
+<script src="scripts/services/api_item_detail.js"></script>
+<script src="scripts/services/api_item_position_detail.js"></script>
+<script src="scripts/services/api_video_cature.js"></script>
+<script src="scripts/services/api_editor_list.js"></script>
+<script src="scripts/services/api_shape.js"></script>
+<script src="scripts/services/api_build_item.js"></script>
+<script src="scripts/services/api_build_group.js"></script>
+<script src="scripts/services/api_build_process.js"></script>
+<script src="scripts/services/api_crawling_image.js"></script>
+<script src="scripts/services/api_crawling_process.js"></script>
+<script src="scripts/services/auth_events.js"></script>
+<script src="scripts/services/authinterceptor.js"></script>
+<script src="scripts/services/env.js"></script>
+<script src="scripts/services/modal.js"></script>
+<script src="scripts/services/common.js"></script>
+<script src="scripts/services/duplicate_auth.js"></script>
+<script src="scripts/services/ksm_utils.js"></script>
+<script src="scripts/services/api_admin_video_list.js"></script>
+<script src="scripts/services/api_shape_video_list.js"></script>
+<script src="scripts/services/api_item_detail_to_file.js"></script>
+<!--<script src="scripts/services/api_train_thum_List.js"></script>-->
+<script src="scripts/services/api_titan_model.js"></script>
+<script src="scripts/services/api_make_titan_video.js"></script>
+<script src="scripts/services/api_progress_process.js"></script>
+<script src="scripts/services/api_search_video.js"></script>
+<script src="scripts/services/api_user_access_hist.js"></script>
+<!--<script src="scripts/services/api_user_access_hist_page.js"></script>-->
+<script src="scripts/services/api_get_item.js"></script>
+<script src="scripts/services/api_temporary_password.js"></script>
+<script src="scripts/services/api_auth.js"></script>
+<script src="scripts/services/api_model_request.js"></script>
+<script src="scripts/services/api_search_youtube.js"></script>
+
+<script src="scripts/directives/loadingcontainer.js"></script>
+<script src="scripts/directives/jqdatepicker.js"></script>
+<script src="scripts/directives/youtube.js"></script>
+<script src="scripts/directives/imageonload.js"></script>
+<script src="scripts/directives/manage_nav.js"></script>
+<script src="scripts/directives/dir-pagination.js"></script>
+<script src="scripts/directives/uiSelectAll.js"></script>
+<script src="scripts/directives/directive_main_header.js"></script>
+<script src="scripts/directives/contextMenu.js"></script>
+<script src="scripts/directives/RightClick.js"></script>
+
+<script src="scripts/filter/time.js"></script>
+
+<!-- web service -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+
+
+<!-- endbuild -->
+
+</div>
+<!-- //wrap -->
+</body>
+</html>
+

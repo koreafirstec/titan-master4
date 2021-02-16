@@ -1,0 +1,206 @@
+.sidebar {
+    background-color: #343a40;
+    color: #ced4da;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    font-style:normal;
+}
+
+.sidebar .count {
+    background-color: #343a40;
+    color: rgba(255, 255, 255, 0.5);
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0;
+    padding-left: 4px;
+    /*position: absolute;*/
+    top: 0;
+    right: 0
+}
+
+.sidebar > ul, .sidebar > div{
+    border-bottom: 1px solid;
+    margin: 10px 0;
+    padding: 10px 0;
+}
+
+.sidebar-mobile {
+    display: none
+}
+
+.sidebar-module {
+    padding: 8px 24px 16px !important;
+}
+
+.sidebar__filter .form-checkbox,
+.sidebar__filter .form-radio {
+    letter-spacing: -.5px;
+    line-height: 16px
+}
+
+.sidebar__filter .form-checkbox label,
+.sidebar__filter .form-radio label {
+    color: #ced4da;
+    font-weight: 600;
+    /*text-indent: 24px;*/
+    min-width: 16px;
+    /*font-size: 1.4rem;*/
+}
+
+.sidebar__filter .form-checkbox label::before,
+.sidebar__filter .form-radio label::before {
+    border-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(0, 0, 0, 0);
+    width: 16px;
+    height: 16px
+}
+
+.sidebar__filter .form-checkbox label::after {
+    height: 9px;
+    width: 6px
+}
+
+.sidebar__filter .form-radio label::after {
+    top: 4px;
+    left: 4px;
+    height: 8px;
+    width: 8px
+}
+
+.sidebar__filter__wrapper {
+    padding: 4px 24px
+}
+
+.filter-encryption:nth-last-of-type(2n-1),
+.filter-publishing:nth-last-of-type(2n-1),
+.filter-content-type:nth-last-of-type(2n-1) {
+    border-top: 1px solid #495057;
+    margin: 4px 24px 0;
+    padding-top: 4px
+}
+
+.filter-encryption:nth-last-of-type(2n-1) .sidebar__filter__wrapper,
+.filter-publishing:nth-last-of-type(2n-1) .sidebar__filter__wrapper,
+.filter-content-type:nth-last-of-type(2n-1) .sidebar__filter__wrapper {
+    padding-right: 0;
+    padding-left: 0
+}
+
+.filter-content-type:nth-last-of-type(2n) .sidebar__filter__wrapper {
+    padding-bottom: 0
+}
+
+.sidebar__title {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: unset;
+    padding: 8px 24px;
+}
+
+.sidebar__title.sidebar__link:hover {
+    background-color: transparent;
+    box-shadow: none
+}
+
+.sidebar__title>a {
+    margin-left: 8px;
+    margin-right: -4px;
+    color: #fff;
+}
+
+.sidebar__title>a .ks-icon {
+    font-size: 12px;
+    transition: 0.2s ease-in-out
+}
+
+.sidebar__title>a:hover .ks-icon {
+    color: #fff
+}
+
+.sidebar__title .btn__icon {
+    background-color: transparent
+}
+
+.sidebar__separator {
+    border: 0;
+    border-top: 1px solid #495057;
+    margin: 16px 0;
+    overflow: hidden
+}
+
+.sidebar__title {
+    position: relative;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out
+}
+
+.sidebar__link>a {
+    color: #fedcba;
+    display: block;
+    font-size: 14px;
+    padding: 8px 24px;
+    white-space: nowrap;
+}
+
+.sidebar__title>a>span:not(.count) {
+    margin-right: 4px
+}
+
+.sidebar__title>a .count {
+    transition: background-color 0.2s ease-in-out;
+    top: 8px;
+    right: 24px
+}
+
+.sidebar__title:hover,
+.sidebar__title.active {
+    box-shadow: inset 4px 0 0 #3498db;
+    background-color: #495057
+}
+
+.sidebar__title:hover>a .count,
+.sidebar__title.active>a .count {
+    background-color: transparent
+}
+
+.sidebar__title:hover>a {
+    color: #fff
+}
+
+.sidebar__title:hover .btn__entry {
+    box-shadow: inset 4px 0 0 #3498db
+}
+
+.sidebar__link.open .btn__entry__open,
+.sidebar__link:hover .btn__entry__open {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    visibility: visible
+}
+
+.sidebar__link.open .count,
+.sidebar__link:hover .count {
+    visibility: hidden
+}
+
+.sidebar__link>a>.ks-icon {
+    opacity: .5
+}
+
+.sidebar__link .ks-icon-share {
+    font-size: 12px
+}
+
+.sidebar__link .ks-icon-lock {
+    font-size: 13px;
+    position: relative;
+    top: -2px
+}
+
+.sidebar__category .sidebar__link:nth-child(-n+2):hover .count {
+    visibility: visible !important
+}

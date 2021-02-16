@@ -1,0 +1,119 @@
+<i main-header />
+<i manage-nav></i>
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <section id="contents" class="container module-default" tabindex="1" style="overflow: hidden; outline: none;">
+        <div class="content__header content__header__library">
+            <h3 class="content__header__title">
+                <span id="library-title">상품 통계</span>
+            </h3>
+            <div class="content__header__action">
+<!--                <div class="library__search__wrap">-->
+<!--                    <input type="text" placeholder="검색" id="form-q" class="library__search" autocomplete="off" value="">-->
+<!--                </div>-->
+                <div id="form-per-page" class="dropdown">
+                    <button class="btn dropdown-toggle btn__per-page" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">{{limit_video}}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li class="js-dropdown-per-page" data-dropdown-value="5"><a ng-click="limitValue(5)" class="dropdown-item">5</a></li>
+                        <li class="js-dropdown-per-page" data-dropdown-value="10"><a ng-click="limitValue(10)" class="dropdown-item">10</a></li>
+                        <!--                <li class="js-dropdown-per-page" data-dropdown-value="20"><a href="" class="dropdown-item">20</a></li>-->
+                        <li class="js-dropdown-per-page" data-dropdown-value="20"><a ng-click="limitValue(15)" class="dropdown-item">15</a></li>
+                    </ul>
+                </div>
+            </div><!-- content__header__action -->
+        </div><!-- content__header -->
+
+
+        <section class="module">
+            <section id="library-tabs">
+                <table class="table-library" ng-table="show_item_history">
+                    <colgroup>
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col class="library__col__channel">
+                        <col span="2" class="library__col__date">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+
+                        <th class="library__td__title">
+                            <a href="" id="btn-reorder-by-title" class="btn__sort"> 아이디
+                                <span class="icon-triangle-wrap"><i class="fa fa-sort-up"></i><i class="fa fa-sort-down"></i></span>
+                            </a>
+                        </th>
+                        <th class="library__td__category">상품명</th>
+                        <th class="library__td__channel">판매가</th>
+                        <th class="library__td__date">
+                            <a href="" id="btn-reorder-by-date" class="btn__sort">
+                                등록일 <span class="icon-triangle-wrap">
+									<i class="fa fa-sort-up"></i><i class="fa fa-sort-down"></i>
+								</span>
+                            </a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <!-- 컨텐츠 영역 -->
+                    <tbody>
+                    <tr class="ng-scope" ng-repeat="history in $data" ng-if="history.user_id != undefined">
+<!--                         ng-repeat="item in video_list | limitTo: limit_video"-->
+                        <td style="text-align: center">{{history.idx || 'Empty'}}</td>
+
+                        <td class="library__td__title">
+                            <div class="td__title__wrap ng-binding"  style="text-align: center">{{history.user_id || 'Empty'}}</div>
+                        </td>
+                        <td class="library__td__category">
+                            <span class="library__category__wrap" style="text-align: center">{{history.item_title || 'Empty'}}</span>
+                        </td>
+                        <td class="library__td__channel">
+                            <span class="library__channel__wrap" style="text-align: center">{{status[history.action_status].action || 'Empty'}}</span>
+                        </td>
+                        <td class="library__td__date">
+                            <div class="date__wrap" style="text-align: center">{{date_format(history.create_date) || 'Empty'}}</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    </section>
+</section>
+<!--<div manage-nav></div>-->
+
+<!--<div class="manage_wrap">-->
+<!--    <h1 class="manage_title">상품 통계</h1>-->
+<!--&lt;!&ndash;    <select ng-model="date_option" ng-options="data.name for data in date_options" ng-change="date_filter()"></select>&ndash;&gt;-->
+<!--    <div class="user_manage_area">-->
+<!--        <table ng-table="show_item_history" class="user_manage_table">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th ng-repeat="head in item_history_table_headers" class="{{head.class_name}}">-->
+<!--                    <div>-->
+<!--                        <span>{{head.name}}</span>-->
+<!--                    </div>-->
+<!--                </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr ng-repeat="history in $data" ng-if="history.user_id != undefined">-->
+<!--                    <td class="no">-->
+<!--                        {{history.idx || 'Empty'}}-->
+<!--                    </td>-->
+<!--                    <td class="item-wrapper">-->
+<!--                        <div>{{history.user_id || 'Empty'}}</div>-->
+<!--                    </td>-->
+<!--                    <td class="item-wrapper">-->
+<!--                        <div>{{history.item_title || 'Empty'}}</div>-->
+<!--                    </td>-->
+<!--                     <td class="item-wrapper">-->
+<!--                        <div>{{status[history.action_status].action || 'Empty'}}</div>-->
+<!--                    </td>-->
+<!--                     <td class="item-wrapper">-->
+<!--                        <div>{{date_format(history.create_date) || 'Empty'}}</div>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->

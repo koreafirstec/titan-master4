@@ -1,0 +1,26 @@
+<div class="titans_popup alert_modal Netflix-Logo-5-hex-back Netflix-Logo-4-hex">
+    <div class="title">
+        {{user_title}}
+        <button class="fa fa-close" ng-click="close()"></button>
+    </div>
+    <form method="post" name="user_update_form">
+        <table class="manage_popup_table">
+            <tr>
+                <th>아이디: </th>
+                <td><input type="text" ng-model="user_id" class="form-control" ng-change="console.log(user_id)"></td>
+            </tr>
+            <tr>
+                <th>비밀번호: </th>
+                <td><input type="password" ng-model="user_pw" class="form-control"></td>
+            </tr>
+            <tr>
+                <th>이름: </th>
+                <td><input type="text" ng-model="user_name" class="form-control"></td>
+            </tr>
+        </table>
+        <div>
+            <button class="btn input-round" ng-click="user_update()">수정하기</button>
+            <button class="btn input-round" ng-click="close()">취소</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,116 @@
+body{
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup_img_status{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.popup_img_status > img{
+    width: 25%;
+}
+
+.ai_draw_rect{
+    position: relative;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.ai_draw_rect > img{
+    width: 100%;
+}
+
+.progress {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 12px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 30px;
+    background-color: #4CAF50;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.preview_container{
+    width: 854px;
+    height: 480px;
+    position: relative;
+}
+
+.preview_item_position{
+    display: none;
+    position: absolute;
+    border: 1px solid white;
+    background-color: rgba(0,0,0,0.3);
+    top: 0;
+}
+
+.preview_item_position > img{
+    width: 50px;
+    height: 50px;
+}
+
+.preview{
+    font-size: 1.6rem;
+    padding: 0;
+    margin: 10px 0;
+}
+.preview_btn{
+    margin-top: 10px;
+}
+.preview_btn > button{
+    background-color: rgba(169,169,169,0.5);
+    border-color: rgba(169,169,169,0.5);
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.popup_make{
+    position: relative;
+    width: 70%;
+    height: 80%;
+    overflow: hidden;
+}
+.popup_make img{
+    float: left;
+    width: 250px;
+    height: auto;
+}
+.popup_make .popup_insert{
+    display: inline-block;
+    height: 100%;
+    border-spacing: 0px 30px;
+}
+.popup_make .bottom{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 260px);
+}
+.popup_make .bottom > button{
+    background-color: rgba(169,169,169,0.8);
+    border-color: rgba(169,169,169,0.8);
+    width: 100%;
+    margin-top: 5px;
+}
+.popup_make table.popup_insert input,
+.popup_make table.popup_insert select{
+    border: none;
+    border-bottom: 1px solid;
+    padding: 4px;
+    background-color: rgba(169,169,169,0.8);
+    border-radius: 4px;
+}
+.popup_make table.popup_insert select > option{
+    background-color: #fff;
+}

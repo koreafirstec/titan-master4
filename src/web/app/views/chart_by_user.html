@@ -1,0 +1,90 @@
+<i main-header/>
+
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <section id="contents" class="container module-default" tabindex="1">
+        <i manage-nav></i>
+        <div class="content__header content__header__library">
+            <h3 class="content__header__title">
+                <span id="library-title">상품 관리</span>
+            </h3>
+            <div class="content__header__action">
+                <select ng-model="history_year" ng-options="year for year in history_years" ng-change="change_year()"></select>
+            </div><!-- content__header__action -->
+        </div><!-- content__header -->
+
+        <section class="module">
+            <section id="library-tabs">
+                <div>
+                    <highchart class="item_history_chart" config="click_pie_chart"></highchart>
+                    <highchart class="item_history_chart" config="click_bar_chart"></highchart>
+                    <highchart class="item_history_chart" config="buy_pie_chart"></highchart>
+                    <highchart class="item_history_chart" config="buy_bar_chart"></highchart>
+                </div>
+            </section>
+        </section>
+    </section>
+</section>
+<!--<div manage-nav></div>-->
+
+<!--<div class="manage_wrap">-->
+<!--    <h1 class="manage_title">-->
+<!--    <select ng-model="history_year" ng-options="year for year in history_years" ng-change="change_year()"></select>-->
+<!--        년 상품별 차트-->
+<!--    </h1>-->
+
+<!--    <div>-->
+<!--        <highchart class="item_history_chart" config="click_pie_chart"></highchart>-->
+<!--        <highchart class="item_history_chart" config="click_bar_chart"></highchart>-->
+<!--        <highchart class="item_history_chart" config="buy_pie_chart"></highchart>-->
+<!--        <highchart class="item_history_chart" config="buy_bar_chart"></highchart>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!-- // PIE CHART-->
+<!--        $scope.pie_chart = {-->
+<!--            options: {-->
+<!--                chart: {-->
+<!--                    type: 'pie',-->
+<!--                    width: 600,-->
+<!--                    backgroundColor: null-->
+<!--                },-->
+<!--                credits: {-->
+<!--                    enabled: false-->
+<!--                },-->
+<!--                title: {-->
+<!--                    text: ''-->
+<!--                },-->
+<!--                plotOptions: {-->
+<!--                    pie: {-->
+<!--                        allowPointSelect: true,-->
+<!--                        cursor: 'pointer',-->
+<!--                        dataLabels: {-->
+<!--                            enabled: false-->
+<!--                        },-->
+<!--                        showInLegend: true-->
+<!--                    },-->
+<!--                    series: {-->
+<!--                        dataLabels: {-->
+<!--                            enabled: true,-->
+<!--                            format: '{point.name}: {point.y}회'-->
+<!--                        }-->
+<!--                    }-->
+<!--                },-->
+<!--                tooltip: {-->
+<!--                    headerFormat: '',-->
+<!--                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}회</b><br/>'-->
+<!--                },-->
+<!--            },-->
+<!--            series: [-->
+<!--                {-->
+<!--                    // point: {-->
+<!--                    //     events: {-->
+<!--                    //         click: function() {-->
+<!--                    //             alert('here');-->
+<!--                    //         }-->
+<!--                    //     }-->
+<!--                    // },-->
+<!--                    data: []-->
+<!--                }-->
+<!--            ]-->
+<!--        };-->

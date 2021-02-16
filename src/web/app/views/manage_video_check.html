@@ -1,0 +1,213 @@
+<i main-header />
+<i manage-nav></i>
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <section id="contents" class="container module-default" tabindex="1" style="overflow: hidden; outline: none;">
+        <div class="content__header content__header__library">
+            <h3 class="content__header__title">
+                <span id="library-title">상품 동영상 관리</span>
+            </h3>
+            <div class="library__search__wrap library__search__mobile__wrap" style="margin-left: 8px">
+                <input type="text" placeholder="검색" class="library__search" ng-model="search_video_title" autocomplete="off" value="">
+            </div>
+        </div><!-- content__header -->
+
+
+        <section class="new_module">
+            <section id="library-tabs">
+                <section id="library-video-wrap" style="overflow-y: auto;">
+                    <div id="module-library-header" class="module__library__header mdule-default">
+                        <div class="btn-toolbar pull-left">
+                            <div class="library__search__wrap">
+                                <input type="text" placeholder="검색" id="form-search" class="library__search" autocomplete="off" value="">
+                            </div>
+                        </div>
+                        <div class="btn-toolbar pull-right">
+                            <div class="btn-group">
+                                <button type="button" id="btn-edit" class="btn tooltip-message"
+                                        data-original-title="데이터 추가" href=""
+                                        ng-click="videoAddPopup()">
+                                    <i class="fa fa-edit"></i><span class="btn-label-hidden">데이터 추가</span>
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" id="btn-delete-all" class="btn tooltip-message"
+                                        data-confirm-message="삭제하시겠습니까?" data-original-title="삭제하기"
+                                        ng-click="video_drop()">
+                                    <i class="fa fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div><!-- btn--toolbar -->
+                    </div>
+
+                    <table class="table-library" ng-table="videoListParams">
+                        <colgroup>
+                            <col class="library__col__checkbox">
+                            <col class="col__access">
+                            <col>
+                            <col class="col__access">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th class="js-table-checkbox">
+                                <div class="form-checkbox">
+                                    <ui-select-all items="video_check" prop="isSelected"
+                                                   id="library-check-all"
+                                                   ng-click="video_check_all(video_check)"></ui-select-all>
+                                    <label for="library-check-all"></label>
+                                </div>
+                            </th>
+    <!--                        <th>번호</th>-->
+                            <th class="access">썸네일</th>
+                            <th>동영상 제목</th>
+                            <th class="access">등록일</th>
+                        </tr>
+                        </thead>
+                        <!-- 컨텐츠 영역 -->
+                        <tbody>
+                        <tr ng-if="$data.length == 0">
+                            <td colspan="6">등록하신 영상이 존재하지 않습니다</td>
+                        </tr>
+                        <tr class="ng-scope" ng-repeat="item in video_check | filter:search_video_title" id="item_line_{{item.idx}}" ng-click="showVideoDetails(item)">
+    <!--                         ng-repeat="item in video_list | limitTo: limit_video"-->
+
+                            <td class="library__td__checkbox" id="library__td__checkbox__{{item.idx}}">
+                                <div class="form-checkbox">
+                                    <input type="checkbox" id="item_checked_{{item.idx}}"
+                                           ng-model="item.isSelected" ng-click="item_check_one(item)">
+                                    <label for="item_checked_{{item.idx}}"></label>
+                                </div>
+                            </td>
+
+    <!--                        <td style="text-align: center">{{item.idx || 'Empty'}}</td>-->
+
+    <!--                        아이템 썸네일-->
+    <!--                        ng-click="modify_meta_item(item)"-->
+                            <td class="library__td__category"><img id="{{item.video_url.substr(32, 11)}}" ng-click="videoDetails(item, 1)" ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg" alt="썸네일" style="width:80px; height: 60px;"/>
+                            </td>
+                            <td>
+                                <span class="library__category__wrap">{{item.video_title}}</span>
+                            </td>
+                            <td class="library__td__category">
+                                <span class="library__category__wrap">{{splitTime(item.create_date)}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+            <section id="content-detail-window">
+                <div class="detail" tabindex="11" style="opacity: 1; overflow: hidden; outline: none; display: none;">
+                    <setion class="detail__header">
+                        <nav class="detail__nav">
+                            <a ng-click="" class="active">상품정보</a>
+                        </nav>
+                        <button type="button" class="btn__icon btn__icon-xs js-btn-close-detail-window" ng-click="closePopup()">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </setion>
+
+                    <!-- 일반 -->
+                    <section class="detail__content" id="detail-general">
+                        <section class="detail__preview">
+<!--                 ng-click="modify_meta_item(selectedVideoItem)"            -->
+                            <img ng-src="https://img.youtube.com/vi/{{selectedVideoItem.video_url.substr(32, 11)}}/hqdefault.jpg" style="height: 300px; object-fit: scale-down; cursor: pointer" ng-click="modify_meta_item(selectedVideoItem)">
+                        </section>
+
+                        <section class="detail__wrap">
+                            <form class="disable-enter disable-submit">
+                                <div class="form-group">
+                                    <label>동영상 제목</label>
+                                    <input class="form-control" id="form-uploader"
+                                           style="overflow: hidden;"
+                                           type="text"
+                                           name="test1"
+                                           placeholder="Title"
+                                           value="{{selectedVideoItem.video_title}}"
+                                           ng-model="selectedVideoItem.video_title"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>동영상 길이</label>
+                                    <input class="form-control" id="form-title"
+                                           disabled
+                                           style="overflow: hidden;"
+                                           type="text"
+                                           name="test2"
+                                           placeholder="Title"
+                                           value="{{convertMilliSec(selectedVideoItem.video_duration)}}"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>동영상 플랫폼</label>
+                                    <input class="form-control" id="form-link"
+                                           disabled
+                                           style="overflow: hidden;"
+                                           placeholder="Title"
+                                           type="text"
+                                           name="test3"
+                                           value="{{selectedVideoItem.video_source}}"/>
+                                </div>
+
+
+                                 <div class="form-group row">
+                                     <label class="col-xs-3">상태</label>
+
+                                     <div class="col-xs-9 text-right">
+                                         <div class="form-radio inline" style="float: left">
+                                             <input type="radio" id="form-status-enable" name="form-status"
+                                                    value="1" ng-model="selectedVideoItem.video_status_value">
+                                             <label for="form-status-enable"><i class="fa fa-unlock"></i>활성화</label>
+                                         </div>
+
+                                         <div class="form-radio inline" style="float: left">
+                                             <input type="radio" id="form-status-disable" name="form-status"
+                                                    value="0" ng-model="selectedVideoItem.video_status_value">
+                                             <label for="form-status-disable"><i class="fa fa-lock"></i>비활성화</label>
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <div class="form-group row">
+                                     <label class="col-xs-3">공유</label>
+                                     <div class="col-xs-9 text-right">
+                                         <div class="form-radio inline" style="float: left">
+                                             <input type="radio" id="form-shared-enable" name="form-shared"
+                                                    value="1" ng-model="selectedVideoItem.video_shared"
+                                                    ng-disabled="fk_group_idx != 1 && selectedVideoItem.fk_user_idx != user_idx">
+                                             <label for="form-shared-enable"><i class="fa fa-unlock"></i>공개</label>
+                                         </div>
+
+                                         <div class="form-radio inline" style="float: left">
+                                             <input type="radio" id="form-shared-disable" name="form-shared"
+                                                    value="0" ng-model="selectedVideoItem.video_shared"
+                                                    ng-disabled="fk_group_idx != 1 && selectedVideoItem.fk_user_idx != user_idx">
+                                             <label for="form-shared-disable"><i class="fa fa-lock"></i>비공개</label>
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <div class="detail__edit-footer">
+                                     <button type="submit" id="btn-update-content"
+                                             class="btn btn-primary btn-confirm"
+                                             ng-click="video_update()">
+                                         <i class="fa fa-edit mr-xs"></i>
+                                         변경하기
+                                     </button>
+
+<!--                                     <button type="button" id="btn-delete-content"-->
+<!--                                             class="btn btn-danger btn-confirm"-->
+<!--                                             ng-click="video_drop()">-->
+<!--                                         <i class="fa fa-remove mr-xs"></i>-->
+<!--                                         삭제하기-->
+<!--                                     </button>-->
+                                 </div>
+                            </form>
+                        </section>
+                    </section>
+                </div>
+            </section>
+            </section>
+        </section>
+    </section>
+</section>

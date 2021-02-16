@@ -1,0 +1,89 @@
+<i main-header />
+<i manage-nav></i>
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <section id="contents" class="container module-default" tabindex="1" style="overflow: hidden; outline: none;">
+        <div class="content__header content__header__library">
+            <h3 class="content__header__title">
+                <span id="library-title">AI 모델</span>
+            </h3>
+            <div class="library__search__wrap library__search__mobile__wrap" style="margin-left: 8px">
+                <input type="text" placeholder="검색" class="library__search" ng-model="search_video_title" autocomplete="off" value="">
+            </div>
+            <div class="content__header__action">
+                <button class="btn btn-primary" type="submit" ng-click="makeModel()">생성</button>
+            </div><!-- content__header__action -->
+        </div><!-- content__header -->
+
+
+        <section class="new_module">
+            <section id="library-tabs">
+                <section id="library-model-wrap" style="overflow-y: auto;">
+                    <div id="module-library-header" class="module__library__header module-default">
+                        <div class="btn-toolbar pull-left">
+                            <div id="form-per-page" class="dropdown">
+                                <div class="library__search__wrap" style="float:left; margin-left: 8px">
+                                    <input type="text" placeholder="검색" id="form-search" class="library__search" ng-model="search_video_title" autocomplete="off" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table-library" ng-table="show_model" >
+                        <colgroup>
+                            <col style="width: 100px;">
+                            <col class="no">
+                            <col class="no">
+                            <col class="epochs">
+                            <col class="user">
+                            <col class="epochs">
+                            <col class="no">
+                            <col class="epochs">
+                            <col class="del">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th ng-repeat="head in model_table_headers" class="{{head.class_name}}">
+                                <div>
+                                    <span>{{head.name}}</span>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <!-- 컨텐츠 영역 -->
+                        <tbody style="text-align: center">
+                        <tr ng-repeat="model in model_list | filter:search_video_title" ng-if="model.idx != undefined">
+                            <td class="no">
+                                {{model.idx || 'Empty'}}
+                            </td>
+                            <td class="no">
+                                <div>{{model.model_title || 'Empty'}}</div>
+                            </td>
+                            <td class="no">
+                                <div>{{model.model_description || 'Empty'}}</div>
+                            </td>
+                            <td class="epochs">
+                                <div>{{model.model_epochs || 'Empty'}}</div>
+                            </td>
+                            <td class="user">
+                                <div>{{model.user_id || 'Empty'}}</div>
+                            </td>
+                            <td class="epochs">
+                                <div>{{access[model.model_access].type || 'Empty'}}</div>
+                            </td>
+                            <td class="no">
+                                <div>{{model.create_date | date: 'yyyy-MM-dd' || 'Empty'}}</div>
+                            </td>
+                            <td class="epochs">
+                                <div>{{status[model.model_status].value || 'Empty'}}</div>
+                            </td>
+                            <td class="del">
+                                <button class="btn" ng-click="onModelModify(model.idx)">수정</button>
+                                <button class="btn" ng-click="onModelDelete(model.idx)">삭제</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </section>
+    </section>
+</section>

@@ -1,0 +1,20 @@
+<div class="alert_modal Netflix-Logo-5-hex-back">
+    <div class="popup_video_add_container">
+        <div class="title">
+            <span>Youtube 영상 이미지 추가</span>
+            <button class="fa fa-close" ng-click="close()"></button>
+        </div>
+        <div class="msg video_add_container">
+            <form method="post" name="video_search" ng-submit="search()" novalidate>
+                <div class="form-group">
+                    <input type="text" style="width: 80%;" class="form-control input-field inline-block" placeholder="Youtube 영상 주소" ng-model="video_url" required />
+                    <input type="submit" class="btn inline-block" value="확인" />
+                </div>
+            </form>
+
+            <div ng-show="no_video_msg">
+                존재하지 않는 영상입니다.
+            </div>
+        </div>
+    </div>
+</div>

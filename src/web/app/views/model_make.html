@@ -1,0 +1,113 @@
+<article class="modal__content">
+    <div id="video_Editors_Time_Line" class="video_editor_wrap">
+        <div id="editors_LNB_wrap" class="editors_LNB_wrap">
+
+            <div id="editors_LNB">
+                <ul>
+                    <li class="lib_btn" style="line-height: 60px;height: 60px;color: #fff;padding-top: unset;font-weight: bold;background: #258cd1 radial-gradient(circle, transparent 1%, #258cd1 1%) center/20000%;">
+                        <p>TITANS</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="editors_header">
+            <input type="text" class="editor_title" ng-model="model_title" placeholder="모델명을 입력해주세요.">
+            <button ng-click="close()" class="editor_close">
+                <i class="fa fa-sign-out-alt"></i>
+                닫기
+            </button>
+        </div>
+
+        <div class="editors_content">
+            <div class="editors_above" style="height: 55%;">
+<!--                왼쪽-->
+                <div class="editors_none">
+
+                    <div ng-show="!show_builder" class="image_area" style="top: 25px;" ng-mousedown="drawStart($event)"
+                         ng-mousemove="drawing($event)" ng-mouseup="drawEnd()">
+                        <img ng-src="{{show_image}}" ondragstart="return false;" onerror="this.src = '/images/common/noimg.png';"/>
+<!--                        <span>{{show_image}}</span>-->
+                        <div class="draw_rect" id="draw_rect"></div>
+
+                        <div class="class_form" id="class_form" ng-form name="class_form" ng-mousedown="$event.stopPropagation();"
+                             ng-mousemove="$event.stopPropagation();" ng-mouseup="$event.stopPropagation();">
+                            <button class="btn btn-primary" ng-click="addDataImageSubmit()">확인</button>
+                            <button class="btn btn-primary" ng-click="addDataImageCancel()">취소</button>
+<!--                            <p class="class_title">이름</p>-->
+<!--                            <div>-->
+<!--                                <input class="form-control" name="class_name" type="text" ng-model="class_name"-->
+<!--                                       ng-pattern="/^[a-zA-Z]*$/" required>-->
+<!--                            </div>-->
+<!--                            <span class="error"-->
+<!--                                  ng-show="class_form.class_name.$invalid || class_form.class_name.$error.pattern">영어로만 입력해주세요!</span>-->
+<!--                            <select multiple class="form-control" id="exampleFormControlSelect2">-->
+<!--                                <option ng-repeat="class in classes" ng-click="classClick(class)">{{class}}</option>-->
+<!--                            </select>-->
+<!--                            <div class="button_area">-->
+<!--                                <button ng-class="{disabled:class_form.class_name.$invalid || class_form.class_name.$error.pattern}"-->
+<!--                                        class="btn btn-primary" ng-click="classSubmit()">확인-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-primary" ng-click="classCancel()">취소</button>-->
+<!--                            </div>-->
+                        </div>
+
+                        <div class="drew_rect_area" ng-repeat="(anno_name, anno) in annotation">
+                            <div class="drew_rect_area" ng-repeat="(anno_count, anno_data) in anno">
+                                <div class="drew_rect" id="{{anno_name}}_{{anno_count}}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="show_builder" style="overflow: scroll; height: 100%">
+                        <ul>
+                            <li class="model_img_list" style="cursor: pointer; margin: 3px 3px 6px 6px; padding: 10px 10px 5px; float: left;">
+                                <button style="width: 100px; height: 100px;">
+                                    AddItem
+                                </button>
+                            </li>
+                            <li ng-repeat="image in uploadedImage" class="model_img_list" style="cursor: pointer; margin: 3px 3px 6px 6px; padding: 10px 10px 5px; float: left;">
+                                <img ng-src="{{image}}" style="width: 100px; height: 100px;"/>
+                                <i class="fa fa-times" aria-hidden="true" ng-click="removeDataImage(image)"></i>
+                            </li>
+                        </ul>
+                        <div class="upload_form" id="upload_form" ng-form name="upload_form" ng-mousedown="$event.stopPropagation();"
+                             ng-mousemove="$event.stopPropagation();" ng-mouseup="$event.stopPropagation();">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="class_area">
+                    <img ng-src="{{now_image}}" ondragstart="return false;" onerror="this.src = '/images/common/noimg.png';" style="width: 100%; height: 100%;"/>
+                </div>
+            </div>
+
+            <div class="editors_timeline" style="height: 45%;">
+                <div class="positionList">
+                    <div style="position: absolute; left: 0;">
+                        <button class="position_btn" ng-click="crawlingImage()">데이터 수집</button>
+                        <button class="position_btn" ng-click="controlModel()">이미지 생성</button>
+<!--                        <button class="position_btn" ng-click="changeShowType('local_image')">로컬 이미지</button>-->
+                        <button class="position_btn" ng-click="trainModel()">모델 학습</button>
+                    </div>
+                </div>
+                <div id="editors_list_tab">
+                    <ul id="video_cap_img">
+                        <li ng-repeat="img_path in all_images">
+                            <img ng-src="{{img_path}}"
+                                 title="item_image"
+                                 style="width: 100px; height: 100px;"
+                                 onerror="this.src = '/images/common/noimg.png';"
+                                 ng-click="imageChange(img_path)"/>
+                        </li>
+                    </ul>
+                </div>
+                <div class="progress" ng-show="progress_width > 0 && progress_width < 100">
+                    <div id="progress_bar" class="progress-bar progress-bar-success Netflix-Logo-4-hex">
+                        {{progress_width}}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

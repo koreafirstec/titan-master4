@@ -1,0 +1,124 @@
+<div class="title">
+    <h1>회원정보 입력</h1>
+    <p><img src="../images/common/join_level.PNG"></p>
+</div>
+<form method="post" name="joinForm" ng-submit="join(credentials)" novalidate form-autofill-fix class="form">
+    <section class="join_module">
+        <h1>회원정보</h1>
+        <div style="display:none">
+            <input type="hidden" name="return_url" value="/">
+            <input type="hidden" name="csrf_token" value="5a38a168306cf8f4973b28c8adf7f3c1">
+        </div>
+        <div class="form-group join_id">
+            <label>아이디 <span>*</span></label>
+            <input name="user_id" ng-maxlength="50" type="email" class="join_id_value"
+                   placeholder="아이디를 입력해주세요" tabindex="1" ng-model="credentials.user_id" ref="id" autocomplete="user_id"
+                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required=""/>
+            <input type="button" class="join_id_auth" value="중복확인" ng-click="auth_id(credentials.user_id)">
+        </div>
+
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>비밀번호 <span>*</span></label>
+            <input name="user_pw" type="password" ng-maxlength="20"
+                   autocomplete="off" placeholder="최소 10글자 이상/영문,숫자,특수문자 2개 이상 조합하여 입력해주세요" tabindex="1" ng-model="credentials.user_pw"
+                   required />
+            <p class="ok_message">사용가능한 비밀번호 입니다</p>
+        </div>
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>비밀번호 확인 <span>*</span></label>
+            <input name="user_re_pw" type="password" ng-maxlength="20"
+                   autocomplete="off" tabindex="1" ng-model="credentials.user_re_pw"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+            <p class="no_message">동일한 비밀번호를 입력해주세요</p>
+        </div>
+        <div class="form-group join_email"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>이메일 <span>*</span></label>
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+            @
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+
+            <select>
+                <option>직접입력</option>
+            </select>
+        </div>
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>이름 <span>*</span></label>
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" placeholder="이름을 입력해주세요" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+        </div>
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>회사명 <span>*</span></label>
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" placeholder="회사명을 입력해주세요" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+        </div>
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>부서 <span></span></label>
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+        </div>
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <label>휴대번호 <span>*</span></label>
+            <input name="user_name" type="text" ng-maxlength="20"
+                   autocomplete="off" tabindex="1" ng-model="credentials.user_name"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+        </div>
+        <div class="join_auth">
+            <input id="auth_id" type="text" class="auth_num" placeholder="인증번호" ng-model="auth_id_check_number"/>
+            <input id="auth_id_check_btn" class="auth_btn" type="button" value="인증번호 발송" ng-click="auth_id_check(auth_id_check_number)">
+        </div>
+        <div class="join_check">
+            <div>
+                <input id="join_all_check" type="checkbox">
+                <label for="join_all_check"><span class="join_all_check">모든 약관에 동의</span></label>
+            </div>
+            <div>
+                <input id="join_check_1" type="checkbox">
+                <label for="join_check_1"><span>[필수] 개인정보 수집 및 동의</span></label>
+                <span>자세히 보기</span>
+            </div>
+            <div>
+                <input id="join_check_2" type="checkbox">
+                <label for="join_check_2"><span>[필수] 개인정보 취급 위탁 동의</span></label>
+                <span>자세히 보기</span>
+            </div>
+            <div>
+                <input id="join_check_3" type="checkbox">
+                <label for="join_check_3"><span>[필수] 서비스 이용약관</span></label>
+                <span>자세히 보기</span>
+            </div>
+            <div>
+                <input id="join_check_4" type="checkbox">
+                <label for="join_check_4"><span>[선택] 마케팅 수신 동의</span></label>
+                <span>자세히 보기</span>
+            </div>
+        </div>
+    </section><!-- join_module -->
+    <button type="submit" class="join_btn" ng-click="join_success()">가입하기</button>
+</form>
+
+<div class="footer join_footer">
+<!--    WIXI 이미지 넣기-->
+    <img src="images/common/Boshow.svg">
+    <p>
+        <a href="">개인정보 처리 방침</a>
+        <a href=""><strong>제휴문의</strong></a>
+    </p>
+    <p>
+        서울시 금천구 가산디지털1로 83, 파트너스타워1차 306호
+    </p>
+    <p>
+        <span>TEL : 02-3775-4015</span>
+        <span>FAX : 02-3775-4014</span>
+        <span>E-mail : pnwat@pnwat.com</span>
+    </p>
+    <p>
+        Copyright PNWAT Co., Ltd.All rights reserved.
+    </p>
+</div>

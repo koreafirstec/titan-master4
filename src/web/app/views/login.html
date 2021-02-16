@@ -1,0 +1,69 @@
+<div class="title">
+    <h1>관리자 로그인</h1>
+    <p>안녕하세요! Boshow 통합관제 시스템에 오신 걸 환영합니다:)</p>
+</div>
+
+<section class="login_module">
+    <form method="post" name="loginForm" ng-submit="login(credentials)" novalidate form-autofill-fix class="form">
+<!--    뭔지 모르겠어서 diplay: none으로 내버려 둠-->
+        <div style="display:none">
+            <input type="hidden" name="return_url" value="/">
+            <input type="hidden" name="csrf_token" value="5a38a168306cf8f4973b28c8adf7f3c1">
+        </div>
+
+
+        <div class="form-group">
+            <input class="" name="user_id" ng-maxlength="50" type="email"
+                   placeholder="코드" tabindex="1" ng-model="credentials.user_id" ref="id" autocomplete="user_id"
+                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required />
+        </div>
+
+        <div class="form-group">
+            <input class="" name="user_id" ng-maxlength="50" type="email"
+                   placeholder="아이디" tabindex="1" ng-model="credentials.user_id" ref="id" autocomplete="user_id"
+                   ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required />
+        </div>
+
+        <div class="form-group"> <!-- 비밀번호 입력 안 됐으면 has-error -->
+            <input class="" name="user_pw" type="password" ng-maxlength="20"
+                   autocomplete="off" placeholder="비밀번호" tabindex="1" ng-model="credentials.user_pw"
+                   ng-keypress="($event.which === 13)?login(credentials):0" required />
+        </div>
+
+        <div class="login_bottom">
+            <div>
+                <span class="id_save_check">
+                    <input id="id_save_check" type="checkbox">
+                    <label for="id_save_check"><span>코드, 아이디 저장</span></label>
+                </span>
+                <a href="" ng-click="go_join()" class="text-link pull-right">회원가입</a>
+            </div>
+            <button type="submit" class="login_submit">로그인</button>
+            <div class="search_person_info">
+                <span><a href="" ng-click="go_find_id()">아이디 찾기</a></span>
+                |
+                <span><a href="" ng-click="go_find_pw()">비밀번호 찾기</a></span>
+            </div>
+        </div>
+    </form>
+</section><!-- module -->
+
+<div class="footer">
+<!--    WIXI 이미지 넣기-->
+    <img src="images/common/Boshow.svg">
+    <p>
+        <a href="">개인정보 처리 방침</a>
+        <a href=""><strong>제휴문의</strong></a>
+    </p>
+    <p>
+        서울시 금천구 가산디지털1로 83, 파트너스타워1차 306호
+    </p>
+    <p>
+        <span>TEL : 02-3775-4015</span>
+        <span>FAX : 02-3775-4014</span>
+        <span>E-mail : pnwat@pnwat.com</span>
+    </p>
+    <p>
+        Copyright PNWAT Co., Ltd.All rights reserved.
+    </p>
+</div>

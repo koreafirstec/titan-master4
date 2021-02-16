@@ -1,0 +1,238 @@
+.model_make {
+    position: absolute;
+}
+
+.model_make .file_box {
+    display: inline-block;
+}
+
+.model_make .file_box label {
+    display: inline-block;
+    padding: .5em .75em;
+    color: #fff;
+    font-size: inherit;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #5cb85c;
+    cursor: pointer;
+    border: 1px solid #4cae4c;
+    border-radius: .25em;
+    -webkit-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+}
+
+.model_make .file_box label:hover {
+    background-color: #6ed36e;
+}
+
+.model_make .file_box label:active {
+    background-color: #367c36;
+}
+
+.model_make .file_box input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.model_make .image_list_area {
+    border: 1px solid;
+    border-radius: 10px;
+    width: 500px;
+    display: inline-block;
+}
+
+.model_make .image_list_area .page_nav {
+    text-align: center;
+}
+
+.model_make .image_list_area .image_list {
+    width: 100px;
+    height: 140px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px;
+}
+
+.model_make .image_list_area .image_list img {
+    width: 100px;
+    height: 120px;
+}
+
+.model_make .image_list_area .ng-binding {
+    color: black;
+}
+
+.model_make .draw_area {
+    display: inline-block;
+}
+
+.model_make .draw_area .image_move_area {
+    height: 100%;
+    display: inline-block;
+}
+
+.model_make .image_move_area .image_move {
+    width: 60px;
+    top: 50%;
+    cursor: pointer;
+}
+
+.model_make .image_area {
+    position: relative;
+    width: 416px;
+    height: 416px;
+    cursor: crosshair;
+    display: inline-block;
+}
+
+.model_make .image_area .show_image, .model_make .image_area #draw_rect, .model_make .image_area .drew_rect_area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.model_make .image_area #draw_rect {
+    display: none;
+    border: 1px solid white;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 99;
+}
+
+.model_make .image_area #class_form {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    width: 200px;
+    -webkit-user-select: none;
+}
+
+.model_make .image_area #class_form .class_title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.model_make .image_area #class_form .error {
+    color: red;
+}
+
+.model_make .image_area .drew_rect {
+    border: 1px solid white;
+    background-color: rgba(0,0,0,0.3);
+    position: absolute;
+    z-index: 98;
+}
+
+.model_make .image_area #class_form .button_area {
+    text-align: center;
+}
+
+.model_make .class_area {
+    width: 200px;
+    overflow: auto;
+    height: 300px;
+    position: relative;
+    display: inline-block;
+}
+
+.model_make .class_area ul li {
+    cursor: pointer;
+    background: #d9d9d9;
+}
+
+.model_make .class_area ul li:hover {
+    background: #ddd;
+}
+
+.model_make .class_area ul li a span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 37px;
+    text-align: center;
+    background: #eee;
+    color: black;
+    display: table;
+}
+
+.model_make .class_area ul li a span:hover {
+    background: red;
+}
+
+.model_make .class_area ul li a span div {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+/* ----------------------------------------------------------------------------------------------- */
+
+.user_update .manage_popup_table .access_toggle {
+    height: 34px;
+    padding-bottom: 30px;
+    padding-left: 50px
+}
+
+.user_update .manage_popup_table .access_toggle input[type="checkbox"] {
+    position: absolute;
+    visibility: hidden;
+}
+
+.user_update .manage_popup_table .access_toggle label {
+    display: block;
+    position: absolute;
+    width: 70px;
+    height: 34px;
+    border-radius: 17px;
+    background-color: #ddd;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.user_update .manage_popup_table .access_toggle label span {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    z-index: 1;
+    width: 33px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #fff;
+    transition-duration: 0.2s;
+}
+
+.user_update .manage_popup_table .access_toggle label:before,
+.user_update .manage_popup_table .access_toggle label:after{
+    position: absolute;
+    top: 0;
+    width: 34px;
+    font-size: 11px;
+    line-height: 34px;
+    color: #fff;
+    text-align: center;
+}
+
+.user_update .manage_popup_table .access_toggle label:before {
+    left: 0;
+    content: '공개';
+}
+
+.user_update .manage_popup_table .access_toggle label:after {
+    right: 0;
+    content: '비공개';
+}
+
+.user_update .manage_popup_table .access_toggle input:checked + label {
+    background-color: #00c73c;
+}
+
+.user_update .manage_popup_table .access_toggle input:checked + label span {
+    left: 10px;
+    transform: translateX(26px);
+}

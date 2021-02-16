@@ -1,0 +1,34 @@
+.list_select_wrap{
+    height: 50px;
+}
+.list_select {
+    width: 100%;
+    background-color: #ffffff;
+    height: 50px;
+    line-height: 50px;
+    font-size: 0;
+    margin-top: -1px;
+    position: fixed;
+}
+.list_select > button{
+    width: 50%;
+    font-size: 1.6rem;
+    font-weight: bolder;
+    color: #000;
+    border: 1px solid;
+}
+.my_item_layout{
+    /*display: inline-block;*/
+    /*width: 22%;*/
+    /*margin: 1% 1.5%;*/
+}
+.my_item_layout .video_url{
+    width: 100%;
+}
+.my_item_layout .image_area{
+    height: 300px;
+    overflow: auto;
+}
+.my_item_layout .image_area::-webkit-scrollbar{
+    display: none;
+}

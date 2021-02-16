@@ -1,0 +1,36 @@
+<div>
+    <div class="list_select_wrap">
+        <div class="list_select">
+            <button ng-click="show=1">동영상</button>
+            <button ng-click="show=2">상품</button>
+        </div>
+    </div>
+
+    <div ng-if="show==1" ng-repeat="video in video_list" class="my_item_layout">
+        <dl>
+            <dt>
+<!--                <span ng-if="fk_group_idx == 1 || item.fk_user_idx == user_idx" class="video_delete"><button type="button" ng-click="video_drop(item.idx)">X</button></span>-->
+<!--                <span class="item_count">-->
+<!--                    <span ng-if="video.item_count != 0" class="Netflix-Logo-3-hex"><img src="../images/item_shape/1.png" class="present" ng-click="item_list_check(item)">x{{item.item_count}}</span>-->
+<!--                    <a href="https://www.youtube.com/watch?v={{item.video_url.substr(32, 11)}}" target="_blank"><img src="../images/item_shape/youtube.png" class="logo_youtube"></a>-->
+<!--                </span>-->
+                <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg" alt="썸네일" class="video_url"/>
+            </dt>
+            <dd class="video_list_item_name Netflix-Logo-4-hex">
+                {{video.video_title}}
+            </dd>
+        </dl>
+    </div>
+
+    <div ng-if="show==2" ng-repeat="item in item_list" class="my_item_layout">
+        <div class="image_area">
+            <img ng-src="{{item.item_img_path}}" alt="없음" onerror="this.src='/images/common/noimg.png'"/>
+        </div>
+        <div class="ellipsis1 item_list_name">{{item.item_title}}</div>
+        <div class="ellipsis2">{{item.item_description}}</div>
+<!--        <div>{{item.item_price.toLocaleString()}}원</div>-->
+<!--        <img style="width: 100px;" ng-src="https://img.youtube.com/vi/{{item.video_id}}/hqdefault.jpg" alt="썸네일"/>-->
+        <button ng-click="item_update(item)">수정</button>
+        <button ng-click="item_delete(item)">삭제</button>
+    </div>
+</div>

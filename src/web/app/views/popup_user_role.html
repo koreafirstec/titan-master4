@@ -1,0 +1,25 @@
+<div class="user_update">
+    <p class="popup_user_add_title">{{title}}</p>
+    <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>
+
+    <div class="content_area">
+        <table class="user_manage_table ng-scope ng-table">
+            <thead>
+                <tr>
+                    <th>유저명</th>
+                    <th>권한 리스트</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in userList">
+                    <td>{{user.user_name}}</td>
+                    <td class="role_area">
+                        <span ng-repeat="role in roleList">
+                            <button ng-class="getRoleInfo(user.idx, role.idx)" ng-click="roleChange(user.idx, role.idx)">{{role.role_name}}</button>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

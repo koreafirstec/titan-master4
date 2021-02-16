@@ -1,0 +1,23 @@
+<div id="item_position_list" class="item_position_list Netflix-Logo-5-hex-back Netflix-Logo-4-hex">
+    <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>
+    <p>{{title}}</p>
+    <div id="moveImage" style="display:inline-block;">
+        <button class="position_left" ng-click="previous_Image(image_frame)"><<</button>
+        <div id="position_draw_rect" class="position_draw_rect">
+            <img id="position_img" class="position_img" ng-src="{{position_image}}">
+            <div class="loading_spinner" ng-show="dataStatus != 200">
+                <loading></loading>
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                <p ng-show="detail_update" style="position: relative; color:white; top:150px;">영역 수정 중...</p>
+                <p ng-show="image_count == 0" style="position: relative; color:white; top:150px;">다음 영역으로 이동 중...</p>
+            </div>
+            <div ng-show="dataStatus == 200" id="item_position_{{item_idx}}" class="item_position_rect"></div>
+        </div>
+        <button id="position_time" class="position_right" ng-click="next_Image(image_frame)" ng-disabled="image_count == 0" data-seek="{{next_time}}">>></button>
+    </div>
+
+    <div class="rect_status_change" ng-show="manage_button">
+        <button ng-click="rectUpdate(rectLeft, rectTop, rectWidth, rectHeight, image_frame, image_w, image_h, item_idx)">수정</button>
+        <button ng-click="rectDelete(rectLeft, rectTop, rectWidth, rectHeight, image_frame, image_w, image_h, item_idx)">제거</button>
+    </div>
+</div>

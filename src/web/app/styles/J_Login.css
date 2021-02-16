@@ -1,0 +1,107 @@
+/* login */
+.login_module {
+  width: 402px;
+  height: 293px;
+  margin: 80px auto 165px;
+  object-fit: contain;
+}
+.login_module > form > .form-group > input[type="email"],
+.login_module > form > .form-group > input[type="password"]{
+    padding: 10px 16px;
+    box-shadow: none;
+    width: 402px;
+    height: 40px;
+    background-color: #f4f4f4;
+    font-size: 14px;
+    line-height: 1.43;
+    text-align: left;
+    color: #7f7f7f;
+    border: none;
+}
+.login_module .login_bottom{
+  font-size: 12px;
+  color: #777777;
+}
+.login_module .login_bottom > div:nth-child(1){
+  margin-bottom: 16px;
+}
+.login_module .login_bottom > .login_submit{
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    color: #fff;
+    background-color: rebeccapurple;
+    font-size: 14px;
+    text-align: center;
+    border: none;
+    line-height: 1.43;
+}
+.login_module .login_bottom > div:nth-child(3){
+    text-align: center;
+    margin: 10px 0;
+    width: 100%;
+    height: 18px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6b6b6b;
+}
+.login_module .login_bottom .id_save_check > input[type="checkbox"]{
+    display: none;
+}
+.login_module .login_bottom .id_save_check > input[type="checkbox"] + label{
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 1px;
+    border: 1px solid;
+    box-shadow: 1px 1px grey inset;
+    position: relative;
+}
+.login_module .login_bottom .id_save_check > input[type="checkbox"] + label > span{
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    width: 100px;
+    height: 18px;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+    color: #6b6b6b;
+}
+.login_module .login_bottom .id_save_check > input[type="checkbox"]:checked + label{
+    background: url(http://localhost/styles/../images/common/checked.PNG) no-repeat center/17px 17px;
+}
+
+/* footer */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 214px;
+    padding: 46px 0 0 24.4%;
+    background-color: #f7f7f7;
+}
+.footer img{
+    width: 80px;
+    position: absolute;
+    left: 16.6%;
+    top: 40px;
+}
+.footer p{
+    width: 100%;
+    height: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: -0.17px;
+    text-align: left;
+    color: #7f7f7f;
+}
+.footer p:nth-child(2){
+    margin-bottom: 20px;
+}
+.footer p:nth-child(5){
+    margin-top: 28px;
+    color: #6b6b6b;
+}

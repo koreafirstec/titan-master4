@@ -1,0 +1,94 @@
+<i manage-nav></i>
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <h1 class="title">동영상 등록</h1>
+    <div class="video_add">
+        <div class="video_add_type">
+            <button type="button"><img src="../images/common/icons/video_add_1.png"></button>
+            <button type="button" ng-click="search_youtube()"><img src="../images/common/icons/video_add_2.png"></button>
+        </div>
+        <form ng-submit="videoAdd()" class="video_add_section">
+            <div class="video_add-left">
+                <div>등록한 동영상 썸네일</div>
+                <div class="no_image_video_add" ng-show="video_id == ''"></div>
+                <img ng-src="https://img.youtube.com/vi/{{video_id}}/hqdefault.jpg" class="image_video_add" ng-show="video_id != ''">
+            </div>
+            <div class="video_add-right">
+                <table>
+                    <colgroup>
+                        <col width="93px">
+                        <col width="165px">
+                        <col width="235px">
+                        <col width="113px">
+                    </colgroup>
+                    <tr>
+                        <th>제목</th>
+                        <td colspan="2"><input type="text" ng-model="video_title"></td>
+                        <td class="video_add_table_title_advise">
+                            <span>(<span>0</span>/48)</span>
+                            <span>*공백제외</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>설명</th>
+                        <td colspan="2">
+                            <textarea class="video_add_education" placeholder="영상에 대한 정보나 출연진, 담당 PD 등 설명을적어주세요! (내용이 많을수록 동영상 관리, 검색에 편리합니다.)" ng-model="video_explanation"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>길이</th>
+                        <td><input type="text" ng-model="video_duration"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>플랫폼</th>
+                        <td><input type="text" ng-model="video_source"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>분류</th>
+                        <td>
+                            <select ng-model="video_category">
+                                <option value="">카테고리 선택</option>
+                                <option value="예능">예능</option>
+                                <option value="스포츠/취미">스포츠/취미</option>
+                                <option value="드라마">드라마</option>
+                                <option value="교양">교양</option>
+                                <option value="애니메이션">애니메이션</option>
+                                <option value="키즈">키즈</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>URL</th>
+                        <td colspan="2"><input type="text" ng-model="video_url"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td colspan="2">
+                            직접 등록/유튜브 등록 외 다른 채널의 동영상 등록을 원하신다면 URL을 입력해주세요!<br/>
+                            해당 동영상 정보가 자동으로 업데이트 됩니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>노출여부</th>
+                        <td>
+                            <input type="radio" name="video_shared" ng-model="video_shared" value="1" checked/> 공개
+                            <input type="radio" name="video_shared" ng-model="video_shared" value="2"/> 비공개
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="submit" class="">등록</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

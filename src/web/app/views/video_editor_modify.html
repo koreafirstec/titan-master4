@@ -1,0 +1,105 @@
+<article id="video_modify_Editors_content" class="modal__content">
+    <div id="video_Editors_Time_Line" class="video_editor_wrap">
+        <div id="editors_LNB_wrap" class="editors_LNB_wrap">
+            <div id="editors_LNB" style="background-color:#272731;">
+                <ul>
+                    <li class="lib_btn" style="line-height: 60px;height: 60px;color: #fff;padding-top: unset;font-weight: bold;background: #258cd1 radial-gradient(circle, transparent 1%, #258cd1 1%) center/20000%;">
+                        <p>TITANS</p>
+                    </li>
+                    <li class="lib_btn" ng-click="back_modify_editor()" ng-show="selectedVideoItem != '' && modify_titan_status === 200 && !show_item_lib">
+                        <button><i class="fa fa-arrow-left"></i>
+                            <p>이전</p>
+                        </button>
+                    </li>
+                    <li class="lib_btn" ng-show="img_modify_url_current != '' && img_modify_url_current != undefined" style="display: none;" id="adding_modify_position" ng-click="Add_Draw(editor_i)">
+                        <button><i class="far fa-object-ungroup"></i>
+                            <p>영역 추가</p>
+                        </button>
+                    </li>
+                    <li class="lib_btn" ng-show="img_modify_url_current != '' && img_modify_url_current != undefined" style="display: none;" id="cancel_modify_position" ng-click="Cancel_Draw()">
+                        <button><i class="far fa-object-ungroup"></i>
+                            <p>추가 취소</p>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="editors_header">
+            현재 영역: <input type="text" class="editor_title" ng-model="editor_title" disabled>
+            <button ng-click="close(modify_titan_status)" class="editor_close">
+                <i class="fa fa-sign-out-alt"></i>
+                닫기
+            </button>
+        </div>
+        <div class="editors_content">
+            <div class="editors_above">
+                <div id="editors_none" class="editors_none">
+                    <div id="editors_image_modify" style="height: 95%; width: 100%; position: absolute;"></div>
+                    <div class="editors_video-select" ng-show="show_item_lib">
+                        <div ng-repeat="item in selectedItemList" style="display: inline">
+                            <button ng-click="item_modify_click(item)"><img ng-src="{{item.item_img_path}}"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="editors_title" id="editors_title" style="float: left; width: 50%; height: 100%; position: relative; display: none;">
+                    <div>
+                        <div>
+                            <img ng-src="{{img_modify_url_current}}" src="{{img_modify_url_current}}" id="current_modify_editor_img" class="current_modify_editor_img" ng-show="img_modify_url_current != '' && img_modify_url_current != undefined" style="position:absolute; height: 100%;">
+                            <div style="position: absolute; width:100%; height: 100%;">
+                                <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
+                            </div>
+                            <modify-position ng-repeat="item in video_modify_rect" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)-item.y/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)-item.x/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);" ng-right-click="modify_and_delete_work(item.position_order)" tooltip="마우스 오른쪽 클릭" tooltip-placement="right"></modify-position>
+                        </div>
+                    </div>
+                </div>
+                <div id="editors_modify_video" class="editors_insert_video">
+                    <div id="video_modify_canvas" class="video_canvas"></div>
+                    <youtube id="youtube_modify_if" modifyposition="{{calc_value}}" videoid="{{selectedVideoItem.video_url.substr(32, 11)}}" videoidx="{{selectedVideoItem.idx}}" itemlist="{{[make_item_list]}}" ng-show="selectedVideoItem != undefined && selectedVideoItem !=''" iscontrols="0"></youtube>
+                    <div ng-repeat="item in video_modify_rect" class="video_editor_modify_div" style="display: {{modify_display}}; left:{{(item.x/(1920/youtube_width))+calc_value | number:0}}px; top:{{item.y/(1080/youtube_height) | number:0}}px; height:{{(item.height/(1080/youtube_height)-item.y/(1080/youtube_height)) | number:0}}px; width:{{(item.width/(1920/youtube_width)-item.x/(1920/youtube_width)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></div>
+                    <div ng-show="item.item_shape_type==0 && show_position == true" id="item_video_rect" ng-repeat="item in [make_item_list]">
+                        <div id="item_{{item.idx}}" class="video_item_position"></div>
+                    </div>
+                    <div ng-show="item.item_shape_type==1 && show_position == true" id="img_video_rect" ng-repeat="item in [make_item_list]">
+                        <div id="img_{{item.idx}}" class="video_item_present">
+                            <img src="../images/item_shape/1.png" ng-click="openItem(item.idx)"/>
+                        </div>
+                    </div>
+                    <div class="editor_btn_line">
+                        <button id="backward_btn"><i class="fas fa-backward"></i></button>
+                        <button id="modify_play_btn" data-seek="{{current_time}}" style="display: inline-block;" ng-click="position_change_play()"><i class="fa fa-play" data-seek="{{current_time}}"></i></button>
+                        <button id="modify_pause_btn" style="display: none;" ng-click="position_change_pause()"><i class="fa fa-pause"></i></button>
+                        <button id="forward_btn"><i class="fas fa-forward"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="editors_timeline">
+                <div class="positionList">
+                    <div style="position: absolute; left: 0;" ng-show="detail_list != '' && detail_list != undefined && show_detail_lib">
+                        <select style="width: 100px" ng-options="data.index for data in detail_list" ng-model="detail_selected" ng-change="meta_position_editor(selectedVideoItem, detail_selected)">
+                            <option value="">선택 없음</option>
+                        </select>
+                        <button style="padding: 6px 25px;text-align: center;background-color: rgba(255, 255, 255, 0.05);border-radius: 5px;" ng-click="all_position(selectedVideoItem, detail_selected)">전체 가져오기</button>
+                        현재 영역 개수: {{modify_success.length}}
+                    </div>
+                    <div style="display: inline-block"><div id="current-time" style="display: inline-block; color: #eee;">00:00:00</div>/<div id="duration" style="display: inline-block">00:00:00</div></div>
+                </div>
+                <div id="editors_list_tab">
+                    <ul id="modify_list" class="menu-area" style="top: 0; height: 100%">
+                        <li ng-repeat="item in modify_success" id="meta_modify_editor_li_{{item.current_position}}" class="modify_editor_li">
+                            <p style="margin-bottom: 75px;font-weight: bolder;font-size: 15px;">{{item.position_time.toFixed(1)}}</p>
+                            <i class="fa fa-angle-down editor_icon" id="editor_icon_{{item.image_frame}}" style="display:{{item.display}}; color:#fff; width: 100%;"></i>
+                            <button ng-click="ItemModifyEditor(item, selectedVideoItem.idx, make_item_list.idx)" style="border: {{item.border_color}};"><img ng-src="{{env_webs+item.draw_img_name}}" style="width: 180px; height: 130px;"></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul id="context1" class="context_back">
+        <li style="background-color: blue; color: #fff;">영역 수정</li>
+        <li>{{position_order}}번째</li>
+        <li><button ng-click="position_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, item_idx, position_order, selectedVideoItem.idx)">수정</button></li>
+        <li><button ng-click="position_delete(image_frame, item_idx, position_order, selectedVideoItem.idx)">삭제</button></li>
+        <li ng-show="rectPosition.length > 1"><button ng-click="position_all_drop(rectPosition, selectedVideoItem.idx)">모두 삭제</button></li>
+    </ul>
+</article>

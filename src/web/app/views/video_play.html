@@ -1,0 +1,13 @@
+<div class="title Netflix-Logo-2-hex-back Netflix-Logo-4-hex">
+    <span>{{title}}</span>
+</div>
+<div class="middle_text_2">
+    <div ng-if="video_detail.video == true">
+        <youtube width="640" height="480" videoid="{{video_id}}" videoidx="{{video_idx}}"></youtube>
+        <canvas width="640" height="480" style="border: 1px solid red;position: absolute;" id="canvas_1"></canvas>
+    </div>
+    <div ng-if="video_detail.video == undefined" class="Netflix-Logo-4-hex video_play_undefined">
+        <p>해당 비디오가 존재하지 않습니다.</p>
+        <button>만들기</button>
+    </div>
+</div>

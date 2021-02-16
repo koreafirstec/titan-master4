@@ -1,0 +1,42 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 66px;
+    width: 250px;
+    padding-top: 10px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.12);
+    height: 100%;
+}
+.sidebar > ul > li {
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+    color: #7f7f7f;
+    padding-left: 56px;
+    position: relative;
+}
+.sidebar > ul > li > img{
+    position: absolute;
+    left: 16px;
+    top: 13px;
+    bottom: 13px;
+}
+.sidebar > ul > li > a {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.17px;
+}
+
+.sidebar > .option {
+    position: fixed;
+    bottom: 10px;
+    width: 250px;
+}
+.sidebar > ul > li:hover{
+    background-color: #f6f2ff;
+    color: #4d20a3;
+}
+.sidebar > ul > li.selected{
+    background-color: #f6f2ff;
+    color: #4d20a3;
+}

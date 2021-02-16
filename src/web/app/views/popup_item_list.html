@@ -1,0 +1,17 @@
+<div class="video_item_list Netflix-Logo-5-hex-back Netflix-Logo-4-hex">
+        <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>
+        <p class="video_title">{{title}}</p>
+        <div class="video_item_list_wrap">
+            <div ng-repeat="item in item_list" ng-if="item.using == 1" class="prod_list">
+                <div class="image_area">
+                    <img ng-src="{{item.item_img_path}}" alt="없음" onerror="this.src='/images/common/noimg.png'"/>
+                </div>
+                <p class="item_name">{{item.item_title}}</p>
+                <p class="user_name">{{item.name}}</p>
+                <div class="btn_line">
+                    <button ng-show="fk_group_idx==1 || item.fk_user_idx == user_idx" ng-click="popup_update(video_idx, item, item_video)">수정</button>
+                    <button ng-show="fk_group_idx==1 || item.fk_user_idx == user_idx" ng-click="item_delete(item)">삭제</button>
+                </div>
+            </div>
+        </div>
+</div>

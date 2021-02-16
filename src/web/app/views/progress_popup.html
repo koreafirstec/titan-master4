@@ -1,0 +1,255 @@
+<!-- PROGRESS -->
+<!-- FIXME: ai_status 100을 받아오지 못함 -> (임시) 98로 해놓음 - 97에서 100으로 넘어오는 경우 넘어가지 않음 -->
+<!--ng-if="ai_status < 98" -->
+<div class="popup_progress_status">
+    <div class="popup_img_status">
+        <img ng-src="{{img_url_past}}" alt="remote image" err-SRC="{{noimg_image}}"/>
+        <div class="ai_draw_rect">
+            <img ng-src="{{img_url_current}}" id="current_img" alt="remote image"
+                err-SRC="{{noimg_image}}" style="transition: 0.3s"/>
+            <div id="item_div" class="progress_item_position thick" style="position: absolute; border: 1px solid white; background-color: rgba(0,0,0,0.3);"></div>
+        </div>
+        <img ng-src="{{img_url_future}}" alt="remote image" err-SRC="{{noimg_image}}"/>
+    </div>
+    <div class="progress">
+        <div id="progress_bar" class="progress-bar progress-bar-success Netflix-Logo-4-hex" style="width:{{ai_status}}%">
+            {{ai_status}}%
+        </div>
+    </div>
+    <div class="bottom" atfgn="center">
+        <h1 style="color: white; font-size: 20px;" ng-show="message != undefined">{{message}}</h1>
+    </div>
+</div>
+<!-- =========================================================================================================================================== -->
+<!-- PREVIEW -->
+<!--<div ng-if="ai_status >= 98 && !update_table" class="popup_progress_preview">-->
+<!--  <p class="preview">미리보기</p>-->
+<!--  <div class="preview_container">-->
+<!--      <youtube videoid="{{video_id}}" videoidx="{{video_idx}}" itemidx="{{item_idx}}"></youtube>-->
+<!--          <div id="prev_item_div" class="preview_item_position">-->
+<!--              <img src="http://localhost/images/item_shape/1.png" class="present"/>-->
+<!--          </div>-->
+<!--      <div class="preview_btn">-->
+<!--          <button ng-click="updateOn()">등록(상품 정보 수정)</button>-->
+<!--          <button ng-click="deleteItem()">취소(삭제)</button>-->
+<!--      </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!-- =========================================================================================================================================== -->
+<!-- UPDATE TABLE -->
+<!--<div ng-if="update_table" class="popup_make">-->
+<!--    <form id="popup_make" name="popup_make_form" novalidate form-autofill-fix>-->
+<!--        <img class="insert_img ng-scope" ng-src="http://localhost{{new_data.item_img_path}}"-->
+<!--                         id="item_img" alt="remote image" ng-click="fileClick()"-->
+<!--                         onerror="var blankSrc = 'http:\/\/localhost/images/common/noimg.png'; this.src = blankSrc;"-->
+<!--                         ng-model="new_data.item_img_path" required accept=".gif, .jpg, .png" />-->
+<!--        <div ng-if="new_data.item_img_path == '/images/uploads/'">이미지를 추가해주세요</div>-->
+<!--        <input type="file" id="item_file"-->
+<!--         class="select_ui2 input-round select_file_btn Netflix-Logo-3-hex-back" style="display:none"/>-->
+<!--        <table class="popup_insert">-->
+<!--            <tr>-->
+<!--                <td>대분류</td>-->
+<!--                <td>-->
+<!--                    <select class="select_uo2 input-round" name="main" ng-options="data.item for data in item_main_type"-->
+<!--                            ng-model="new_data.item_main" required>-->
+<!--                        <option value="">-선택-</option>-->
+<!--                    </select>-->
+<!--                </td>-->
+<!--                <td>소분류</td>-->
+<!--                <td>-->
+<!--                    <select class="select_uo2 input-round" name="sub" ng-if="new_data.item_main.value == 0"-->
+<!--                            ng-options="data.item for data in item_sub_s_type" ng-model="new_data.item_sub" required>-->
+<!--                        <option value="">-선택-</option>-->
+<!--                    </select>-->
+<!--                    <select class="select_uo2 input-round" name="sub" ng-if="new_data.item_main.value == 1"-->
+<!--                            ng-options="data.item for data in item_sub_e_type" ng-model="new_data.item_sub" required>-->
+<!--                        <option value="">-선택-</option>-->
+<!--                    </select>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>*상품명</td>-->
+<!--                <td><input type="text" name="item_title" class="form-control input-round"-->
+<!--                                                ng-model="new_data.item_title"-->
+<!--                                                placeholder="상품명을 입력하세요." autocomplete="off" ng-required="true"-->
+<!--                                                ng-maxlength="100">-->
+<!--                    <span style="color:Red; font-size:14px;" ng-if="popup_make_form.item_title.$error.required">상품명은 필수입니다.</span>-->
+<!--                </td>-->
+<!--                <td>*가격</td>-->
+<!--                <td><input type="text" class="form-control input-round" ng-model="new_data.item_price" name="item_price"-->
+<!--                                                placeholder="상품의 가격을 입력하세요." ng-maxlength="20" ng-pattern="/^[0-9]+$/" autocomplete="off"-->
+<!--                                                required>-->
+<!--                <span style="color:Red; font-size:14px;"-->
+<!--                          ng-if="popup_make_form.item_price.$invalid && popup_make_form.item_price.$error.pattern">상품 가격은 필수이며, 숫자로만 입력해주세요</span></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>*설명</td>-->
+<!--                <td colspan="3">-->
+<!--                    <input type="text" class="form-control input-round" name="item_description" placeholder="상품의 설명을 입력하세요."-->
+<!--                           ng-model="new_data.item_description" ng-maxlength="300" autocomplete="off" required>-->
+<!--                    <span style="color:Red; font-size:14px;" ng-if="popup_make_form.item_description.$error.required">상품 설명은 필수입니다.</span>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>URL</td>-->
+<!--                <td colspan="3">-->
+<!--                    <input type="text" class="form-control input-round" name="item_redirect_url" ng-model="new_data.item_redirect_url"-->
+<!--                           placeholder="상품 구매 사이트 url을 붙여 넣어주세요." autocomplete="off" ng-pattern="/(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/" required>-->
+<!--                    <span style="color:Red; font-size:14px;"-->
+<!--                          ng-if="popup_make_form.item_redirect_url.$invalid && popup_make_form.item_redirect_url.$error.pattern">구매 사이트를 붙여넣어주세요</span>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>영역 모양</td>-->
+<!--                <td>-->
+<!--                    <select class="select_uo2 input-round" name="shape"-->
+<!--                            ng-options="data.item for data in item_shape_type"-->
+<!--                            ng-model="new_data.item_shape" required>-->
+<!--                        <option value="">-선택-</option>-->
+<!--                    </select>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </table>-->
+<!--&lt;!&ndash;        ng-disabled="popup_make_form.$invalid"&ndash;&gt;-->
+<!--        <div class="bottom" atfgn="center">-->
+<!--            <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex" ng-click="updateItem()">상품 수정</button>-->
+<!--            <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex" ng-click="updateOff()">취소</button>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div class="popup_progress_status" ng-if="ai_status != 100" [config]="false">-->
+<!--&lt;!&ndash;  ng-if="ai_status != 100"   &ndash;&gt;-->
+<!--    <div>-->
+<!--        <img ng-src="{{img_url_past}}" alt="remote image" err-SRC="/images/common/noimg.png"/>-->
+<!--        <div class="ai_draw_rect">-->
+<!--            <img ng-src="{{img_url_current}}" id="current_img" alt="remote image"-->
+<!--                 onerror="this.src='/images/common/noimg.png';"/>-->
+<!--            <div ng-repeat="progress_list in progress_detail_list" ng-if="progress_detail_len >= 2">-->
+<!--                <div id="item_{{progress_list.draw_item_type}}" class="progress_item_position"></div>-->
+<!--&lt;!&ndash;                <div ng-repeat="progress_list in progress_detail_list" id="item_{{progress_list.draw_item_type}}" class="progress_item_position"></div>&ndash;&gt;-->
+<!--            </div>-->
+<!--            <div ng-if="progress_detail_len < 2" id="item_{{item_idx}}" class="progress_item_position"></div>-->
+<!--        </div>-->
+<!--        <img ng-src="{{img_url_future}}" alt="remote image"/>-->
+<!--    </div>-->
+<!--    <div class="progress">-->
+<!--        <div class="progress-bar progress-bar-warning Netflix-Logo-4-hex" role="progressbar"-->
+<!--             aria-valuenow="ai_status" aria-valuemin="0" aria-valuemax="100" style="width:{{ai_status}}%">-->
+<!--            {{ai_status}}%-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="bottom" atfgn="center">-->
+<!--        <h1 style="color: white; font-size: 20px;" ng-show="message != undefined">{{message}}</h1>-->
+<!--    </div>-->
+<!--</div>-->
+<!--&lt;!&ndash;===========================================================================================================================================&ndash;&gt;-->
+<!--<div class="popup_progress_preview Netflix-Logo-4-hex-back" ng-show="ai_status == 100">-->
+<!--    <p class="preview">미리보기</p>-->
+<!--    <div id="video_middle" class="preview_container">-->
+<!--        <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>-->
+<!--        <youtube videoid="{{video_id}}" videoidx="{{video_idx}}" itemlist="{{item_list}}" open="{{open}}" rectstatus="{{rect_status}}" statusi="{{ai_status}}"></youtube>-->
+<!--        <div ng-if="item.item_shape_type==0" id="item_video_rect" ng-repeat="item in item_list">-->
+<!--            <div id="item_{{item.idx}}" class="video_item_position" ng-click="openItem(item.idx)"></div>-->
+<!--        </div>-->
+<!--        <div ng-if="item.item_shape_type==1" id="img_video_rect" ng-repeat="item in item_list">-->
+<!--            <div id="img_{{item.idx}}" class="video_item_present">-->
+<!--                <img src="../images/item_shape/1.png" ng-click="openItem(item.idx)" />-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div ng-show="rect_status == 0">-->
+<!--            <div id="img_status_{{item.idx}}" class="img_status_rect" ng-if="item.item_shape_type==1" ng-repeat="item in item_list" style="position:absolute; width: 200px; height: 250px; display: none;" ng-click="openItem(item.idx)">-->
+<!--                <p class="item_title">{{item.item_title}}</p>-->
+<!--                <div class="item_status_rect_img_area">-->
+<!--                    <img src="/images/uploads/{{item.idx}}_product.jpg" style="width: 150px; height: 150px;" onerror="this.src='../images/common/noimg.png'">-->
+<!--                </div>-->
+<!--                <div class="item_status_rect_text">-->
+<!--                    <p class="item_description">{{item.item_description}}</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div id="item_status_{{item.idx}}" class="item_status_rect" ng-if="item.item_shape_type==0" ng-repeat="item in item_list" style="position:absolute;width: 200px; height: 250px; display: none;" ng-click="openItem(item.idx)">-->
+<!--                <p class="item_title">{{item.item_title}}</p>-->
+<!--                <div class="item_status_rect_img_area">-->
+<!--                    <img src="/images/uploads/{{item.idx}}_product.jpg" style="width: 150px; height: 150px;" onerror="this.src='../images/common/noimg.png'">-->
+<!--                </div>-->
+<!--                <div class="item_status_rect_text">-->
+<!--                    <p class="item_description">{{item.item_description}}</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div ng-show="item_click" class="item_simple_show_wrap Netflix-Logo-4-hex">-->
+<!--            <div class="item_simple_show">-->
+<!--                <div class="simple_item_image">-->
+<!--                    <img src="/images/uploads/{{idx}}_product.jpg" onerror="this.src='../images/common/noimg.png'">-->
+<!--                </div>-->
+<!--                <div class="simple_item_info">-->
+<!--                    <p class="item_name">{{item_title}}</p>-->
+<!--                    <p>{{item_description}}</p>-->
+<!--&lt;!&ndash;                    <p>{{item_price}}원</p>&ndash;&gt;-->
+<!--                    <div class="item_simple_show_button_line">-->
+<!--                        <button ng-if="item_description_toggle==0" type="button" ng-click="buyItem()">구매</button>-->
+<!--                        <button ng-if="item_description_toggle==1" type="button" ng-click="descripItem()">상품 설명</button>-->
+<!--                        <button type="button" ng-click="item_click = false">취소</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>&ndash;&gt;-->
+<!--&lt;!&ndash;        <youtube videoid="{{video_id}}" videoidx="{{video_idx}}" itemlist="{{item_list}}" open="{{open}}" statusi="{{ai_status}}"></youtube>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div ng-if="item.item_shape_type==0" id="item_video_rect" ng-repeat="item in item_list">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div id="item_{{item.idx}}" class="video_item_position" ng-click="openItem(item.idx)"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div ng-if="item.item_shape_type==1" id="img_video_rect" ng-repeat="item in item_list">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div id="img_{{item.idx}}" class="video_item_present">&ndash;&gt;-->
+<!--&lt;!&ndash;                <img src="../images/item_shape/1.png" ng-click="openItem(item.idx)" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div ng-show="rect_status == 0">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div id="img_status_{{item.idx}}" class="img_status_rect" ng-if="item.item_shape_type==1" ng-repeat="item in item_list" style="position:absolute; width: 200px; height: 250px; display: none;" ng-click="openItem(item.idx)">&ndash;&gt;-->
+<!--&lt;!&ndash;                <p class="item_title">{{item.item_title}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="item_status_rect_img_area">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img src="/images/uploads/{{item.idx}}_product.jpg" style="width: 150px; height: 150px;" onerror="this.src='../images/common/noimg.png'">&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="item_status_rect_text">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="item_description">{{item.item_description}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div id="item_status_{{item.idx}}" class="item_status_rect" ng-if="item.item_shape_type==0" ng-repeat="item in item_list" style="position:absolute;width: 200px; height: 250px; display: none;" ng-click="openItem(item.idx)">&ndash;&gt;-->
+<!--&lt;!&ndash;                <p class="item_title">{{item.item_title}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="item_status_rect_img_area">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img src="/images/uploads/{{item.idx}}_product.jpg" style="width: 150px; height: 150px;" onerror="this.src='../images/common/noimg.png'">&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="item_status_rect_text">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="item_description">{{item.item_description}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex"&ndash;&gt;-->
+<!--&lt;!&ndash;                    ng-click="popup_update(video_idx, item)">등록(상품 정보 수정)&ndash;&gt;-->
+<!--&lt;!&ndash;            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;            <button class="btn input-round Netflix-Logo-2-hex-back Netflix-Logo-4-hex"&ndash;&gt;-->
+<!--&lt;!&ndash;                    ng-click="DelItem(d_item_idx)">취소(삭제)&ndash;&gt;-->
+<!--&lt;!&ndash;            </button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <div ng-show="item_click" class="item_simple_show_wrap Netflix-Logo-4-hex">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="item_simple_show">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="simple_item_image">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img src="/images/uploads/{{idx}}_product.jpg" onerror="this.src='../images/common/noimg.png'">&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="simple_item_info">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="item_name">{{item_title}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p>{{item_description}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                    <p>{{item_price}}원</p>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="item_simple_show_button_line">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <button ng-if="item_description_toggle==0" type="button" ng-click="buyItem()">구매</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <button ng-if="item_description_toggle==1" type="button" ng-click="descripItem()">상품 설명</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <button type="button" ng-click="item_click = false">취소</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--    </div>-->
+<!--</div>-->

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e8acf8e9-9d30-420a-a23f-1faa1c3bd1bc" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/../server/titan_sever/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../server/titan_sever/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/titan_sever/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../server/titan_sever/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/scripts/controllers/popup_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/scripts/controllers/popup_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/scripts/services/api_video_item_detail_list.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/scripts/services/api_video_item_detail_list.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/popup_common.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/popup_common.html" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1Qd5nBcKh0hPzsnv23kRpWfwVfy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\project\titan\src\web\app\scripts\controllers" />
+      <recent name="D:\project\titan\src\web\app\views" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e8acf8e9-9d30-420a-a23f-1faa1c3bd1bc" name="Default" comment="" />
+      <created>1551674113840</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1551674113840</updated>
+      <workItem from="1568087799473" duration="7366000" />
+      <workItem from="1568680177635" duration="2843000" />
+      <workItem from="1569477379144" duration="1253000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

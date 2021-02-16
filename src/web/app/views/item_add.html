@@ -1,0 +1,101 @@
+<i manage-nav></i>
+<section id="content" class="content" data-content-provider-key="akj2995">
+    <h1 class="title">
+        상품 등록
+        <span>AI를 제작하기 위한 상품을 등록해주세요!</span>
+    </h1>
+    <div class="item_add">
+        <form id="" name="" ng-submit="item_add()">
+            <ul class="item_add_list">
+                <li ng-click="li_click('li_info_add')">
+                    정보등록
+                </li>
+                <li ng-show="li_info_add" class="li_info_add">
+                    <span class="item_add_img">
+                        <img src="" ng-show="">
+                    </span>
+                    <table class="">
+<!--                        <tr>-->
+<!--                            이미지 입력하는 부분 참고-->
+<!--                            <td>-->
+<!--                                <div ng-show="img_select == 1" class="thumbnail__wrap" style="width: 120px;">-->
+<!--                                    <img class="insert_img ng-scope" style="height: 170px;"-->
+<!--                                         ng-src={{ShowPicture(item_img_path)}} id="imageFile" alt="remote image" ng-click="Uploads('imageFile')"-->
+<!--                                         onerror="var blankSrc = '/images/common/noimg.png'; this.src = blankSrc;"-->
+<!--                                         ng-model="item_img_path" required accept=".gif, .jpg, .png"/>-->
+<!--                                    <input type="file" id="TEST" class="select_ui2 input-round select_file_btn Netflix-Logo-3-hex-back"-->
+<!--                                            ng-file-select="onFileSelect($file,'TEST')" style="display:none" onclick="this.value=null"/>-->
+<!--                                </div>-->
+<!--                                <div class="thumbnail__wrap" style="width: 120px;">-->
+<!--                                    <img ng-src="../images/common/noimg.png" ng-show="img_select == 0" style="height: 170px;">-->
+<!--                                </div>-->
+<!--                            </td>-->
+
+<!--                        </tr>-->
+                        <tr>
+                            <th>상품명</th>
+                            <td>
+                                <input type="text" ng-model="item_title" placeholder="공백제외 총 28자 내로 입력해주세요.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품코드</th>
+                            <td>
+                                <input type="text" class="item_add_code" ng-model="item_price">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>판매가</th>
+                            <td class="middle_input">
+                                <input type="text" class="item_add_price" ng-model="item_price"> 원
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품 설명</th>
+                            <td>
+                                <input type="text" class="item_add_explanation" ng-model="item_explanation"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품 구매 URL</th>
+                            <td>
+                                <input type="text" class="" ng-model="item_url">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상품 태그</th>
+                            <td>
+                                <input type="text" class="" placeholder="최대 10개 입력">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>정보 불러오기</th>
+                            <td>
+                                <button type="button" class="item_add_load_btn" ng-click="">상품정보 불러오기</button>
+                                <span class="item_add_load">등록상품 중 비슷한 상품을 불러오고 싶다면 버튼을 눌러주세요.</span>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <li ng-click="li_click('li_category')">
+                    카테고리 분류
+                </li>
+                <li ng-show="li_category">
+
+                </li>
+                <li ng-click="li_click('li_option')">
+                    옵션설정
+                </li>
+                <li ng-show="li_option">
+
+                </li>
+            </ul>
+            <div class="item_add_submit">
+                <div>
+                    <button type="submit">등록</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+

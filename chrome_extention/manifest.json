@@ -1,0 +1,30 @@
+{
+  "name": "Titan for YouTube",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Youtube에서 상품의 정보를 표시해 줍니다.",
+  "icons": {
+    "128": "images/logo_color.png"
+  },
+  "background": {
+    "page": "index.html",
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "titan",
+    "default_icon": "images/logo_color.png"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "css": ["css/titan.css", "css/remocon.css", "css/item_add.css", "css/show_item.css"],
+      "js": ["controller/GlobalVariable.js", "controller/Controller.js", "controller/TitanController.js", "controller/ItemAddController.js", "controller/ShowItemController.js", "controller/RemoconController.js"]
+    }
+  ],
+  "content_security_policy": "script-src 'self' https://www.youtube.com/iframe_api https://s.ytimg.com/yts/jsbin/www-widgetapi-vflkAsU_-/www-widgetapi.js; object-src 'self'"
+}

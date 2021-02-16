@@ -1,0 +1,554 @@
+.manage_wrap{
+    margin: 0 auto;
+    /*padding-left: 258px;*/
+}
+.manage_title{
+    font-size: 1.6rem;
+    padding: 8px 0;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+}
+.settings_LNB_wrap {
+    float: left;
+    height: calc(100% - 80px);
+    background-color: #3d3d3d;
+    color: #f2f2f2;
+    font-style: normal;
+    position: absolute;
+    z-index: 100;
+}
+
+.settings_LNB_wrap li {
+    width: 250px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-bottom: 1px solid;
+    margin: 4px;
+    cursor: pointer;
+    display: block;
+}
+.settings_LNB_wrap li:hover {
+    color: #ccc;
+}
+/* ----------------------------------------------------------------------------------------------- */
+.user_manage_area{
+    margin-top: 10px;
+}
+.user_manage_table{
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+}
+.user_manage_table th{
+    text-align: center;
+}
+.user_manage_table > thead{
+    border: 2px solid #2e70bd;
+}
+.user_manage_table > thead > tr{
+    height: 40px;
+}
+.user_manage_table > tbody > tr{
+    border-bottom: 1px solid #adadad;
+    height: 30px;
+}
+.user_update {
+    width: 640px;
+    height: 330px;
+    background-color: #FFFFFF;
+    position: relative;
+    border: 2px solid #000000;
+    padding-top: 20px;
+}
+.role_img {
+    width: 20px;
+}
+.popup_user_add{
+    width: 640px;
+    height: 360px;
+    background-color: #ffdede;
+    position: relative;
+}
+.item_history_chart{
+    display: inline-block;
+}
+
+.add_button {
+    position: absolute;
+    left: 80%;
+    bottom: 10%;
+}
+
+.manage_video_check_img > img{
+    width: 50%;
+}
+.logo_youtube{
+    width: 40px;
+}
+
+/*.live_wrap > .user_add{*/
+/*    text-align: right;*/
+/*}*/
+
+/* ----------------------------------------------------------------------------------------------- */
+
+.content_area {
+    height: 88%;
+    overflow: auto;
+}
+
+.content_area .user_manage_table {
+    width: 80%;
+}
+
+.content_area .role_area {
+    border: double;
+    width: 50%;
+    /*overflow: auto;*/
+}
+
+.content_area .role_area span button {
+    padding: 3px 20px;
+}
+
+.permit_role {
+    font-size: 15px;
+    color: blue;
+}
+
+.search_item_price {
+    width: 100px;
+    display: inline-block;
+    border: 1px solid black;
+    color: gray;
+}
+.search_item_price .search_input_price{
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    outline: none;
+    border: 0;
+    text-align: right;
+}
+
+.video_manage_title{
+    width: 100%;
+    min-width: 1000px;
+    font-size: 1.6rem;
+    padding: 8px 0;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+}
+.item_manage_title{
+    width: 100%;
+    min-width: 1000px;
+    font-size: 1.6rem;
+    padding: 8px 0;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+}
+
+.item_search_area {
+    width: 70%;
+    box-sizing: border-box;
+    min-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    table-layout: fixed;
+    border: 1px solid;
+    color: black;
+}
+
+.search_item_list {
+    display: flex;
+    width: 100%;
+    min-width: 1000px;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.search_item_list #item_search_btn {
+    width: 90px;
+    color: white;
+    background-color: #51cb51;
+    margin: 10px;
+    font-size: 16px;
+    border: 1px solid black;
+}
+
+.item_search_area .item_search_area_title, .item_search_area_content {
+    border: 1px solid;
+}
+.item_search_area .item_search_area_title {
+    width: 20%;
+    height: 40px;
+    text-align: center;
+}
+
+.item_search_area .item_search_area_content {
+    padding: 10px;
+    text-align: left;
+    text-align: -webkit-left;
+    text-align: -moz-left;
+}
+
+.item_search_area_content span{
+    font-size: 18px;
+    float: right;
+}
+
+.item_search_area_content select{
+    width: 100px;
+}
+
+.StartDate, .EndDate{
+    width: 100px;
+    display: inline-block;
+    border: 1px solid black;
+    box-sizing: content-box;
+}
+.StartDate .start_date_input, .EndDate .end_date_input{
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    outline: none;
+    border: none;
+    border-right: 1px solid;
+    text-align: center;
+}
+
+.item_search_area .item_search_area_content #item_search{
+    width: 50%;
+    margin: 5px;
+}
+
+.item_category {
+    width: 100%;
+}
+
+.item_category ul li{
+    padding-right: 20px;
+    font-size: 1.8rem;
+    display: inline-block;
+}
+
+.item_category ul li:last-child{
+    padding: unset;
+}
+
+.item_category ul li button{
+    color: #0b58a2;
+    text-decoration: underline;
+}
+
+.video_manage_table{
+    width: 70%;
+    min-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    table-layout: fixed;
+}
+.video_manage_table th{
+    text-align: center;
+}
+.video_manage_table th.no {
+    width: 100px;
+}
+
+.video_manage_table th.video_img{
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.video_manage_table th.video_title{
+    width: 430px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.video_manage_table td.video_title a{
+    height: 100px;
+    line-height: 100px;
+    text-overflow: ellipsis;
+    float: left;
+    margin-left: 10px;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.video_manage_table > thead{
+    border: 2px solid #2e70bd;
+}
+.video_manage_table > thead > tr{
+    height: 40px;
+}
+.video_manage_table > tbody > tr{
+    border-bottom: 1px solid #adadad;
+    height: 30px;
+}
+.item_manage_table{
+    width: 80%;
+    min-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    table-layout: fixed;
+}
+.item_manage_table th{
+    text-align: center;
+    height: 50px;
+}
+.item_manage_table th.item_title{
+    width: 300px;
+    /*height: 50px;*/
+    /*line-height: 50px;*/
+}
+.item_manage_table td.item_title{
+    width: 300px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.item_manage_table td.item_using i{
+    justify-content: center;
+}
+
+.item_manage_table td.item_title input {
+    width: 80%;
+    height: 20px;
+}
+
+.item_manage_table td.item_price input{
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+}
+
+.item_manage_table th.no {
+    width: 50px;
+}
+
+.item_manage_table th.item_checked {
+    width: 50px;
+}
+
+.item_manage_table > thead{
+    border: 2px solid #2e70bd;
+}
+.item_manage_table > thead > tr{
+    height: 40px;
+}
+.item_manage_table > tbody > tr{
+    border-bottom: 1px solid #adadad;
+    height: 30px;
+}
+.user_update{
+    width: 854px;
+    height: 480px;
+    background-color: #ffdede;
+    position: relative;
+}
+.manage_popup_table{
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 40px 15px;
+}
+.popup_user_add{
+    width: 640px;
+    height: 360px;
+    background-color: #ffdede;
+    position: relative;
+}
+.popup_user_add_title{
+    font-size: 2rem;
+    font-weight: bolder;
+    margin-top: 16px;
+    margin-bottom: 25px;
+}
+.item_history_graph{
+    font-size: 0;
+}
+.item_history_graph > div{
+    width: 50%;
+    display: inline-block;
+}
+.user_add {
+    text-align: right;
+}
+
+.manage_video_check_img > img{
+    width: 50%;
+}
+.logo_youtube{
+    width: 40px;
+}
+.search_click {
+    color: red;
+}
+
+/*====================switch toggle======================*/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 43px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch .enable_toggle, .shared_toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.enable_toggle:checked+.slider, .shared_toggle:checked+.slider {
+  background-color: #2196F3;
+}
+
+.enable_toggle:focus+.slider, .shared_toggle:focus+.slider{
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.enable_toggle:checked+.slider:before, .shared_toggle:checked+.slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.pagination_item_check {
+    width: 80%;
+    margin: 0 auto;
+    min-width: 1000px;
+    color: #0a0a0a;
+    text-align: center;
+    background-color: cadetblue;
+}
+
+.item_check_info {
+    display:none;
+    margin: 2px 0;
+    text-indent: 1em;
+}
+
+/*============================*/
+.container-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 0;
+    height: 50px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.container-checkbox .checkmark {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    height: 25px;
+    width: 25px;
+    background-color: lightgray;
+}
+
+.container-checkbox:hover input ~ .checkmark {
+    background-color: dimgrey;
+}
+
+.container-checkbox input:checked ~ .checkmark {
+    background-color: crimson;
+}
+
+.container-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container-checkbox .checkmark:after {
+    left: 9px;
+    top: 4px;
+    width: 8px;
+    height: 15px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.item_modify_tip{
+    font-size: 1.2rem;
+    padding: 6px;
+    background-color: #bbbbbb;
+}
+
+.item_modify_tip .item_choose{
+    position: absolute;
+    visibility: hidden;
+    width: 195px;
+    background-color: rgba(0, 0, 30, 0.6);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    z-index: 1;
+}
+
+.item_modify_tip:hover .item_choose {
+  visibility: visible;
+}

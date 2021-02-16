@@ -1,0 +1,49 @@
+<div class="user_update">
+    <p class="popup_user_add_title">{{modal_title}}</p>
+    <button class="fa fa-close video_list_popup_close" ng-click="close()"></button>
+    <form method="post" name="model_make_form">
+        <table class="manage_popup_table">
+            <tr>
+                <th>모델명: </th>
+                <td><input type="text" ng-model="model_title" class="form-control"></td>
+            </tr>
+            <tr>
+                <th>모델 설명: </th>
+                <td><input type="text" ng-model="model_description" class="form-control"></td>
+            </tr>
+<!--            <tr>-->
+<!--                <th>클래스명: </th>-->
+<!--                <td>-->
+<!--                    <div ng-repeat="(class_idx, class_name) in classes">-->
+<!--                        <span>{{class_name}}:</span>-->
+<!--                        <input type="text" ng-model="new_shape[class_idx]" class="form-control">-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
+            <tr>
+                <th>학습 횟수: </th>
+                <td><input type="text" ng-model="model_epochs" class="form-control"></td>
+            </tr>
+            <tr>
+                <th>공개 여부: </th>
+                <td class="access_toggle">
+                    <input type="checkbox" id="toggle" ng-model="model_access_status">
+                    <label for="toggle"><span></span></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" ng-show="model">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" ng-model="create_model">
+                        <label class="custom-control-label" for="customCheck1">모델 새로 생성</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button ng-if="model" class="btn input-round" ng-click="model_make()">수정하기</button>
+            <button ng-if="!model" class="btn input-round" ng-click="model_make()">생성하기</button>
+            <button class="btn input-round" ng-click="close()">취소</button>
+        </div>
+    </form>
+</div>

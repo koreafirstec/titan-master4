@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/setting.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/setting.css">
+  </head>
+  <body ng-app="titanApp" ng-controller="SettingCtrl">
+    <div>
+      <div>
+        <div class="checks">
+          <input type="checkbox" id="check" ng-model="titan_remocon_status" ng-change="remoconStatus()">
+          <label for="check">유튜브 화면에 Titan 도구 표시</label>
+        </div><br/>
+        <div ng-repeat="pt in remocon_types" class="radios">
+          <div>
+            <input type="radio" id="{{pt.type}}" ng-click="remoconType(pt.type)" name="radio" value="pt.type">
+            <label for="{{pt.type}}">{{pt.value}}</label>
+          </div><br/>
+        </div>
+      </div>
+      <div>
+        <div class="open_box">
+          <a href="http://118.37.64.217/#/login" target="_blank" class="">
+            <div>
+              <img src="images/logo_color.png">
+            </div>
+            <div>
+              <span>홈페이지</span>
+            </div>
+          </a>
+        </div>
+        <!-- <div class="open_box">
+          <a href="#" target="_blank">
+            <img src="images/question.png">
+            <div>사용법</div>
+          </a>
+        </div> -->
+      </div>
+      <div>
+        <button ng-click="titanStatus()">Titan</button>
+        <button ng-click="itemAddStatus()">상품 등록</button>
+      </div>
+    </div>
+  </body>
+</html>
