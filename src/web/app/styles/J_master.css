@@ -37,7 +37,7 @@
     color: #fff;
 }
 
-section#content {
+section.content {
     background: #eee;
     position: fixed;
     top: 66px;
@@ -45,10 +45,10 @@ section#content {
     left: 250px;
     right: 0;
     z-index: -999;
-    padding: 30px;
+    padding: 30px 40px;
     overflow-y: auto;
 }
-section#content > .title{
+section.content > .title{
     height: 41px;
     margin: 0 0 24px 0;
     font-size: 28px;
@@ -59,7 +59,7 @@ section#content > .title{
     color: #121212;
 }
 
-section#content > .title > span{
+section.content > .title > span{
     font-size: 12px;
     font-weight: 600;
     letter-spacing: -0.14px;

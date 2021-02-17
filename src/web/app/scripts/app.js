@@ -109,11 +109,6 @@ angular
                 templateUrl: 'views/temp_video_make.html',
                 controller: 'TempVideoMakeCtrl'
             })
-            .when('/video_editor', {
-                activePage: 'video_editor',
-                templateUrl: 'views/video_editor.html',
-                controller: 'VideoEditorCtrl'
-            })
             .when('/my_item', {
                 templateUrl: 'views/my_item.html',
                 controller: 'MyItemCtrl'
@@ -134,6 +129,11 @@ angular
             .when('/item_add', {
                 templateUrl: 'views/item_add.html',
                 controller: 'ItemAddCtrl'
+            })
+            .when('/video_editor', {
+                activePage: 'video_editor',
+                templateUrl: 'views/video_editor.html',
+                controller: 'VideoEditorCtrl'
             })
             .otherwise({
                 redirectTo: '/login'

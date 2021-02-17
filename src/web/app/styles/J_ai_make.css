@@ -1,0 +1,287 @@
+.make_ai{
+    margin: 34px 0 0 32px;
+    width: 100%;
+    height: 650px;
+    max-width: 1280px;
+}
+.make_ai > .make_ai_level{
+    font-size: 0;
+}
+.make_ai > .make_ai_level > li{
+    display: inline-block;
+    width: 155px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    border-top-left-radius: 19px;
+    border-top-right-radius: 19px;
+    border: solid 0.3px #707070;
+    border-bottom: none;
+    background-color: #ededed;
+    color: #707070;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    cursor: pointer;
+}
+.make_ai > .make_ai_level > li.selected{
+    border: solid 0.3px #4d20a3;
+    background-color: #ffffff;
+    color: #4d20a3;
+}
+
+/* 동영상 선택 */
+
+.make_ai > .make_ai_video_select{
+    border: solid 0.3px #cbcbcb;
+    background-color: #ffffff;
+}
+.make_ai > .make_ai_video_select > div{
+    padding: 14px 0 12px 27px;
+    border-bottom: solid 0.3px #b4b4b4;
+    position: relative;
+}
+.make_ai > .make_ai_video_select > div > h1{
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    color: #3d3d3d;
+}
+.make_ai > .make_ai_video_select > div > .make_ai_video_search{
+    display: inline-block;
+    position: relative;
+    width: 300px;
+    height: 30px;
+}
+.make_ai > .make_ai_video_select > div > .make_ai_video_search > input[type="text"]{
+    width: 100%;
+    height: 100%;
+    padding: 0 0 0 10px;
+    border: solid 0.4px #b4b4b4;
+    background-color: #ffffff;
+    font-size: 14px;
+}
+.make_ai > .make_ai_video_select > div > .make_ai_video_search > button[type="button"]{
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: solid 0.4px #a5a5a5;
+    background-color: #a5a5a5;
+}
+.make_ai > .make_ai_video_select > div > .make_ai_video_search_guide{
+    font-size: 14px;
+    letter-spacing: -0.17px;
+    color: #b4b4b4;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list{
+    height: 475px;
+    overflow: auto;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list > ul > li{
+    float: left;
+    width: 155px;
+    height: 180px;
+    margin: 0 20px 20px 0;
+    border: solid 0.3px #b4b4b4;
+    background-color: #f7f7f7;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list > ul > li > button{
+    background-color: unset;
+    border: none;
+    padding: 0;
+    text-align: left;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list > ul > li > button > img{
+    width: 100%;
+    height: 115px;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list > ul > li > button > div > p:nth-child(1){
+    margin: 7px 8px 1px 8px;
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #000000;
+    display: -webkit-box;
+    word-wrap: break-word;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 14px;
+    height: 28px;
+    text-decoration: none;
+}
+.make_ai > .make_ai_video_select > .make_ai_video_list > ul > li > button > div > p:nth-child(2){
+    margin: 0.6px auto 0 8.5px;
+    font-size: 10px;
+    letter-spacing: -0.12px;
+    color: #b4b4b4;
+}
+
+/* 상품 선택 */
+
+.make_ai > .make_ai_item_select{
+    border: solid 0.3px #cbcbcb;
+    background-color: #ffffff;
+}
+.make_ai > .make_ai_item_select > div{
+    padding: 14px 0 12px 27px;
+    border-bottom: solid 0.3px #b4b4b4;
+    position: relative;
+}
+.make_ai > .make_ai_item_select > div > h1{
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    color: #3d3d3d;
+}
+.make_ai > .make_ai_item_select > div > .make_ai_item_search{
+    display: inline-block;
+    position: relative;
+    width: 300px;
+    height: 30px;
+}
+.make_ai > .make_ai_item_select > div > .make_ai_item_search > input[type="text"]{
+    width: 100%;
+    height: 100%;
+    padding: 0 0 0 10px;
+    border: solid 0.4px #b4b4b4;
+    background-color: #ffffff;
+    font-size: 14px;
+}
+.make_ai > .make_ai_item_select > div > .make_ai_item_search > button[type="button"]{
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: solid 0.4px #a5a5a5;
+    background-color: #a5a5a5;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list{
+    height: 475px;
+    overflow: auto;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list > ul > li{
+    float: left;
+    width: 155px;
+    height: 180px;
+    margin: 0 20px 20px 0;
+    border: solid 0.3px #b4b4b4;
+    background-color: #f7f7f7;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list > ul > li > button{
+    background-color: unset;
+    border: none;
+    padding: 0;
+    text-align: left;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list > ul > li > button > img{
+    width: 100%;
+    height: 115px;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list > ul > li > button > div > p:nth-child(1){
+    margin: 7px 8px 1px 8px;
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #000000;
+    display: -webkit-box;
+    word-wrap: break-word;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 14px;
+    height: 28px;
+    text-decoration: none;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_list > ul > li > button > div > p:nth-child(2){
+    margin: 0.6px auto 0 8.5px;
+    font-size: 10px;
+    letter-spacing: -0.12px;
+    color: #b4b4b4;
+}
+.make_ai > .make_ai_item_select > .make_ai_item_select_btn {
+    position: absolute;
+    right: 34px;
+    bottom: 23px;
+    width: 110px;
+    height: 38px;
+    background-color: #4d20a3;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    color: #ffffff;
+}
+
+/* make_ai_modeling */
+.make_ai > .make_ai_modeling > .make_ai_modeling_video{
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    min-width: 1200px;
+    height: 336.2px;
+    padding: 27.5px 0 30px 48.5px;
+    border: solid 0.3px #cbcbcb;
+    background-color: #3d3d3d;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > span {
+    display: inline-block;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > span > h1 {
+    font-size: 14px;
+    letter-spacing: -0.17px;
+    color: #ffffff;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > span > img {
+    width: 450px;
+    height: 253.1px;
+    margin: 5.6px 25px 0 0;
+    border-radius: 5px;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > .make_ai_modeling_video_start{
+    position: absolute;
+    bottom: 30px;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > .make_ai_modeling_video_start > button[type="button"]{
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #ffffff;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > .make_ai_modeling_video_start > p{
+    margin: 11.3px 0 0.2px 8px;
+    font-family: AppleSDGothicNeo;
+    font-size: 12px;
+    line-height: 1.25;
+    color: #cbcbcb;
+}
+
+.make_ai > .make_ai_modeling > .make_ai_modeling_item{
+    height: 160px;
+    border: solid 0.3px #cbcbcb;
+    background-color: #ffffff;
+    padding: 30px 0 0 48px;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_item > p{
+    font-size: 14px;
+    letter-spacing: -0.17px;
+    color: #121212;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_item > img{
+    width: 130px;
+    height: 74px;
+    margin: 0 19px 0 0;
+    border-radius: 5px;
+    border: solid 2px #e6e6e6;
+}

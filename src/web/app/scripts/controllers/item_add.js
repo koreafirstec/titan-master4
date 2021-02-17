@@ -32,11 +32,11 @@ angular.module('titanApp')
         };
 
         $scope.item_add = function(){
-            var get_params = {};
-            get_params['item_title'] = $scope.item_title;
-            get_params['item_price'] = $scope.item_price;
-            get_params['item_explanation'] = $scope.item_explanation;
-            get_params['item_url'] = $scope.item_url;
+            var api_params = {};
+            api_params['item_title'] = $scope.item_title;
+            api_params['item_price'] = $scope.item_price;
+            api_params['item_explanation'] = $scope.item_explanation;
+            api_params['item_url'] = $scope.item_url;
 
             api_item.save(api_params, function (data) {
                 if(data.status==200){

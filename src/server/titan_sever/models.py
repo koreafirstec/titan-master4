@@ -116,6 +116,8 @@ class TB_ITEM(db.Model):
     item_title = db.Column('item_title', db.String(256))
     item_description = db.Column('item_description', db.String(1024))
     item_price = db.Column('item_price', db.Integer)
+    item_explanation = db.Column('item_explanation', db.String(1024))
+    item_url = db.Column('item_url', db.String(1024))
     item_redirect_url = db.Column('item_redirect_url', db.String(1024))
     item_description_url = db.Column('item_description_url', db.String(1024))
     fk_item_main_type = db.Column('fk_item_main_type', db.Integer)

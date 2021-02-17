@@ -1061,71 +1061,73 @@ class Video(Resource):
         print("[GET] Video")
         objects = []
 
-        video_id = request.args.get('video_id')
-        search_title = request.args.get('search_title')
+        # video_id = request.args.get('video_id')
+        # search_title = request.args.get('search_title')
         user_idx = request.args.get('user_idx')
         fk_group_idx = request.args.get('fk_group_idx')
-        limit = request.args.get('limit')
-        offset = request.args.get('offset')
-        main_type = request.args.get('main_type')
+        limit = None
+        # limit = request.args.get('limit')
+        # offset = request.args.get('offset')
+        # main_type = request.args.get('main_type')
 
-        filter = request.args.get('filter')
-        filter_editor = request.args.get('filter_editor')
-        filter_user_idx = request.args.get('filter_user_idx')
+        # filter = request.args.get('filter')
+        # filter_editor = request.args.get('filter_editor')
+        # filter_user_idx = request.args.get('filter_user_idx')
 
         video_filter_and_group = []
 
-        if filter != None:
-            if filter == "shared":
-                video_filter_and_group.append(TB_VIDEO.video_shared == 1)
+        # if filter != None:
+        #     if filter == "shared":
+        #         video_filter_and_group.append(TB_VIDEO.video_shared == 1)
+        #
+        # if filter_editor != None:
+        #     if filter_editor == "shared":
+        #         video_list = TB_VIDEO.query.filter_by(video_shared=1, video_status_value=0).order_by(TB_VIDEO.create_date.desc()).all()
+        #         objects = self.overlap_obj(video_list, len(video_list), filter_user_idx)
+        #         return result(200, "shared video", objects, None, COMPANY_NAME)
+        #
+        # if search_title != None:
+        #     video_filter_and_group.append(TB_VIDEO.video_title.like('%' + search_title + '%'))
+        #     search_video_list = TB_VIDEO.query.filter(and_(*video_filter_and_group)).order_by(TB_VIDEO.create_date.desc()).all()
+        #     total_count = len(search_video_list)
+        #     item_obj = self.overlap_obj(search_video_list, total_count)
+        #     return result(200, 'search video list success', item_obj, None, COMPANY_NAME)
+        #
+        # if fk_group_idx is not None:
+        #     if int(fk_group_idx) != 1:
+        #         video_filter_and_group.append(TB_VIDEO.fk_user_idx == user_idx)
+        #
+        # if video_id is not None:
+        #     video = TB_VIDEO.query.filter(TB_VIDEO.video_url.like("%" + video_id + "%")).first()
+        #     if video is None:
+        #         return result(409, "[GET] Video is not exist.", None, None, COMPANY_NAME)
+        #     objects.append({
+        #         "video": True,
+        #         "video_idx": video.idx,
+        #         "video_title": video.video_title
+        #     })
+        #     return result(200, "[GET] Select video_id's video successful.", objects, None, COMPANY_NAME)
 
-        if filter_editor != None:
-            if filter_editor == "shared":
-                video_list = TB_VIDEO.query.filter_by(video_shared=1, video_status_value=0).order_by(TB_VIDEO.create_date.desc()).all()
-                objects = self.overlap_obj(video_list, len(video_list), filter_user_idx)
-                return result(200, "shared video", objects, None, COMPANY_NAME)
-
-        if search_title != None:
-            video_filter_and_group.append(TB_VIDEO.video_title.like('%' + search_title + '%'))
-            search_video_list = TB_VIDEO.query.filter(and_(*video_filter_and_group)).order_by(TB_VIDEO.create_date.desc()).all()
-            total_count = len(search_video_list)
-            item_obj = self.overlap_obj(search_video_list, total_count)
-            return result(200, 'search video list success', item_obj, None, COMPANY_NAME)
-
-        if fk_group_idx is not None:
-            if int(fk_group_idx) != 1:
-                video_filter_and_group.append(TB_VIDEO.fk_user_idx == user_idx)
-
-        if video_id is not None:
-            video = TB_VIDEO.query.filter(TB_VIDEO.video_url.like("%" + video_id + "%")).first()
-            if video is None:
-                return result(409, "[GET] Video is not exist.", None, None, COMPANY_NAME)
-            objects.append({
-                "video": True,
-                "video_idx": video.idx,
-                "video_title": video.video_title
-            })
-            return result(200, "[GET] Select video_id's video successful.", objects, None, COMPANY_NAME)
-
-        videos = TB_VIDEO.query.filter(and_(*video_filter_and_group)).order_by(TB_VIDEO.create_date.desc()).all()
+        # videos = TB_VIDEO.query.filter(and_(*video_filter_and_group)).order_by(TB_VIDEO.create_date.desc()).all()
+        videos = TB_VIDEO.query.filter_by(fk_user_idx=user_idx).all()
         if limit is None:
             for video in videos:
-                user_model = TB_USER.query.filter_by(idx=user_idx).first().prev_model_item if user_idx is not None else 0
+                # user_model = TB_USER.query.filter_by(idx=user_idx).first().prev_model_item if user_idx is not None else 0
                 objects.append({
-                    'idx': video.idx,
-                    'fk_user_idx': video.fk_user_idx,
-                    'video_source': video.video_source,
+                    # 'idx': video.idx,
+                    # 'fk_user_idx': video.fk_user_idx,
+                    # 'video_source': video.video_source,
                     'video_url': video.video_url,
                     'video_title': video.video_title,
-                    'create_date': json_encoder(video.create_date),
-                    'modify_date': json_encoder(video.modify_date),
-                    'video_duration': video.video_duration,
-                    'video_status_value': video.video_status_value,
-                    'video_auto_preview': video.video_auto_preview,
-                    'video_shared': video.video_shared,
-                    'item_count': len(TB_ITEM.query.filter_by(fk_video_idx=video.idx).all()),
-                    'user_model': user_model,
-                    'total_count': len(videos)
+                    # 'create_date': json_encoder(video.create_date),
+                    # 'modify_date': json_encoder(video.modify_date),
+                    'video_duration': video.video_duration
+                    # 'video_status_value': video.video_status_value,
+                    # 'video_auto_preview': video.video_auto_preview,
+                    # 'video_shared': video.video_shared,
+                    # 'item_count': len(TB_ITEM.query.filter_by(fk_video_idx=video.idx).all()),
+                    # 'user_model': user_model,
+                    # 'total_count': len(videos)
                 })
             return result(200, "[GET] Select video list successful.", objects, None, COMPANY_NAME)
 
@@ -1328,6 +1330,7 @@ class Item(Resource):
             self.make_request_status = True if item.make_request == 1 else False
             self.make_request_msg = '완료' if item.make_request == 0 else '요청'
             item_list_len = item_len if item_len != None else len(item_list)
+            #print(item.fk_user_idx)
             img_path = "../images/uploads/" + str(item.idx) + "_product.jpg" if os.path.isfile(
                 UPLOAD_FOLDER + '/' + str(item.idx) + "_product.jpg") else "../images/common/noimg.png"
             auto_preview = TB_VIDEO.query.filter_by(
@@ -1350,8 +1353,8 @@ class Item(Resource):
                 "item_shape_type": item.item_shape,
                 "using": item.using,
                 "video_auto_preview": auto_preview,
-                "name": TB_USER.query.filter_by(idx=item.fk_user_idx).first().user_name,
-                "user_id": TB_USER.query.filter_by(idx=item.fk_user_idx).first().user_id,
+                #"name": TB_USER.query.filter_by(idx=item.fk_user_idx).first().user_name,
+                #"user_id": TB_USER.query.filter_by(idx=item.fk_user_idx).first().user_id,
                 "using_status": self.using_status,
                 "description_status": self.description_status,
                 "request_status": self.make_request_status,
@@ -1367,75 +1370,85 @@ class Item(Resource):
         print("[GET] Item")
         objects = []
 
-        item_idx = request.args.get('item_idx')
-        model_user_idx = request.args.get('model_user_idx')
-        video_idx = request.args.get('video_idx')
+        # item_idx = request.args.get('item_idx')
+        # model_user_idx = request.args.get('model_user_idx')
+        # video_idx = request.args.get('video_idx')
         user_idx = request.args.get('user_idx')
         fk_group_idx = request.args.get('fk_group_idx')
-        fk_group_idx_sample = request.args.get('fk_group_idx_sample')
-        search_item_title = request.args.get('item_title')
-        search_category = request.args.get('search_category')
-        search_item_name = request.args.get('search_item_name')
-        search_min_price = request.args.get('search_min_price')
-        search_max_price = request.args.get('search_max_price')
-        search_main_type = request.args.get('search_main_type')
-        search_sub_type = request.args.get('search_sub_type')
-        startDate = request.args.get('startDate')
-        endDate = request.args.get('endDate')
-        main_idx = request.args.get('main_idx')
-        sub_idx = request.args.get('sub_idx')
-        detail_exists = request.args.get('detail_exists')
-        limit = request.args.get('limit')
-        offset = request.args.get('offset')
+        # fk_group_idx_sample = request.args.get('fk_group_idx_sample')
+        # search_item_title = request.args.get('item_title')
+        # search_category = request.args.get('search_category')
+        # search_item_name = request.args.get('search_item_name')
+        # search_min_price = request.args.get('search_min_price')
+        # search_max_price = request.args.get('search_max_price')
+        # search_main_type = request.args.get('search_main_type')
+        # search_sub_type = request.args.get('search_sub_type')
+        # startDate = request.args.get('startDate')
+        # endDate = request.args.get('endDate')
+        # main_idx = request.args.get('main_idx')
+        # sub_idx = request.args.get('sub_idx')
+        # detail_exists = request.args.get('detail_exists')
+        # limit = request.args.get('limit')
+        # offset = request.args.get('offset')
 
-        item_filter_and_group = []
-        item_filter_or_group = []
-        user_filter_and_group = []
-        fk_item_idx = []
-        item_and_type = []
+        item_list = TB_ITEM.query.order_by(TB_ITEM.create_date.desc()).all()
+        for item in item_list:
+            objects.append({
+                'idx': item.idx,
+                'item_title': item.item_title,
+                'item_price': item.item_price,
+            })
 
-        total_item_list = TB_ITEM.query.count()
-        # item_len = len(total_item_list)
-        if detail_exists is not None:
-            if fk_group_idx is not None:
-                if int(fk_group_idx) != 1:
-                    detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).all()
-                    for detail in detail_list:
-                        fk_item_idx.append(detail.fk_item_idx)
-                    item_list = TB_ITEM.query.filter(TB_ITEM.idx.in_(fk_item_idx)).filter_by(fk_user_idx=user_idx).all()
-                    objects = self.overlap_obj(item_list, len(item_list))
-                    return result(200, 'success', objects, None, COMPANY_NAME)
-            detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).all()
-            for detail in detail_list:
-                fk_item_idx.append(detail.fk_item_idx)
-            item_list = TB_ITEM.query.filter(TB_ITEM.idx.in_(fk_item_idx)).all()
-            objects = self.overlap_obj(item_list, len(item_list))
-            return result(200, 'success', objects, None, COMPANY_NAME)
-        if item_idx is not None:
-            item_filter_and_group.append(TB_ITEM.idx == item_idx)
-        if fk_group_idx is not None:
-            if int(fk_group_idx) != 1:
-                item_filter_and_group.append(TB_ITEM.fk_user_idx == user_idx)
-        if fk_group_idx_sample is not None:
-            if int(fk_group_idx_sample) != 1:
-                item_list = TB_ITEM.query.filter_by(fk_user_idx=user_idx).all()
-                objects = self.overlap_obj(item_list, len(item_list))
-                return result(200, "user_item_list_sample", objects, None, COMPANY_NAME)
-        if video_idx is not None:
-            item_filter_and_group.append(TB_ITEM.fk_video_idx == video_idx)
-        if main_idx is not None:
-            item_filter_and_group.append(TB_ITEM.fk_item_main_type == main_idx)
-        if sub_idx is not None:
-            item_filter_and_group.append(TB_ITEM.fk_item_sub_type == sub_idx)
-        # if search_item_name is not None:
-        #     item_filter_and_group.append(TB_ITEM.item_title.like('%' + search_item_name + '%'))
-        if search_main_type is not None:
-            item_filter_and_group.append(TB_ITEM.fk_item_main_type == search_main_type)
-        #     item_and_type.append(TB_ITEM.fk_item_main_type == search_main_type)
-        if search_sub_type is not None:
-            item_filter_and_group.append(TB_ITEM.fk_item_sub_type == search_sub_type)
-        if search_item_title is not None:
-            item_filter_and_group.append(TB_ITEM.item_title.like('%' + search_item_title + '%'))
+        return result(200, "[GET] Select item list successful.", objects, None, COMPANY_NAME)
+
+        # item_filter_and_group = []
+        # item_filter_or_group = []
+        # user_filter_and_group = []
+        # fk_item_idx = []
+        # item_and_type = []
+        #
+        # total_item_list = TB_ITEM.query.count()
+        # # item_len = len(total_item_list)
+        # if detail_exists is not None:
+        #     if fk_group_idx is not None:
+        #         if int(fk_group_idx) != 1:
+        #             detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).all()
+        #             for detail in detail_list:
+        #                 fk_item_idx.append(detail.fk_item_idx)
+        #             item_list = TB_ITEM.query.filter(TB_ITEM.idx.in_(fk_item_idx)).filter_by(fk_user_idx=user_idx).all()
+        #             objects = self.overlap_obj(item_list, len(item_list))
+        #             return result(200, 'success', objects, None, COMPANY_NAME)
+        #     detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).all()
+        #     for detail in detail_list:
+        #         fk_item_idx.append(detail.fk_item_idx)
+        #     item_list = TB_ITEM.query.filter(TB_ITEM.idx.in_(fk_item_idx)).all()
+        #     objects = self.overlap_obj(item_list, len(item_list))
+        #     return result(200, 'success', objects, None, COMPANY_NAME)
+        # if item_idx is not None:
+        #     item_filter_and_group.append(TB_ITEM.idx == item_idx)
+        # if fk_group_idx is not None:
+        #     if int(fk_group_idx) != 1:
+        #         item_filter_and_group.append(TB_ITEM.fk_user_idx == user_idx)
+        # if fk_group_idx_sample is not None:
+        #     if int(fk_group_idx_sample) != 1:
+        #         item_list = TB_ITEM.query.filter_by(fk_user_idx=user_idx).all()
+        #         objects = self.overlap_obj(item_list, len(item_list))
+        #         return result(200, "user_item_list_sample", objects, None, COMPANY_NAME)
+        # if video_idx is not None:
+        #     item_filter_and_group.append(TB_ITEM.fk_video_idx == video_idx)
+        # if main_idx is not None:
+        #     item_filter_and_group.append(TB_ITEM.fk_item_main_type == main_idx)
+        # if sub_idx is not None:
+        #     item_filter_and_group.append(TB_ITEM.fk_item_sub_type == sub_idx)
+        # # if search_item_name is not None:
+        # #     item_filter_and_group.append(TB_ITEM.item_title.like('%' + search_item_name + '%'))
+        # if search_main_type is not None:
+        #     item_filter_and_group.append(TB_ITEM.fk_item_main_type == search_main_type)
+        # #     item_and_type.append(TB_ITEM.fk_item_main_type == search_main_type)
+        # if search_sub_type is not None:
+        #     item_filter_and_group.append(TB_ITEM.fk_item_sub_type == search_sub_type)
+        # if search_item_title is not None:
+        #     item_filter_and_group.append(TB_ITEM.item_title.like('%' + search_item_title + '%'))
         #     item_and_type.append(TB_ITEM.fk_item_sub_type == search_sub_type)
         # if startDate is not None and endDate is not None:
         #     item_filter_and_group.append(TB_ITEM.create_date >= func.str_to_date(startDate, '%Y-%m-%d'))
@@ -1498,18 +1511,17 @@ class Item(Resource):
         #             objects = self.overlap_obj(item_user, len(item_user))
         #             print("t6 ,", objects)
         #             return result(200, "[GET] Select user item list successful.", objects, None, COMPANY_NAME)
-        if limit is not None:
-            item_len = TB_ITEM.query.filter(and_(*item_filter_and_group)).all()
-            item_limit_list = TB_ITEM.query.filter(and_(*item_filter_and_group)).order_by(TB_ITEM.create_date.desc()).limit(limit).offset(offset)
-            list, objects, current_count, meta = Paging(limit, offset, item_len, TB_ITEM, 'item')
-            objects = self.overlap_obj(item_limit_list, len(item_len))
-            # print("t7 ,", objects)
-            return result(200, "[GET] Select item list successful.", objects, meta, COMPANY_NAME)
-        item_list = TB_ITEM.query.filter(and_(*item_filter_and_group)).order_by(TB_ITEM.create_date.desc()).all()
-        objects = self.overlap_obj(item_list, len(item_list), model_user_idx)
+        # if limit is not None:
+        #     item_len = TB_ITEM.query.filter(and_(*item_filter_and_group)).all()
+        #     item_limit_list = TB_ITEM.query.filter(and_(*item_filter_and_group)).order_by(TB_ITEM.create_date.desc()).limit(limit).offset(offset)
+        #     list, objects, current_count, meta = Paging(limit, offset, item_len, TB_ITEM, 'item')
+        #     objects = self.overlap_obj(item_limit_list, len(item_len))
+        #     # print("t7 ,", objects)
+        #     return result(200, "[GET] Select item list successful.", objects, meta, COMPANY_NAME)
+        # item_list = TB_ITEM.query.filter(and_(*item_filter_and_group)).order_by(TB_ITEM.create_date.desc()).all()
+        # objects = self.overlap_obj(item_list, len(item_list), model_user_idx)
         # print("t8, ", objects)
         # , objects
-        return result(200, "[GET] Select item list successful.", objects, None, COMPANY_NAME)
 
     def post(self):
         print("[POST] Item")
@@ -1520,6 +1532,7 @@ class Item(Resource):
         input = self.parser.parse_args()
         new_item = TB_ITEM()
 
+        new_item.create_date = self.create_date
         new_item.item_title = self.item_title
         new_item.item_price = self.item_price
         new_item.item_explanation = self.item_explanation
@@ -1527,7 +1540,6 @@ class Item(Resource):
 
         # new_item.fk_video_idx = self.fk_video_idx
         # new_item.fk_user_idx = self.fk_user_idx
-        # new_item.create_date = self.create_date
         # new_item.item_description = self.item_description
         # new_item.item_redirect_url = self.item_redirect_url
         # new_item.item_description_url = self.item_description_url
