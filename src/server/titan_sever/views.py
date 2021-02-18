@@ -3922,8 +3922,9 @@ class AI_MODEL:
                     label = f'{self.names[int(cls)]} {conf:.2f}'
                     self.items, c1, c2 = plot_one_box(xyxy, image, label=label, color=self.colors[int(cls)], line_thickness=3,
                                          items=self.items, frame=position, ori_img=ori_img)
+
                     boxes.append({
-                        "item_type": cls,
+                        "item_type": int(cls),
                         "x": c1[0] * w,
                         "y": c1[1] * h,
                         "width": (c2[0] - c1[0]) * w,

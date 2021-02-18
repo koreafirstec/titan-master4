@@ -116,7 +116,7 @@ angular.module('titanApp')
                         }
                     }
                 });
-            },100);
+            },0);
         }
 
 
