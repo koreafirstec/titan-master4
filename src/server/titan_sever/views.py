@@ -3473,7 +3473,8 @@ class video_capture(Resource):
 
     def post(self):
         objects = []
-
+        print(self.video_idx)
+        print(self.item_idx)
         file_path = MODIFY_IMAGES_DIR + str(self.video_idx) + '/'
         if self.video_url == None:
             self.video_url = TB_VIDEO.query.filter_by(idx=self.video_idx).first().video_url
@@ -3486,6 +3487,8 @@ class video_capture(Resource):
         # for f in files:
         #     os.remove(f)
         url = self.video_url
+        vPafy = pafy.new(url)
+        position = 0
         try:
             vPafy = pafy.new(url)
         except Exception as e:
@@ -3502,33 +3505,36 @@ class video_capture(Resource):
             cv2.imwrite(file_name, image)
             current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
         else:
-            image_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx).first()
-            if image_frame == None:
-                return result(404, "not found", None, None, COMPANY_NAME)
-            self.image_frame = image_frame.position
             play = vPafy.getbest(preftype="mp4")
             cap = cv2.VideoCapture(play.url)
-            current_frame = int(self.image_frame)
-            cap.set(1, current_frame)
-            file_name = images_file_path + str(current_frame).zfill(5) + '.jpg'
-            success, image = cap.read()
-            cv2.imwrite(file_name, image)
-            current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            # success, frame = cap.read()
+            # while(success):
+            # success, frame = cap.read()
+            image_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx,
+                                                         fk_video_idx=self.video_idx).all()
+            for i in image_frame:
+                if int(i.position) % 3000 == 0:
+                    self.image_frame = int(i.position)
+                    cap.set(1, self.image_frame)
+                    file_name = images_file_path + str(self.image_frame).zfill(5) + '.jpg'
+                    success, image = cap.read()
+                    cv2.imwrite(file_name, image)
+                    current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
 
-        position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, position=self.image_frame, fk_video_idx=self.video_idx).all()
-        for p_detail in position_detail:
-            objects.append({
-                'fk_item_idx': p_detail.fk_item_idx,
-                'fk_video_idx': p_detail.fk_video_idx,
-                'position': p_detail.position,
-                'position_time': current_time,
-                'draw_img_name': '/modify_images/'+ str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5)+ '.jpg',
-                'position_order': p_detail.position_order,
-                'x': p_detail.x,
-                'y': p_detail.y,
-                'width': p_detail.width,
-                'height': p_detail.height
-            })
+                    position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, position=self.image_frame, fk_video_idx=self.video_idx).all()
+                    for p_detail in position_detail:
+                        objects.append({
+                            'fk_item_idx': p_detail.fk_item_idx,
+                            'fk_video_idx': p_detail.fk_video_idx,
+                            'position': p_detail.position,
+                            'position_time': current_time,
+                            'draw_img_name': '../modify_images/'+ str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5)+ '.jpg',
+                            'position_order': p_detail.position_order,
+                            'x': p_detail.x,
+                            'y': p_detail.y,
+                            'width': p_detail.width,
+                            'height': p_detail.height
+                        })
         cap.release()
         cv2.destroyAllWindows()
 
