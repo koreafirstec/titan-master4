@@ -101,6 +101,7 @@ angular.module('titanApp')
             api_make_titan_video.save(api_item_params, function(data){
                 if(data.status == 200) {
                     $scope.make_ai_level = 4;
+                    $scope.video_capture_func($scope.selected_video, $scope.selected_item);
                 }
             });
 
@@ -117,13 +118,14 @@ angular.module('titanApp')
                             $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
                             $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
                             $scope.modeling_progress = datas.progress;
-                            if (datas.progress == 100 || datas.progress == 99 || datas.progress == 98) {
+                            $scope.progress = datas.progress;
+                            if (datas.progress >= 95) {
                                 $interval.cancel($scope.progressTimer);
                             }
                         }
                     }
                 });
-            }, 100);
+            }, 500);
         }
 
 

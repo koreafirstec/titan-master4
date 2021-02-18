@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-.controller('VideoAddCtrl', function ($scope, $rootScope, $route, Modal, api_search_youtube, AuthService, api_video) {
+.controller('VideoAddCtrl', function ($scope, $rootScope, $route, Modal, api_search_youtube, AuthService, api_video, $location) {
     $scope.item = '';
     $scope.video_id = '';
     $scope.user_idx = AuthService.getIdx();
@@ -29,7 +29,8 @@ angular.module('titanApp')
             if (data.status == 200) {
                 $rootScope.show_videoList = data.objects;
                 $rootScope.selected_video_status_title = "나의 상품 동영상 수";
-                $route.reload();
+                // $route.reload();
+                $location.url('/video_list', true);
                 // $modalInstance.dismiss('ok');
             } else {
             }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('ItemAddCtrl', function ($scope, $route, $q, $upload, ENV, api_item) {
+    .controller('ItemAddCtrl', function ($scope, $route, $q, $upload, ENV, api_item, $location) {
         $scope.li_info_add = true;
         $scope.li_category = false;
         $scope.li_option = false;
@@ -53,6 +53,7 @@ angular.module('titanApp')
                     //         // $modalInstance.dismiss('ok');
                     //     }
                     // });
+                    $location.url('/item_list', true);
                 }
             })
         }
