@@ -75,7 +75,8 @@ angular.module('titanApp')
                             //     '</li>' +
                             // '</ul>' +
                             '<ul>' +
-                                '<li ng-repeat="menu in settings" ng-show="CheckGroups(menu.groups)" class="" ng-class="menu.class" ng-click="move_page(menu.page)">' +
+                                '<li ng-repeat="menu in settings" ng-show="CheckGroups(menu.groups)" class="" ng-class="{\'selected\': menu.page == now_page}" ng-click="move_page(menu.page)">' +
+                                // '<li ng-repeat="menu in settings" ng-show="CheckGroups(menu.groups)" class="" ng-class="menu.class" ng-click="move_page(menu.page)">' +
                                     '<img src="{{menu.icon}}">' +
                                     '<a ng-click="move_page(menu.page)" href="">{{menu.title}}</a>' +
                                 '</li>' +
@@ -90,7 +91,7 @@ angular.module('titanApp')
                         '</div>',
             link: function (scope) {
                 scope.settings = [
-                    {idx: 1, title: '대시보드', page: 'dashboard', class: 'selected', groups: 0, icon: '../images/common/icons/ic-dashboard.png'},
+                    {idx: 1, title: '대시보드', page: 'dashboard', class: '', groups: 0, icon: '../images/common/icons/ic-dashboard.png'},
                     {idx: 2, title: '카테고리 관리', page: 'category', class: '', groups: 0, icon: '../images/common/icons/ic-category.png'},
                     {idx: 3, title: '동영상', page: 'video_add', class: '', groups: 0, icon: '../images/common/icons/ic-video.png'},
                     {idx: 4, title: '동영상 등록', page: 'video_add', class: '', groups: 0, icon: ''},
@@ -108,6 +109,8 @@ angular.module('titanApp')
 
                 scope.setting = [];
                 scope.video_count = 0;
+                let url = $location.absUrl().split('/');
+                scope.now_page = url[url.length - 1];
 
                 var api_params = {};
                 api_params['user_idx'] = AuthService.getIdx();
@@ -184,7 +187,6 @@ angular.module('titanApp')
                 };
 
                 scope.move_page = function(page){
-
                     if (page === '') {
                         return ;
                     }
@@ -225,8 +227,8 @@ angular.module('titanApp')
                 }
                 scope.menuCount = 0;
                 scope.categoryMenuDown = function () {
-                    if(scope.menuCount == 0){
-                        $('#sidebar__dropdown__menu').css('display', 'block');
+                        $('#sidebar__dropdown__menu').c
+                    if(scope.menuCount == 0){ss('display', 'block');
                         scope.menuCount = 1;
                     }else{
                         $('#sidebar__dropdown__menu').css('display', 'none');

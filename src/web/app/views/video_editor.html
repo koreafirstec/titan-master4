@@ -14,7 +14,9 @@
                 <h1>동영상 검색</h1>
                 <span class="make_ai_video_search">
                     <input type="text" placeholder="Search" ng-model="make_ai_video_search"/>
-                    <button type="button"></button>
+                    <button type="button">
+                        <img src="../images/common/icons/ic-search.png" alt="">
+                    </button>
                 </span>
                 <span class="make_ai_video_search_guide">동영상은 한 번에 1개만 선택할 수 있습니다.</span>
             </div>
@@ -44,7 +46,9 @@
                 <h1>상품 검색</h1>
                 <span class="make_ai_item_search">
                     <input type="text" placeholder="Search" ng-model="make_ai_item_search"/>
-                    <button type="button"></button>
+                    <button type="button">
+                        <img src="../images/common/icons/ic-search.png" alt="">
+                    </button>
                 </span>
             </div>
             <div>
@@ -80,6 +84,11 @@
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
+                    <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
+                        <i class="fa fa-spinner fa-spin"></i><br/>
+                        상품연결중…<br/>
+                        {{modeling_progress}}%
+                    </span>
                     <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">
@@ -115,7 +124,8 @@
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
-                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)-item.y/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)-item.x/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
+<!--                    -item.x/(1920/width_img)-->
+                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
                 </span>
                 <span class="make_ai_modeling_video_start">
 <!--                    <button type="button">AI 모델링 시작</button>-->

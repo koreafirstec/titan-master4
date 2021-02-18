@@ -1958,7 +1958,7 @@ class item_detail(Resource):
                         'position_order': item_detail.position_order,
                         'position_time': item_detail.position_time,
                         # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
-                        'draw_img_name': '/make_images/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
+                        'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                         'x': item_detail.x,
                         'y': item_detail.y,
                         'width': item_detail.width,
@@ -4510,7 +4510,7 @@ class make_titan_video(Resource):
     def add_item_detail(self, lenP, position, current_time, x, y, width, height, m_type, item_type, video_idx):
         new_detail = TB_ITEM_DETAIL()
         # new_detail.fk_item_idx = self.fk_item_idx
-        new_detail.fk_item_idx = 1313
+        new_detail.fk_item_idx = self.fk_item_idx
         new_detail.position = position
         new_detail.position_time = current_time
         new_detail.position_order = lenP

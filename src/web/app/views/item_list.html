@@ -1,13 +1,23 @@
 <i manage-nav />
 <section class="content">
-    <h1 class="title">동영상 관리</h1>
-    <div class="video_list">
+    <h1 class="title">상품 관리</h1>
+    <div class="item_list">
+       <div>
+            <span>전체 30개</span>
+            <span class="item_list_search">
+                <input type="text" placeholder="Search" ng-model="search_item_title"/>
+                <button type="button">
+                    <img src="../images/common/icons/ic-search.png" alt="">
+                </button>
+            </span>
+            <span class="item_list_search_guide">조회순 ▼</span>
+        </div>
         <table class="table-library">
             <colgroup>
                 <col width="100px">
                 <col width="120px">
-                <col width="300px">
-                <col width="100px">
+                <col width="200px">
+                <col width="200px">
                 <col width="100px">
                 <col width="100px">
                 <col width="100px">
@@ -39,7 +49,7 @@
             </thead>
             <!-- 컨텐츠 영역 -->
             <tbody>
-                <tr ng-repeat="item in item_list" class="library__tr">
+                <tr ng-repeat="item in item_list | filter:search_item_title" class="library__tr">
 <!--                    ng-click="video_library_list(item, $event)"-->
 <!--                    <td id="library__td__checkbox__{{item.idx}}">-->
 <!--                        <div class="form-checkbox">-->
@@ -50,15 +60,14 @@
 <!--                    </td>-->
                     <td>123</td>
                     <td>
-                        <img id="{{item.item_url.substr(32, 11)}}"
-                             ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg"
-                             alt="썸네일" ng-click="videoDetails(item, 0)" class="video_list_image"/>
+                        <img ng-src="../images/uploads/{{item.idx}}_product.jpg"
+                             class="item_list_image"/>
                     </td>
                     <td>
                         <p>{{item.item_title}}</p>
                         <p>{{item.item_explanation}}</p>
                     </td>
-                    <td>{{item.item_duration}}</td>
+                    <td>[대분류]아우터>[중분류]패딩>[소분류]디키즈</td>
                     <td>458</td>
                     <td>공개</td>
                     <td>스포츠/취미</td>
@@ -67,7 +76,7 @@
                         <p>2021-01-14-목</p>
                         <p>13:05:04</p>
                     </td>
-                    <td class="video_list_btn">
+                    <td class="item_list_btn">
                         <button type="button">수정</button>
                         <button type="button">삭제</button>
                     </td>

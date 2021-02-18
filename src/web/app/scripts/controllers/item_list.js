@@ -7,6 +7,7 @@ angular.module('titanApp')
     $scope.item_title = '';
     $scope.item_description = '';
     $scope.item_redirect_url = '';
+    $scope.search_item_title ='';
     // var parameters;
 
     api_item.get(null, function(data){

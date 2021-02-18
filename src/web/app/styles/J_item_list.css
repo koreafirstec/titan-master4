@@ -1,4 +1,4 @@
-.video_list{
+.item_list{
     display: block;
     width: 100%;
     max-width: 1280px;
@@ -8,14 +8,14 @@
     background-color: #ffffff;
     padding: 0 15px;
 }
-.video_list > div{
+.item_list > div{
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     position: relative;
 }
-.video_list > div > span:nth-child(1){
+.item_list > div > span:nth-child(1){
     font-size: 14px;
     letter-spacing: -0.17px;
     text-align: left;
@@ -23,20 +23,20 @@
     position: absolute;
     left: 0;
 }
-.video_list > div > .video_list_search{
+.item_list > div > .item_list_search{
     position: relative;
     width: 300px;
     height: 30px;
     margin: 0 17px 0 0;
 }
-.video_list > div > .video_list_search > input[type="text"]{
+.item_list > div > .item_list_search > input[type="text"]{
     width: 100%;
     height: 30px;
     padding: 0 0 0 10px;
     border: solid 0.4px #b4b4b4;
     background-color: #ffffff;
 }
-.video_list > div > .video_list_search > button[type="button"]{
+.item_list > div > .item_list_search > button[type="button"]{
     position: absolute;
     right: 0;
     width: 50px;
@@ -44,49 +44,49 @@
     border: solid 0.4px #a5a5a5;
     background-color: #a5a5a5;
 }
-.video_list > div > .video_list_search_guide{
+.item_list > div > .item_list_search_guide{
     font-size: 14px;
     letter-spacing: -0.17px;
     text-align: left;
     color: #6b6b6b;
 }
-.video_list > .table-library{
+.item_list > .table-library{
     width: 100%;
 }
-.video_list > .table-library > thead > tr{
+.item_list > .table-library > thead > tr{
     width: 1245px;
     height: 50px;
     line-height: 50px;
     border: solid 0.3px #b4b4b4;
     background-color: #f7f7f7;
 }
-.video_list > .table-library > tbody > tr{
+.item_list > .table-library > tbody > tr{
     width: 1245px;
     border: solid 0.3px #b4b4b4;
     background-color: #ffffff;
 }
-.video_list > .table-library > thead > tr > th {
+.item_list > .table-library > thead > tr > th {
     font-size: 14px;
     letter-spacing: -0.17px;
     text-indent: 6px;
     text-align: left;
     color: #6b6b6b;
 }
-.video_list > .table-library > tbody > tr > td{
+.item_list > .table-library > tbody > tr > td{
     vertical-align: middle;
     font-size: 14px;
     line-height: 2;
     letter-spacing: -0.17px;
     color: #000000;
 }
-.video_list > .table-library > tbody > tr > td > .video_list_image{
+.item_list > .table-library > tbody > tr > td > .item_list_image{
     width: 110px;
     height: 75px;
     border: solid 0.3px #cbcbcb;
     vertical-align: middle;
     margin: 10px 0;
 }
-.video_list > .table-library > tbody > tr > .video_list_btn > button[type="button"]{
+.item_list > .table-library > tbody > tr > .item_list_btn > button[type="button"]{
     width: 50px;
     height: 26px;
     border-radius: 6px;

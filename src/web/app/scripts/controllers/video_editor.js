@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video) {
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video, $interval) {
 
 //         $scope.user_id = AuthService.getUserId();
 //         $scope.user_idx = AuthService.getIdx();
@@ -20,6 +20,8 @@ angular.module('titanApp')
         $scope.selected_item = '';
         $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+        $scope.modeling_loading = false;
+        $scope.modeling_progress = 0;
 
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
@@ -90,33 +92,38 @@ angular.module('titanApp')
         };
 
         $scope.start_modeling = function () {
+            $scope.modeling_loading = true;
             let api_item_params = {};
             api_item_params['video_idx'] = $scope.selected_video.idx;
             api_item_params['video_url'] = $scope.selected_video.video_url;
             api_item_params['fk_item_idx'] = $scope.selected_item.idx;
 
-            api_make_titan_video.save(api_item_params, function(data){});
+            api_make_titan_video.save(api_item_params, function(data){
+                if(data.status == 200) {
+                    $scope.make_ai_level = 4;
+                }
+            });
 
             let api_params2 = {};
             let image_path = ENV.webs + '/make_image/' + $scope.selected_video.idx + '/';
             let video_image_path = image_path + 'images/';
             let draw_image_path = image_path + 'draw_images/';
             api_params2['fk_video_idx'] = $scope.selected_video.idx;
-            let progressTimer = setInterval(function (){
+            $scope.progressTimer = $interval(function () {
                 api_progress_process.get(api_params2, function (data) {
-                    if(data.status == 200) {
+                    if (data.status == 200) {
                         let datas = data.objects[0];
-                        if(datas.draw_img_name != '') {
+                        if (datas.draw_img_name != '') {
                             $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
                             $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
-                            if (datas.progress == 100) {
-                                clearInterval(progressTimer);
-                                $scope.make_ai_level = 4;
+                            $scope.modeling_progress = datas.progress;
+                            if (datas.progress == 100 || datas.progress == 99 || datas.progress == 98) {
+                                $interval.cancel($scope.progressTimer);
                             }
                         }
                     }
                 });
-            },0);
+            }, 100);
         }
 
 

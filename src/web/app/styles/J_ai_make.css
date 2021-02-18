@@ -234,6 +234,7 @@
 }
 .make_ai > .make_ai_modeling > .make_ai_modeling_video > span {
     display: inline-block;
+    position: relative;
 }
 .make_ai > .make_ai_modeling > .make_ai_modeling_video > span > h1 {
     font-size: 14px;
@@ -265,6 +266,19 @@
     font-size: 12px;
     line-height: 1.25;
     color: #cbcbcb;
+}
+.make_ai > .make_ai_modeling > .make_ai_modeling_video > span > .make_ai_modeling_spinner{
+    position: absolute;
+    top: calc(50% - 26px);
+    left: calc(50% - 33px);
+    width: 66px;
+    padding: 11px 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 11px;
+    line-height: 1.25;
+    letter-spacing: -0.14px;
+    text-align: center;
+    color: #ffffff;
 }
 
 .make_ai > .make_ai_modeling > .make_ai_modeling_item{
