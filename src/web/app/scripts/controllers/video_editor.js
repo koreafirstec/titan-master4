@@ -22,12 +22,26 @@ angular.module('titanApp')
         $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.modeling_loading = false;
         $scope.modeling_progress = 0;
+        $scope.start_time = '';
+        $scope.end_time = '';
 
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
             $scope.position_order = item.position_order;
             $scope.enter_status = true;
             $("#meta_data_editor_btn").css('display', 'flex');
+        }
+
+        $scope.position_molra = function(s, e){
+            if(s !== '' && e !== ''){
+                var st = $scope.modify_success_list.findIndex(i => i.position_time_d == s);
+                var et = $scope.modify_success_list.findIndex(i => i.position_time_d == e);
+
+                $scope.position_modify = $scope.modify_success_list.slice(st, (et+1))
+                $scope.modify_success_list = $scope.position_modify
+            }else{
+                console.log($scope.modify_success_list)
+            }
         }
 
         $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
@@ -152,6 +166,10 @@ angular.module('titanApp')
 //            });
         }
 
+        $scope.position_all = function(all_position){
+            $scope.modify_success_list = all_position;
+        }
+
 
         $scope.get_position_all = function(video, item){
             $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
@@ -186,9 +204,11 @@ angular.module('titanApp')
                     "position": $scope.detail_list[j].position,
                     "detail_index": $scope.detail_list[j].index,
                     "position_time": $scope.detail_list[j].position_time,
+                    "position_time_d": $scope.detail_list[j].position_time_d,
                     "draw_img_name": $scope.detail_list[j].draw_img_name,
                     "display": "none",
                 });
+                $scope.modify_rect_position = $scope.modify_success_list;
             }
 
             for(var i in $scope.modify_success){
@@ -227,7 +247,6 @@ angular.module('titanApp')
                     $scope.modify_rect = data.objects;
                     var Objects = data.objects;
                     $scope.rectPosition = [];
-                    console.log(data.objects)
                     for(let i = 0; i < Objects.length; i++){
                          $scope.p_time = Objects[i].position_time;
                          $scope.fk_item_idx = item_idx;
@@ -1475,8 +1494,8 @@ angular.module('titanApp')
                      $rootScope.meta_data_insert = true;
                      $rootScope.local_player.stopVideo();
                  }
-             }else{
-                console.log("ddd");
+             }
+//             else{
 //                 Modal.open(
 //                     'views/alert_modal.html',
 //                     'AlertCtrl',
@@ -1490,7 +1509,7 @@ angular.module('titanApp')
 //                         }
 //                     }
 //                 );
-             }
+//             }
          }
 
          $(window).resize(function () {
@@ -1683,15 +1702,12 @@ angular.module('titanApp')
          $scope.position_selected = function(draw_stat){
              if(draw_stat == 0){
                  $scope.draw_stat = 0;
-                 console.log($scope.editor_locker_not_drawing);
                  $scope.editor_locker = $scope.editor_locker_not_drawing;
              }else if(draw_stat == 1){
                  $scope.draw_stat = 1;
-                 console.log($scope.editor_locker_drawing);
                  $scope.editor_locker = $scope.editor_locker_drawing;
              }else{
                  $scope.draw_stat = 2;
-                 console.log($scope.editor_locker_all);
                  $scope.editor_locker = $scope.editor_locker_all;
              }
          }

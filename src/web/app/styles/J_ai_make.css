@@ -367,12 +367,31 @@
     padding: 13px 0 30px 48.5px;
     background-color: #707070;
 }
+.make_ai_model_edit_item_time> input[type="text"]{
+    padding: 0 0 0 10px;
+    height: 28px;
+    width: 114px;
+    color: black;
+    margin-left: 10px;
+}
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > p{
     font-size: 14px;
     line-height: 3;
     letter-spacing: -0.17px;
     text-align: left;
     color: #ffffff;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > p > button{
+    height: 28px;
+    line-height: 20px;
+    padding: 4px 14px;
+    border: solid 0.5px #ffffff;
+    border-radius: 4px;
+    background: none;
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #ffffff;
+    margin-left: 8px;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2){
     margin: 22px 0 22px -48.5px;
@@ -388,6 +407,19 @@
     margin: 0 24px 0 0;
     border-radius: 5px;
     border: solid 2px #cbcbcb;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div > ul{
+
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div > ul > li{
+    display: inline-block;
+    width: 125px;
+    margin-right: 24px;
+    font-size: 10px;
+    line-height: 1.6;
+    letter-spacing: -0.12px;
+    text-align: left;
+    color: #b4b4b4;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > p{
     font-size: 14px;
