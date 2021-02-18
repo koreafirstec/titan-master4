@@ -17,16 +17,6 @@ angular
     ])
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/video_list', {
-                activePage: 'video_list',
-                templateUrl: 'views/video_list.html',
-                controller: 'VideoListCtrl'
-            })
-            .when('/item_list', {
-                activePage: 'item_list',
-                templateUrl: 'views/item_list.html',
-                controller: 'ItemListCtrl'
-            })
             .when('/video_play/:video_id', {
                 templateUrl: 'views/video_play.html',
                 controller: 'VideoPlayCtrl'
@@ -134,6 +124,16 @@ angular
                 activePage: 'video_editor',
                 templateUrl: 'views/video_editor.html',
                 controller: 'VideoEditorCtrl'
+            })
+            .when('/video_list', {
+                activePage: 'video_list',
+                templateUrl: 'views/video_list.html',
+                controller: 'VideoListCtrl'
+            })
+            .when('/item_list', {
+                activePage: 'item_list',
+                templateUrl: 'views/item_list.html',
+                controller: 'ItemListCtrl'
             })
             .otherwise({
                 redirectTo: '/login'

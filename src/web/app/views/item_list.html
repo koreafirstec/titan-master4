@@ -1,12 +1,90 @@
-<div>
-    <img ng-repeat="item in item_list" ng-src="{{item.item_img_path}}"  alt="" onerror="this.style.display = 'none'" class="my_item"
-         ng-click="inform_on(item.idx)"/>
-
-    <div id="item_inform_area" class="item_inform_area">
-<!--        <div class="ellipsis1 item_list_name">{{item.item_title}}</div>-->
-        <div class="ellipsis1 item_list_name">{{$scope.item_title}}</div>
-        <div class="ellipsis2">{{$scope.item_description}}</div>
-        <a href="" ng-href="https://www.youtube.com/watch?v={{item.video_id}}" target="_blank">동영상에서 보러가기</a><br>
-        <a href="" ng-href="{{$scope.item_redirect_url}}" target="_blank">사러가기</a>
+<i manage-nav />
+<section class="content">
+    <h1 class="title">동영상 관리</h1>
+    <div class="video_list">
+        <table class="table-library">
+            <colgroup>
+                <col width="100px">
+                <col width="120px">
+                <col width="300px">
+                <col width="100px">
+                <col width="100px">
+                <col width="100px">
+                <col width="100px">
+                <col width="100px">
+                <col width="">
+                <col width="70px">
+            </colgroup>
+            <thead>
+            <tr>
+<!--                <th class="js-table-checkbox">-->
+<!--                    <div class="form-checkbox">-->
+<!--                        <ui-select-all items="video_list" prop="isSelected"-->
+<!--                                       id="library-check-all"-->
+<!--                                       ng-click="video_check_all(video_list)"></ui-select-all>-->
+<!--                        <label for="library-check-all"></label>-->
+<!--                    </div>-->
+<!--                </th>-->
+                <th>번호</th>
+                <th>상품명</th>
+                <th></th>
+                <th>카테고리</th>
+                <th>판매가</th>
+                <th>AI 연결여부</th>
+                <th>공개상태</th>
+                <th>판매상태</th>
+                <th>날짜 ↑</th>
+                <th></th>
+            </tr>
+            </thead>
+            <!-- 컨텐츠 영역 -->
+            <tbody>
+                <tr ng-repeat="item in item_list" class="library__tr">
+<!--                    ng-click="video_library_list(item, $event)"-->
+<!--                    <td id="library__td__checkbox__{{item.idx}}">-->
+<!--                        <div class="form-checkbox">-->
+<!--                            <input type="checkbox" id="checkbox-20200519-pbg5cyca-{{item.idx}}"-->
+<!--                                   ng-model="item.isSelected" ng-click="video_check_one(item)">-->
+<!--                            <label for="checkbox-20200519-pbg5cyca-{{item.idx}}"></label>-->
+<!--                        </div>-->
+<!--                    </td>-->
+                    <td>123</td>
+                    <td>
+                        <img id="{{item.item_url.substr(32, 11)}}"
+                             ng-src="https://img.youtube.com/vi/{{item.video_url.substr(32, 11)}}/hqdefault.jpg"
+                             alt="썸네일" ng-click="videoDetails(item, 0)" class="video_list_image"/>
+                    </td>
+                    <td>
+                        <p>{{item.item_title}}</p>
+                        <p>{{item.item_explanation}}</p>
+                    </td>
+                    <td>{{item.item_duration}}</td>
+                    <td>458</td>
+                    <td>공개</td>
+                    <td>스포츠/취미</td>
+                    <td>김ㅇㅇ</td>
+                    <td>
+                        <p>2021-01-14-목</p>
+                        <p>13:05:04</p>
+                    </td>
+                    <td class="video_list_btn">
+                        <button type="button">수정</button>
+                        <button type="button">삭제</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
+</section>
+<!--<div>-->
+<!--    <img ng-repeat="item in item_list" ng-src="{{item.item_img_path}}"  alt="" onerror="this.style.display = 'none'" class="my_item"-->
+<!--         ng-click="inform_on(item.idx)"/>-->
+
+<!--    <div id="item_inform_area" class="item_inform_area">-->
+<!--&lt;!&ndash;        <div class="ellipsis1 item_list_name">{{item.item_title}}</div>&ndash;&gt;-->
+<!--        <div class="ellipsis1 item_list_name">{{$scope.item_title}}</div>-->
+<!--        <div class="ellipsis2">{{$scope.item_description}}</div>-->
+<!--        <a href="" ng-href="https://www.youtube.com/watch?v={{item.video_id}}" target="_blank">동영상에서 보러가기</a><br>-->
+<!--        <a href="" ng-href="{{$scope.item_redirect_url}}" target="_blank">사러가기</a>-->
+<!--    </div>-->
+<!--</div>-->

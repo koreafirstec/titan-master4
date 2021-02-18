@@ -93,8 +93,12 @@ angular.module('titanApp')
                     {idx: 1, title: '대시보드', page: 'dashboard', class: 'selected', groups: 0, icon: '../images/common/icons/ic-dashboard.png'},
                     {idx: 2, title: '카테고리 관리', page: 'category', class: '', groups: 0, icon: '../images/common/icons/ic-category.png'},
                     {idx: 3, title: '동영상', page: 'video_add', class: '', groups: 0, icon: '../images/common/icons/ic-video.png'},
-                    {idx: 4, title: '상품', page: 'item_add', class: '', groups: 0, icon: '../images/common/icons/ic-goods.png'},
-                    {idx: 5, title: 'AI 만들기', page: 'video_editor', class: '', groups: 0, icon: '../images/common/icons/ic-ai-make.png'}
+                    {idx: 4, title: '동영상 등록', page: 'video_add', class: '', groups: 0, icon: ''},
+                    {idx: 5, title: '동영상 관리', page: 'video_list', class: '', groups: 0, icon: ''},
+                    {idx: 6, title: '상품', page: 'item_add', class: '', groups: 0, icon: '../images/common/icons/ic-goods.png'},
+                    {idx: 7, title: '상품 등록', page: 'item_add', class: '', groups: 0, icon: ''},
+                    {idx: 8, title: '상품 관리', page: 'item_list', class: '', groups: 0, icon: ''},
+                    {idx: 9, title: 'AI 만들기', page: 'video_editor', class: '', groups: 0, icon: '../images/common/icons/ic-ai-make.png'}
                 ];
                 scope.options = [
                     {idx: 1, title: '사이트맵', page: 'sitemap', class: '', groups: 0, icon: '../images/common/icons/ic-sitemap.png'},

@@ -1114,17 +1114,19 @@ class Video(Resource):
             for video in videos:
                 # user_model = TB_USER.query.filter_by(idx=user_idx).first().prev_model_item if user_idx is not None else 0
                 objects.append({
-                    # 'idx': video.idx,
+                    'idx': video.idx,
                     # 'fk_user_idx': video.fk_user_idx,
                     # 'video_source': video.video_source,
                     'video_url': video.video_url,
                     'video_title': video.video_title,
-                    # 'create_date': json_encoder(video.create_date),
+                    'video_explanation': video.video_explanation,
                     # 'modify_date': json_encoder(video.modify_date),
-                    'video_duration': video.video_duration
+                    'video_duration': video.video_duration,
                     # 'video_status_value': video.video_status_value,
                     # 'video_auto_preview': video.video_auto_preview,
-                    # 'video_shared': video.video_shared,
+                    'video_shared': video.video_shared,
+                    'video_category': video.video_category,
+                    'create_date': json_encoder(video.create_date),
                     # 'item_count': len(TB_ITEM.query.filter_by(fk_video_idx=video.idx).all()),
                     # 'user_model': user_model,
                     # 'total_count': len(videos)
