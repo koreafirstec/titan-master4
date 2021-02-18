@@ -5137,6 +5137,7 @@ class SearchYoutube(Resource):
                 ).execute()
 
             for search_result in search_response2.get("items", []):
+                print(search_result)
                 if search_result["id"]["kind"] == "youtube#video":
                     objects.append({
                         "id": search_result["id"]["videoId"],

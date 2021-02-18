@@ -1,7 +1,7 @@
 <div class="popup_youtube_search">
     <div class="title">
         유튜브 검색
-        <button class="fa fa-close" ng-click="close()"></button>
+        <button id="esc_button" class="fa fa-close"></button>
     </div>
     <div class="popup_youtube_search_container">
         <form method="post" name="video_search" ng-submit="search(searchTitle)" novalidate form-autofill-fix>
@@ -68,7 +68,7 @@
             </ul>
         </div>
         <div class="video_search_list">
-            <div ng-repeat="video in video_list" class="video_search_list_item" ng-click="addDetail(video.url)">
+            <div ng-repeat="video in video_list" class="video_search_list_item" ng-click="addDetail(video.id)">
                 <img ng-src="https://img.youtube.com/vi/{{video.id}}/hqdefault.jpg" alt="썸네일">
                 <span class="video_search_list_item_info">
                     <div class="ellipsis2">

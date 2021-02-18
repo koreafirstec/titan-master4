@@ -6,6 +6,7 @@ angular.module('titanApp')
     $scope.user_idx = AuthService.getIdx();
     $scope.fk_group_idx = AuthService.getFkGroupIdx();
 
+
     $scope.videoAdd = function(video_title) {
         var api_params = {};
         api_params['fk_user_idx'] = $scope.user_idx;
