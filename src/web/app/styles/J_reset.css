@@ -66,3 +66,17 @@ input[type="checkbox"]{
     margin: 0 !important;
     padding: 0 !important;
 }
+*::-webkit-scrollbar {
+  width: 6px;
+}
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: #b4b4b4;
+}
+*::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
