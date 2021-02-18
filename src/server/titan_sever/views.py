@@ -36,6 +36,7 @@ import re
 from flask_cors import CORS
 from openpyxl import load_workbook
 import numpy as np
+from numpy import random
 import cv2
 import glob
 import pafy
@@ -53,12 +54,23 @@ from urllib.request import urlretrieve
 
 ############# AI PART #######################################################
 import tensorflow as tf
-from .datasets import data as dataset
-from .models_.nn import YOLO as ConvNet
-from .learning.evaluators import RecallEvaluator as Evaluator
-from .learning.utils import draw_pred_boxes, predict_nms_boxes, convert_boxes
-from .learning.optimizers import MomentumOptimizer as Optimizer
+# from .datasets import data as dataset
+# from .models_.nn import YOLO as ConvNet
+# from .learning.evaluators import RecallEvaluator as Evaluator
+# from .learning.utils import draw_pred_boxes, predict_nms_boxes, convert_boxes
+# from .learning.optimizers import MomentumOptimizer as Optimizer
 
+import torch
+# from .ai.models.experimental import attempt_load
+# from .ai.utils.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+# from .ai.utils.plots import plot_one_box
+# from .ai.utils.torch_utils import select_device
+
+from .ai.models.experimental import attempt_load
+from .ai.models.datasets import letterbox
+from .ai.models.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+from .ai.models.plots import plot_one_box
+from .ai.models.torch_utils import select_device
 #############################################################################
 
 from googleapiclient.discovery import build
@@ -3856,6 +3868,61 @@ class YOLO_V2:
         return draw_image, boxes
 
 
+class AI_MODEL:
+    def __init__(self, model_name='detect', img_size=640):
+        sys.path.insert(0, './titan_sever/ai')
+        self.model_path = './titan_sever/ai/model/'
+        self.model = self.model_path + model_name + '.pt'
+
+        self.device = select_device('')
+        self.half = self.device.type != 'cpu'
+        self.model = attempt_load(self.model, map_location=self.device)
+        if self.half:
+            self.model.half()
+        self.img_size = check_img_size(img_size, s=self.model.stride.max())
+        self.names = self.model.module.names if hasattr(self.model, 'module') else self.model.names
+        self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in self.names]
+
+        self.items = {'top': [], 'long_bottom': [], 'skirt': [], 'shoes': [], 'cap': [], 'golfball': [], 'golfbag': [], 'golfclub': []}
+
+    def detect(self, image, position):
+        ori_img = image.copy()
+        height, width, channels = image.shape
+        h = 1080 / height
+        w = 1920 / width
+
+        img = image.copy()
+        img = letterbox(img, new_shape=self.img_size)[0]
+        img = img[:, :, ::-1].transpose(2, 0, 1)
+        img = np.ascontiguousarray(img)
+        img = torch.from_numpy(img).to(self.device)
+        img = img.half() if self.half else img.float()
+        img /= 255.0
+        if img.ndimension() == 3:
+            img = img.unsqueeze(0)
+
+        pred = self.model(img, augment='')[0]
+        pred = non_max_suppression(pred)
+
+        boxes = []
+        for i, det in enumerate(pred):
+            if len(det):
+                det[:, :4] = scale_coords(img.shape[2:], det[:, :4], image.shape).round()
+
+                for *xyxy, conf, cls in reversed(det):
+                    label = f'{self.names[int(cls)]} {conf:.2f}'
+                    self.items, c1, c2 = plot_one_box(xyxy, image, label=label, color=self.colors[int(cls)], line_thickness=3,
+                                         items=self.items, frame=position, ori_img=ori_img)
+                    boxes.append({
+                        "item_type": cls,
+                        "x": c1[0] * w,
+                        "y": c1[1] * h,
+                        "width": (c2[0] - c1[0]) * w,
+                        "height": (c2[1] - c1[1]) * h
+                    })
+        return image, boxes
+
+
 ##########################################################################################
 
 class titan_model(Resource):
@@ -4254,58 +4321,57 @@ class make_titan_video(Resource):
         model_title = request.args.get('model_title')
         file_absUrl = os.getcwd()
         model_path = file_absUrl + '/titan_sever/ai_model/' + str(model_title) + '/model.ckpt.index'
-        if os.path.exists(model_path):
-            ai = YOLO_V2(str(model_title))
-            ai.restore()
-
-            video_current_time = request.args.get('video_current_time')
-            video_duration_time = request.args.get('video_duration_time')
-
-            url = request.args.get('video_url')
-            try:
-                vPafy = pafy.new(url)
-            except Exception as ex:
-                return result(500, str(ex), None, None, COMPANY_NAME)
-
-            best = vPafy.getbest(preftype="mp4")
-            cap = cv2.VideoCapture(best.url)
-            position = 1
-
-            if video_current_time != None and video_duration_time != None:
-                print('current_time, duration_time is true')
-                total_frame = int(cap.get(7))
-                find_frame = round(total_frame / float(video_duration_time) * float(video_current_time))
-                cap.set(1, find_frame)
-                retval, frame = cap.read()
-                draw_image, objects = ai.draw(frame, True)
-                self.objects = objects
-                self.current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
-            else:
-                print('current_time, duration_time is false')
-                retval, frame = cap.read()
-                while (retval):
-                    retval, frame = cap.read()
-                    if position % 10 == 0:
-                        draw_image, boxes = ai.draw(frame, True)
-                        if draw_image is not None:
-                            if boxes is not None:
-                                self.objects = boxes
-                                self.current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
-                                break
-                    if position == 1000:
-                        return result(403, "item position not found", None, None, COMPANY_NAME)
-                    position += 1
-
-            boxes_obj.append({
-                'boxes': self.objects,
-                'current_time': self.current_time
-            })
-
-            objects = boxes_obj[0]
-            cap.release()
-            cv2.destroyAllWindows()
-
-            return result(200, "item_detection frame successful.", objects, None, COMPANY_NAME)
+        # if os.path.exists(model_path):
+        #     ai = Detect()
+        #
+        #     video_current_time = request.args.get('video_current_time')
+        #     video_duration_time = request.args.get('video_duration_time')
+        #
+        #     url = request.args.get('video_url')
+        #     try:
+        #         vPafy = pafy.new(url)
+        #     except Exception as ex:
+        #         return result(500, str(ex), None, None, COMPANY_NAME)
+        #
+        #     best = vPafy.getbest(preftype="mp4")
+        #     cap = cv2.VideoCapture(best.url)
+        #     position = 1
+        #
+        #     if video_current_time != None and video_duration_time != None:
+        #         print('current_time, duration_time is true')
+        #         total_frame = int(cap.get(7))
+        #         find_frame = round(total_frame / float(video_duration_time) * float(video_current_time))
+        #         cap.set(1, find_frame)
+        #         retval, frame = cap.read()
+        #         draw_image, objects = ai.draw(frame)
+        #         self.objects = objects
+        #         self.current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+        #     else:
+        #         print('current_time, duration_time is false')
+        #         retval, frame = cap.read()
+        #         while (retval):
+        #             retval, frame = cap.read()
+        #             if position % 10 == 0:
+        #                 draw_image, boxes = ai.draw(frame)
+        #                 if draw_image is not None:
+        #                     if boxes is not None:
+        #                         self.objects = boxes
+        #                         self.current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+        #                         break
+        #             if position == 1000:
+        #                 return result(403, "item position not found", None, None, COMPANY_NAME)
+        #             position += 1
+        #
+        #     boxes_obj.append({
+        #         'boxes': self.objects,
+        #         'current_time': self.current_time
+        #     })
+        #
+        #     objects = boxes_obj[0]
+        #     cap.release()
+        #     cv2.destroyAllWindows()
+        #
+        #     return result(200, "item_detection frame successful.", objects, None, COMPANY_NAME)
         return result(404, "model not exists", None, None, COMPANY_NAME)
 
     def add_video_editor(self, fk_user_idx):
@@ -4325,6 +4391,7 @@ class make_titan_video(Resource):
         # if os.path.exists(model_path):
             # if item_insert_status != 1:
             # ai = YOLO_V2(self.model_title)
+        ai = AI_MODEL()
             # ai.restore()
 
             # progress 데이터 생성 및 수정/삭제
@@ -4333,8 +4400,8 @@ class make_titan_video(Resource):
             # self.delete_item_detail()
 
             # ../web/app/make_image/{item_idx}
-        video_image_path = MAKE_IMAGE_DIR + str(self.fk_item_idx) + '/'
-        modify_image_path = MODIFY_IMAGES_DIR + str(self.video_idx) + '/' + str(self.fk_item_idx) + '_images/'
+        # video_image_path = MAKE_IMAGE_DIR + str(self.fk_item_idx) + '/'
+        # modify_image_path = MODIFY_IMAGES_DIR + str(self.video_idx) + '/' + str(self.fk_item_idx) + '_images/'
 
             # ../web/app/make_image/{item_idx} 하위 디렉터리 및 파일 삭제 ignore_errors=True - 에러 무시
             # if os.path.exists(video_image_path): shutil.rmtree(video_image_path, ignore_errors=True)
@@ -4347,75 +4414,72 @@ class make_titan_video(Resource):
             # except:
             #     pass
 
-        images_file_path = video_image_path + 'images/'
-        # draw_images_file_path = video_image_path + 'draw_images/'
-        directory = os.path.dirname(images_file_path)
-        modify_directory = os.path.dirname(modify_image_path)
-        # draw_directory = os.path.dirname(draw_images_file_path)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        # if not os.path.exists(draw_directory):
-        #     os.makedirs(draw_directory)
-        files = glob.glob(images_file_path + '*')
-        for f in files:
-            os.remove(f)
-        # files = glob.glob(draw_images_file_path + '*')
+        # images_file_path = video_image_path + 'images/'
+        # # draw_images_file_path = video_image_path + 'draw_images/'
+        # directory = os.path.dirname(images_file_path)
+        # modify_directory = os.path.dirname(modify_image_path)
+        # # draw_directory = os.path.dirname(draw_images_file_path)
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+        # # if not os.path.exists(draw_directory):
+        # #     os.makedirs(draw_directory)
+        # files = glob.glob(images_file_path + '*')
         # for f in files:
         #     os.remove(f)
-        if not os.path.exists(modify_directory):
-            os.makedirs(modify_directory)
+        # # files = glob.glob(draw_images_file_path + '*')
+        # # for f in files:
+        # #     os.remove(f)
+        # if not os.path.exists(modify_directory):
+        #     os.makedirs(modify_directory)
 
             # 유튜브 영상 캡쳐
         url = self.video_url
         vPafy = pafy.new(url)
-        # best = vPafy.getbest(preftype='webm')
         best = vPafy.getbest(preftype="mp4")
         cap = cv2.VideoCapture(best.url)
-        retval, frame = cap.read()
+        retval, image = cap.read()
         total_frame = int(cap.get(7))
         start_time = time.time()
         position = 1
         while (retval):
-            retval, frame = cap.read()
-            if position % 10 == 0:
-                image_name = str(position).zfill(5)
-                image_path = images_file_path + '/' + image_name + '.jpg'
-                # draw_image_path = draw_images_file_path + '/' + image_name + '.jpg'
-                modify_file_path = modify_image_path + '/' + image_name + '.jpg'
-                cv2.imwrite(image_path, frame)
-                cv2.imwrite(modify_file_path, frame)
-                zposition = str(position).zfill(5)
-                objects.append({
-                    str(position): position,
-                    'item_idx': self.fk_item_idx,
-                    'position': zposition,
-                    'position_time': cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
-                })
-                # image = cv2.imread(image_path)
+            # image_name = str(position).zfill(5)
+            # image_path = images_file_path + '/' + image_name + '.jpg'
+            # # draw_image_path = draw_images_file_path + '/' + image_name + '.jpg'
+            # modify_file_path = modify_image_path + '/' + image_name + '.jpg'
+            # cv2.imwrite(image_path, image)
+            # cv2.imwrite(modify_file_path, image)
+            # zposition = str(position).zfill(5)
+            # objects.append({
+            #     str(position): position,
+            #     'item_idx': self.fk_item_idx,
+            #     'position': zposition,
+            #     'position_time': cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            # })
 
-                # progress_item = TB_PROCCESS_AI.query.filter_by(fk_item_idx=self.fk_item_idx).first()
-                # if progress_item == None:
-                #     print('종료합니다.')
-                #     return result(400, "make_titan_out", None, None, COMPANY_NAME)
-                # process_num = (position / total_frame) * 100
-                # process_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
-                # self.current_time = process_time
-                # draw_image, boxes = ai.draw(image)
-                # if draw_image is not None:
-                #     lenP = 0
-                #     cv2.imwrite(draw_image_path, draw_image)
-                #     for box in boxes:
-                #         lenP += 1
-                #         current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
-                        # self.add_item_detail(lenP, position, current_time, box['left'], box['top'], box['width'],
-                        #                      box['height'], 1,self.video_idx)
-                # self.last_image_name = image_name
-                # self.update_process_ai(image_name, process_time, process_num, 0)
-                # has_item = TB_ITEM.query.filter_by(idx=self.fk_item_idx).first()
-                # if has_item is None:
-                #     break
+            # progress_item = TB_PROCCESS_AI.query.filter_by(fk_item_idx=self.fk_item_idx).first()
+            # if progress_item == None:
+            #     print('종료합니다.')
+            #     return result(400, "make_titan_out", None, None, COMPANY_NAME)
+            # process_num = (position / total_frame) * 100
+            # process_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            # self.current_time = process_time
+            image, boxes = ai.detect(image, position)
 
+            if len(boxes):
+                lenP = 0
+                # cv2.imwrite(draw_image_path, draw_image)
+                for box in boxes:
+                    lenP += 1
+                    current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+                    self.add_item_detail(lenP, position, current_time, box['x'], box['y'], box['width'],
+                                         box['height'], 1, box['item_type'], self.video_idx)
+            # self.last_image_name = image_name
+            # self.update_process_ai(image_name, process_time, process_num, 0)
+            # has_item = TB_ITEM.query.filter_by(idx=self.fk_item_idx).first()
+            # if has_item is None:
+            #     break
             position += 1
+            retval, image = cap.read()
         # self.update_process_ai(self.last_image_name, self.current_time,  100, 1)
         # self.update_item_info(1, 0)
 
@@ -4443,9 +4507,10 @@ class make_titan_video(Resource):
             modify_item.insert_status = insert_status
             db.session.commit()
 
-    def add_item_detail(self, lenP, position, current_time, x, y, width, height, m_type,video_idx):
+    def add_item_detail(self, lenP, position, current_time, x, y, width, height, m_type, item_type, video_idx):
         new_detail = TB_ITEM_DETAIL()
-        new_detail.fk_item_idx = self.fk_item_idx
+        # new_detail.fk_item_idx = self.fk_item_idx
+        new_detail.fk_item_idx = 1313
         new_detail.position = position
         new_detail.position_time = current_time
         new_detail.position_order = lenP
@@ -4454,6 +4519,7 @@ class make_titan_video(Resource):
         new_detail.width = width
         new_detail.height = height
         new_detail.make_type = m_type
+        new_detail.draw_item_type = item_type
         new_detail.fk_video_idx = video_idx
         db.session.add(new_detail)
         db.session.commit()
