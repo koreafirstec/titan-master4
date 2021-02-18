@@ -75,7 +75,8 @@ angular.module('titanApp')
                             //     '</li>' +
                             // '</ul>' +
                             '<ul>' +
-                                '<li ng-repeat="menu in settings" id="manage_nav_{{menu.idx}}" ng-show="CheckGroups(menu.groups)" class="" ng-class="{\'selected\': now_page == menu.page }" ng-click="move_page(menu.page)">' +
+                                '<li ng-repeat="menu in settings" ng-show="CheckGroups(menu.groups)" class="" ng-class="{\'selected\': menu.page == now_page}" ng-click="move_page(menu.page)">' +
+                                // '<li ng-repeat="menu in settings" ng-show="CheckGroups(menu.groups)" class="" ng-class="menu.class" ng-click="move_page(menu.page)">' +
                                     '<img src="{{menu.icon}}">' +
                                     '<a ng-click="move_page(menu.page)" href="">{{menu.title}}</a>' +
                                 '</li>' +
@@ -108,8 +109,8 @@ angular.module('titanApp')
 
                 scope.setting = [];
                 scope.video_count = 0;
-
-                scope.now_page = 'dashboard';
+                let url = $location.absUrl().split('/');
+                scope.now_page = url[url.length - 1];
 
                 var api_params = {};
                 api_params['user_idx'] = AuthService.getIdx();
@@ -196,14 +197,7 @@ angular.module('titanApp')
                     // if(fullUrl.indexOf(page) !== -1)
                     //     return $route.reload();
                     $location.url('/' + page, true);
-                    switch (page) {
-                        case 'dashboard':
-                            $('#manage_nav_1').addClass('selected');
-                            break;
-                        case 'video_list':
-                            $('#manage_nav_5').addClass('selected');
-                            break;
-                    }
+                    // console.log(page);
                 }
 
                 scope.move_item_check = function(){
@@ -233,8 +227,8 @@ angular.module('titanApp')
                 }
                 scope.menuCount = 0;
                 scope.categoryMenuDown = function () {
-                    if(scope.menuCount == 0){
-                        $('#sidebar__dropdown__menu').css('display', 'block');
+                        $('#sidebar__dropdown__menu').c
+                    if(scope.menuCount == 0){ss('display', 'block');
                         scope.menuCount = 1;
                     }else{
                         $('#sidebar__dropdown__menu').css('display', 'none');

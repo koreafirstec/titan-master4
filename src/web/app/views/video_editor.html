@@ -124,7 +124,8 @@
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
-                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)-item.y/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)-item.x/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
+<!--                    -item.x/(1920/width_img)-->
+                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
                 </span>
                 <span class="make_ai_modeling_video_start">
 <!--                    <button type="button">AI 모델링 시작</button>-->
