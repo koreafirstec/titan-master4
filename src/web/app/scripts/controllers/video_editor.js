@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, AuthService, api_video, api_item) {
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, AuthService, api_video, api_item, api_make_titan_video, ENV, api_progress_process) {
 
 
 //         $scope.user_id = AuthService.getUserId();
@@ -18,6 +18,8 @@ angular.module('titanApp')
         $scope.selected_video = '';
         $scope.check_item = [];
         $scope.selected_item = '';
+        $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+        $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
 
         var api_video_params = {};
         api_video_params['user_idx'] = AuthService.getIdx();
@@ -43,6 +45,7 @@ angular.module('titanApp')
 
         $scope.video_click = function(video){
             $scope.selected_video = video;
+            $scope.video_image = 'https://img.youtube.com/vi/' + $scope.selected_video.video_url.substr(32, 11) + '/hqdefault.jpg';
             $scope.make_ai_level = 2;
         };
 
@@ -54,6 +57,36 @@ angular.module('titanApp')
             $scope.selected_item = item;
             $scope.make_ai_level = 3;
         };
+
+        $scope.start_modeling = function () {
+            let api_item_params = {};
+            api_item_params['video_idx'] = $scope.selected_video.idx;
+            api_item_params['video_url'] = $scope.selected_video.video_url;
+            api_item_params['fk_item_idx'] = $scope.selected_item.idx;
+
+            api_make_titan_video.save(api_item_params, function(data){});
+
+            let api_params2 = {};
+            let image_path = ENV.webs + '/make_image/' + $scope.selected_video.idx + '/';
+            let video_image_path = image_path + 'images/';
+            let draw_image_path = image_path + 'draw_images/';
+            api_params2['fk_video_idx'] = $scope.selected_video.idx;
+            let progressTimer = setInterval(function (){
+                api_progress_process.get(api_params2, function (data) {
+                    if(data.status == 200) {
+                        let datas = data.objects[0];
+                        if(datas.draw_img_name != '') {
+                            $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
+                            $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
+                            if (datas.progress == 100) {
+                                clearInterval(progressTimer);
+                                $scope.make_ai_level = 4;
+                            }
+                        }
+                    }
+                });
+            },100);
+        }
 
 // video_click 부분------------------------------------------------------------------------------
         // if($scope.main_model != ''){
