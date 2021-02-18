@@ -44,6 +44,7 @@ angular.module('titanApp')
         $scope.video_click = function(video){
             $scope.selected_video = video;
             $scope.make_ai_level = 2;
+            $(".make_ai_modeling_video").load(location.href + " .make_ai_modeling_video");
         };
 
         $scope.item_check = function (item) {
