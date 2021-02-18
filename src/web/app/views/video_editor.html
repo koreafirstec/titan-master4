@@ -122,7 +122,7 @@
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
 <!--                    -item.x/(1920/width_img)-->
-                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
+                    <modify-Editposition ng-repeat="item in modify_rect" ng-mousedown="modify_rect_down(item, enter_status)" class="modify__div" context="context1" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);" ng-right-click=""></modify-Editposition>
                 </span>
                 <span class="make_ai_modeling_video_start">
 <!--                    <button type="button">AI 모델링 시작</button>-->
@@ -134,10 +134,16 @@
                 <button class="make_ai_model_edit_save_btn" ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">저장</button>
             </div>
             <div class="make_ai_model_edit_item">
-                <p>연결된 동영상 구간</p>
+                <p class="make_ai_model_edit_item_time">연결된 동영상 구간 <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
                 <div>
                     <div>
+<!--                        <ul>-->
+<!--                            <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>-->
+<!--                        </ul>-->
                         <img ng-repeat="image in modify_success_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
+                        <ul>
+                            <li ng-repeat="image in modify_success_list">{{image.position_time_d}}</li>
+                        </ul>
                     </div>
                 </div>
                 <div>
@@ -149,10 +155,14 @@
                     <img ng-src="../images/uploads/{{image.idx}}_product.jpg">
                 </div>
             </div>
+            <ul id="context1" class="context_back" style="display: none;">
+<!--                <li style="background-color: blue; color: #fff;">영역 수정</li>-->
+<!--                <li>{{position_order}}번째 영역</li>-->
+<!--                <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, w, h, item_idx, position_order, selectedItem.idx)">수정</button></li>-->
+                <li><button ng-click="position_editor_delete(image_frame, selected_item.idx, position_order, selected_video.idx)" style="background: rgba(0, 0, 0, 0.3);border: 1px solid #fff;color: #fff;padding: 4px 8px;">삭제</button></li>
+<!--                <li ng-show="rectPosition.length > 1"><button ng-click="position_editor_all_drop(rectPosition, item_idx, image_frame, selectedItem.idx)">모두 삭제</button></li>-->
+            </ul>
         </div>
-
-
-
     </div>
 </section>
 <!--<article id="video_Editors_content" class="modal__content">-->

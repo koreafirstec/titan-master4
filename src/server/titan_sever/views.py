@@ -1960,7 +1960,8 @@ class item_detail(Resource):
                         'fk_item_idx': item_detail.fk_item_idx,
                         'position': item_detail.position,
                         'position_order': item_detail.position_order,
-                        'position_time': item_detail.position_time,
+                        'position_time': int(item_detail.position_time),
+                        'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
                         # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
                         'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                         'x': item_detail.x,
@@ -1968,7 +1969,8 @@ class item_detail(Resource):
                         'width': item_detail.width,
                         'height': item_detail.height
                     })
-            return result(200, '[GET] Select item_detail successful', objects, None, COMPANY_NAME)
+            a = list({timeP['position_time']: timeP for timeP in objects}.values())
+            return result(200, '[GET] Select item_detail successful', a, None, COMPANY_NAME)
         # return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
 
     def post(self):
@@ -2000,7 +2002,7 @@ class item_detail(Resource):
                 'detail_exists': detail_exists,
                 'position': detail_list.position,
                 'draw_img_name': str(detail_list.position).zfill(5),
-                'position_time': detail_list.position_time,
+                'position_time': int(detail_list.position_time),
                 'position_order': detail_list.position_order,
                 'x': detail_list.x,
                 'y': detail_list.y,
@@ -2058,6 +2060,7 @@ class item_detail(Resource):
         print(rect_item_idx, rect_item_position, p_order)
         drop_detail_info = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=rect_item_idx, fk_video_idx=rect_video_idx, position=rect_item_position,
                                                           position_order=p_order).first()
+        print(drop_detail_info.fk_item_idx, drop_detail_info.position)
         if drop_detail_info is not None:
             db.session.query(TB_ITEM_DETAIL).filter_by(fk_item_idx=rect_item_idx, fk_video_idx=rect_video_idx, position=rect_item_position,
                                                        position_order=p_order).delete()

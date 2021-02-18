@@ -22,12 +22,26 @@ angular.module('titanApp')
         $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.modeling_loading = false;
         $scope.modeling_progress = 0;
+        $scope.start_time = '';
+        $scope.end_time = '';
 
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
             $scope.position_order = item.position_order;
             $scope.enter_status = true;
             $("#meta_data_editor_btn").css('display', 'flex');
+        }
+
+        $scope.position_molra = function(s, e){
+            if(s !== '' && e !== ''){
+                var st = $scope.modify_success_list.findIndex(i => i.position_time_d == s);
+                var et = $scope.modify_success_list.findIndex(i => i.position_time_d == e);
+
+                $scope.position_modify = $scope.modify_success_list.slice(st, (et+1))
+                $scope.modify_success_list = $scope.position_modify
+            }else{
+                console.log($scope.modify_success_list)
+            }
         }
 
         $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
@@ -38,12 +52,12 @@ angular.module('titanApp')
             api_params['p_order'] = p_order;
             api_params['rect_x'] = x * (1920/iw);
             api_params['rect_y'] = y * (1080/ih);
-            api_params['rect_w'] = w * (1920/iw)+api_params['rect_x'];
-            api_params['rect_h'] = h * (1080/ih)+api_params['rect_y'];
+            api_params['rect_w'] = w * (1920/iw);
+            api_params['rect_h'] = h * (1080/ih);
             api_item_detail.update(api_params, function(data){
                 if(data.status == 200){
                     $scope.dataStatus = data.status;
-                    $scope.modify_rect = data.objects
+                    $scope.modify_rect = data.objects;
                     $scope.rectPosition = [];
                     for(let i = 0; i < data.objects.length; i++){
                          $scope.rect_position_func(data.objects, i)
@@ -152,6 +166,12 @@ angular.module('titanApp')
 //            });
         }
 
+        $scope.position_all = function(all_position){
+            $scope.modify_success_list = all_position;
+            $scope.start_time = '';
+            $scope.end_time = '';
+        }
+
 
         $scope.get_position_all = function(video, item){
             $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
@@ -186,9 +206,11 @@ angular.module('titanApp')
                     "position": $scope.detail_list[j].position,
                     "detail_index": $scope.detail_list[j].index,
                     "position_time": $scope.detail_list[j].position_time,
+                    "position_time_d": $scope.detail_list[j].position_time_d,
                     "draw_img_name": $scope.detail_list[j].draw_img_name,
                     "display": "none",
                 });
+                $scope.modify_rect_position = $scope.modify_success_list;
             }
 
             for(var i in $scope.modify_success){
@@ -201,17 +223,17 @@ angular.module('titanApp')
              $scope.position_order = Objects[i].position_order;
              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-             $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-             $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+             $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+             $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
              $scope.editor_i = Objects[i].position_order;
              $scope.rectPosition.push({
                  item_idx: $scope.fk_item_idx,
                  position: $scope.image_frame,
                  p_order: $scope.position_order,
                  rectLeft: $scope.rectLeft * (1920/$scope.width_img),
-                 rectTop: $scope.rectTop * (1080/$scope.h),
-                 rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
-                 rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+                 rectTop: $scope.rectTop * (1080/$scope.height_img),
+                 rectWidth: $scope.rectWidth * (1920/$scope.width_img),
+                 rectHeight: $scope.rectHeight * (1080/$scope.height_img),
              });
         }
 
@@ -227,7 +249,6 @@ angular.module('titanApp')
                     $scope.modify_rect = data.objects;
                     var Objects = data.objects;
                     $scope.rectPosition = [];
-                    console.log(data.objects)
                     for(let i = 0; i < Objects.length; i++){
                          $scope.p_time = Objects[i].position_time;
                          $scope.fk_item_idx = item_idx;
@@ -236,16 +257,16 @@ angular.module('titanApp')
                          $scope.item_position_value = Objects[i].position;
                          $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
                          $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-                         $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-                         $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+                         $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+                         $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
                          $scope.rectPosition.push({
                              item_idx: $scope.fk_item_idx,
                              position: $scope.image_frame,
                              p_order: $scope.position_order,
                              rectLeft: $scope.rectLeft * (1920/$scope.width_img),
                              rectTop: $scope.rectTop * (1080/$scope.height_img),
-                             rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
-                             rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+                             rectWidth: $scope.rectWidth * (1920/$scope.width_img),
+                             rectHeight: $scope.rectHeight * (1080/$scope.height_img),
                          });
                     }
                 }
@@ -839,8 +860,8 @@ angular.module('titanApp')
               $scope.position_order = Objects[i].position_order;
               $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
               $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
               $scope.editor_i = Objects[i].position_order;
               $scope.rectPosition.push({
                   item_idx: $scope.fk_item_idx,
@@ -848,9 +869,10 @@ angular.module('titanApp')
                   p_order: $scope.position_order,
                   rectLeft: $scope.rectLeft * (1920/$scope.w),
                   rectTop: $scope.rectTop * (1080/$scope.h),
-                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.width_img)),
-                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.height_img)),
+                  rectWidth: $scope.rectWidth * (1920/$scope.w),
+                  rectHeight: $scope.rectHeight * (1080/$scope.h),
               });
+              // $scope.modify_rect = $scope.rectPosition;
          }
 //
 //         $scope.ItemEditor = function(item, video_idx){
@@ -1018,67 +1040,68 @@ angular.module('titanApp')
 //             return s;
 //         }
 //
-//         $scope.position_editor_delete = function(position, item_idx, p_order, video_idx){
-//             var drop_confirm = confirm('현재 영역을 삭제하시겠습니까?');
-//
-//             if(drop_confirm){
-//                 var api_params = {};
-//
-//                 api_params['rect_item_idx'] = item_idx;
-//                 api_params['rect_video_idx'] = video_idx;
-//                 api_params['rect_position'] = position;
-//                 api_params['p_order'] = p_order;
-//                 var image_path = ENV.webs + '/make_image/' + item_idx;
-//                 api_item_detail.delete(api_params, function(data){
-//                     if(data.status == 200){
-//                         if(data.objects != '' && data.objects != undefined){
-//                             $scope.dataStatus = data.status;
-//                             // var um = $scope.editor_locker_not_drawing.filter(function (not_drawing) { return not_drawing.image_frame == position });
-//                             $scope.modify_rect = data.objects;
-//                             $scope.rectPosition = [];
-//                             for(let i = 0; i < data.objects.length; i++){
-//                                  $scope.rect_position_func(data.objects, i)
-//                             }
-//                             const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
-//                             const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
-//                             const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
-//                             $scope.editor_locker[index].border_color = "5px solid red";
-//                             $scope.editor_locker_all[indexLock].border_color = "5px solid red";
-//                             $scope.editor_locker_drawing[indexDraw].border_color = "5px solid red";
-//                             $('#item_modify_div_'+p_order).css('display', 'none');
-//                             $('#item_modify_div_video_'+p_order).css('display', 'none');
-//                         }else{
-//                             $scope.editor_locker_not_drawing.push({
-//                                "image_frame": parseInt(position),
-//                                "draw_name": lpad(String(position), 5, 0),
-//                                "position_time": $scope.p_time,
-//                                "current_time": parseInt($scope.p_time),
-//                                "fk_item_idx": item_idx,
-//                                "draw_image": image_path+'/images/'+lpad(String(position), 5, 0)+".jpg",
-//                                "border_color": "5px solid #fff",
-//                                "display": "inline-block"
-//                             });
-//                             $scope.editor_locker_not_drawing = Array.from(new Set($scope.editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
-//                             $scope.editor_locker_not_drawing.sort(function(a, b) {
-//                                 return a["image_frame"] - b["image_frame"];
-//                             });
-//                             $('.item_modify_div').css('display', 'none');
-//                             // const indexNot = $scope.editor_locker_not_drawing.findIndex(notDraw => notDraw.image_frame === position);
-//                             // const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
-//                             // const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
-//                             // const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
-//                             // if($scope.draw_stat != 2)
-//                             //     $scope.editor_locker.splice(index, 1);
-//                             // $scope.editor_locker_drawing.splice(indexDraw, 1);
-//                             // $scope.editor_locker_all[indexLock].border_color = "5px solid #fff";
-//                             // $scope.editor_locker_all[indexLock].display = "inline-block";
-//                         }
-//                     }
-//                 });
-//             }else{
-//                 alert("취소하였습니다.");
-//             }
-//         }
+        $scope.position_editor_delete = function(position, item_idx, p_order, video_idx){
+            // var drop_confirm = confirm('현재 영역을 삭제하시겠습니까?');
+            //
+            // if(drop_confirm){
+            var api_params = {};
+
+            api_params['rect_item_idx'] = item_idx;
+            api_params['rect_video_idx'] = video_idx;
+            api_params['rect_position'] = position;
+            api_params['p_order'] = p_order;
+
+            // console.log(item_idx, position, p_order, video_idx)
+            api_item_detail.delete(api_params, function(data) {
+                if (data.status == 200) {
+                    // $scope.modify_success_list = datat.objects;
+                    $scope.modify_rect = data.objects;
+                    for (let i = 0; i < data.objects.length; i++) {
+                        $scope.rect_position_func(data.objects, i)
+                    }
+                }
+            });
+            // var image_path = ENV.webs + '/make_image/' + item_idx;
+            // api_item_detail.delete(api_params, function(data){
+            //     if(data.status == 200){
+            //         for(let i = 0; i < data.objects.length; i++){
+            //              $scope.rect_position_func(data.objects, i)
+            //         }
+                    // if(data.objects != '' && data.objects != undefined){
+                    // $scope.dataStatus = data.status;
+                    // var um = $scope.editor_locker_not_drawing.filter(function (not_drawing) { return not_drawing.image_frame == position });
+                    // $scope.modify_rect = data.objects;
+                    // $scope.rectPosition = [];
+
+                        // }else{
+                        //     $scope.editor_locker_not_drawing.push({
+                        //        "image_frame": parseInt(position),
+                        //        "draw_name": lpad(String(position), 5, 0),
+                        //        "position_time": $scope.p_time,
+                        //        "current_time": parseInt($scope.p_time),
+                        //        "fk_item_idx": item_idx,
+                        //        "draw_image": image_path+'/images/'+lpad(String(position), 5, 0)+".jpg",
+                        //        "border_color": "5px solid #fff",
+                        //        "display": "inline-block"
+                        //     });
+                        //     $scope.editor_locker_not_drawing = Array.from(new Set($scope.editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
+                        //     $scope.editor_locker_not_drawing.sort(function(a, b) {
+                        //         return a["image_frame"] - b["image_frame"];
+                        //     });
+                        //     $('.item_modify_div').css('display', 'none');
+                            // const indexNot = $scope.editor_locker_not_drawing.findIndex(notDraw => notDraw.image_frame === position);
+                            // const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
+                            // const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
+                            // const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
+                            // if($scope.draw_stat != 2)
+                            //     $scope.editor_locker.splice(index, 1);
+                            // $scope.editor_locker_drawing.splice(indexDraw, 1);
+                            // $scope.editor_locker_all[indexLock].border_color = "5px solid #fff";
+                            // $scope.editor_locker_all[indexLock].display = "inline-block";
+                        // }
+                    // }
+                // });
+        }
 //
 //         $scope.position_editor_all_drop = function(rectPosition, item_idx, position, video_idx){
 //             var drop_confirm = confirm('모든 영역을 삭제하시겠습니까?');
@@ -1475,8 +1498,8 @@ angular.module('titanApp')
                      $rootScope.meta_data_insert = true;
                      $rootScope.local_player.stopVideo();
                  }
-             }else{
-                console.log("ddd");
+             }
+//             else{
 //                 Modal.open(
 //                     'views/alert_modal.html',
 //                     'AlertCtrl',
@@ -1490,29 +1513,29 @@ angular.module('titanApp')
 //                         }
 //                     }
 //                 );
-             }
+//             }
          }
 
-         $(window).resize(function () {
-             $timeout(function(){
-                 $('#context1').css('display', 'none');
-                 var editor_id = document.getElementById('current_modify_editor_img');
-                 if(editor_id){
-                     if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
-                         $scope.w = $('#current_modify_editor_img')[0].clientWidth;
-                         $scope.h = $('#current_modify_editor_img')[0].clientHeight;
-                         $scope.youtube_if = $("#current_modify_editor_img")[0].clientWidth;
-                         $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
-                         for(var i in $scope.rectPosition){
-                             $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
-                             $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
-                             $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
-                             $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
-                         }
-                     }
-                 }
-             }, 1);
-         });
+         // $(window).resize(function () {
+         //     $timeout(function(){
+         //         $('#context1').css('display', 'none');
+         //         var editor_id = document.getElementById('current_modify_editor_img');
+         //         if(editor_id){
+         //             if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
+         //                 $scope.w = $('#current_modify_editor_img')[0].clientWidth;
+         //                 $scope.h = $('#current_modify_editor_img')[0].clientHeight;
+         //                 $scope.youtube_if = $("#current_modify_editor_img")[0].clientWidth;
+         //                 $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
+         //                 for(var i in $scope.rectPosition){
+         //                     $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
+         //                     $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
+         //                     $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
+         //                     $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
+         //                 }
+         //             }
+         //         }
+         //     }, 1);
+         // });
 
          $scope.close_func = function(close_stat){
              var editor_close;
@@ -1683,15 +1706,12 @@ angular.module('titanApp')
          $scope.position_selected = function(draw_stat){
              if(draw_stat == 0){
                  $scope.draw_stat = 0;
-                 console.log($scope.editor_locker_not_drawing);
                  $scope.editor_locker = $scope.editor_locker_not_drawing;
              }else if(draw_stat == 1){
                  $scope.draw_stat = 1;
-                 console.log($scope.editor_locker_drawing);
                  $scope.editor_locker = $scope.editor_locker_drawing;
              }else{
                  $scope.draw_stat = 2;
-                 console.log($scope.editor_locker_all);
                  $scope.editor_locker = $scope.editor_locker_all;
              }
          }
