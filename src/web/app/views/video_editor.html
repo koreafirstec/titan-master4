@@ -134,7 +134,7 @@
                 <button class="make_ai_model_edit_save_btn" ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">저장</button>
             </div>
             <div class="make_ai_model_edit_item">
-                <p class="make_ai_model_edit_item_time">연결된 동영상 구간 Position 입력: <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
+                <p class="make_ai_model_edit_item_time">연결된 동영상 구간 <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
                 <div>
                     <div>
                         <ul>
@@ -156,10 +156,10 @@
                 </div>
             </div>
             <ul id="context1" class="context_back" style="display: none;">
-                <li style="background-color: blue; color: #fff;">영역 수정</li>
-                <li>{{position_order}}번째 영역</li>
+<!--                <li style="background-color: blue; color: #fff;">영역 수정</li>-->
+<!--                <li>{{position_order}}번째 영역</li>-->
 <!--                <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, w, h, item_idx, position_order, selectedItem.idx)">수정</button></li>-->
-                <li><button ng-click="position_editor_delete(image_frame, selected_item.idx, position_order, selected_video.idx)">삭제</button></li>
+                <li><button ng-click="position_editor_delete(image_frame, selected_item.idx, position_order, selected_video.idx)" style="background: rgba(0, 0, 0, 0.3);border: 1px solid #fff;color: #fff;padding: 4px 8px;">삭제</button></li>
 <!--                <li ng-show="rectPosition.length > 1"><button ng-click="position_editor_all_drop(rectPosition, item_idx, image_frame, selectedItem.idx)">모두 삭제</button></li>-->
             </ul>
         </div>

@@ -52,8 +52,8 @@ angular.module('titanApp')
             api_params['p_order'] = p_order;
             api_params['rect_x'] = x * (1920/iw);
             api_params['rect_y'] = y * (1080/ih);
-            api_params['rect_w'] = w * (1920/iw)+api_params['rect_x'];
-            api_params['rect_h'] = h * (1080/ih)+api_params['rect_y'];
+            api_params['rect_w'] = w * (1920/iw);
+            api_params['rect_h'] = h * (1080/ih);
             api_item_detail.update(api_params, function(data){
                 if(data.status == 200){
                     $scope.dataStatus = data.status;
@@ -223,17 +223,17 @@ angular.module('titanApp')
              $scope.position_order = Objects[i].position_order;
              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-             $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-             $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+             $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+             $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
              $scope.editor_i = Objects[i].position_order;
              $scope.rectPosition.push({
                  item_idx: $scope.fk_item_idx,
                  position: $scope.image_frame,
                  p_order: $scope.position_order,
                  rectLeft: $scope.rectLeft * (1920/$scope.width_img),
-                 rectTop: $scope.rectTop * (1080/$scope.h),
-                 rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
-                 rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+                 rectTop: $scope.rectTop * (1080/$scope.height_img),
+                 rectWidth: $scope.rectWidth * (1920/$scope.width_img),
+                 rectHeight: $scope.rectHeight * (1080/$scope.height_img),
              });
         }
 
@@ -257,16 +257,16 @@ angular.module('titanApp')
                          $scope.item_position_value = Objects[i].position;
                          $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
                          $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-                         $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-                         $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+                         $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+                         $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
                          $scope.rectPosition.push({
                              item_idx: $scope.fk_item_idx,
                              position: $scope.image_frame,
                              p_order: $scope.position_order,
                              rectLeft: $scope.rectLeft * (1920/$scope.width_img),
                              rectTop: $scope.rectTop * (1080/$scope.height_img),
-                             rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
-                             rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+                             rectWidth: $scope.rectWidth * (1920/$scope.width_img),
+                             rectHeight: $scope.rectHeight * (1080/$scope.height_img),
                          });
                     }
                 }
@@ -860,8 +860,8 @@ angular.module('titanApp')
               $scope.position_order = Objects[i].position_order;
               $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
               $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
-              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
-              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img));
+              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img));
               $scope.editor_i = Objects[i].position_order;
               $scope.rectPosition.push({
                   item_idx: $scope.fk_item_idx,
@@ -869,8 +869,8 @@ angular.module('titanApp')
                   p_order: $scope.position_order,
                   rectLeft: $scope.rectLeft * (1920/$scope.w),
                   rectTop: $scope.rectTop * (1080/$scope.h),
-                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.width_img)),
-                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.height_img)),
+                  rectWidth: $scope.rectWidth * (1920/$scope.w),
+                  rectHeight: $scope.rectHeight * (1080/$scope.h),
               });
               // $scope.modify_rect = $scope.rectPosition;
          }
@@ -1516,26 +1516,26 @@ angular.module('titanApp')
 //             }
          }
 
-         $(window).resize(function () {
-             $timeout(function(){
-                 $('#context1').css('display', 'none');
-                 var editor_id = document.getElementById('current_modify_editor_img');
-                 if(editor_id){
-                     if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
-                         $scope.w = $('#current_modify_editor_img')[0].clientWidth;
-                         $scope.h = $('#current_modify_editor_img')[0].clientHeight;
-                         $scope.youtube_if = $("#current_modify_editor_img")[0].clientWidth;
-                         $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
-                         for(var i in $scope.rectPosition){
-                             $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
-                             $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
-                             $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
-                             $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
-                         }
-                     }
-                 }
-             }, 1);
-         });
+         // $(window).resize(function () {
+         //     $timeout(function(){
+         //         $('#context1').css('display', 'none');
+         //         var editor_id = document.getElementById('current_modify_editor_img');
+         //         if(editor_id){
+         //             if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
+         //                 $scope.w = $('#current_modify_editor_img')[0].clientWidth;
+         //                 $scope.h = $('#current_modify_editor_img')[0].clientHeight;
+         //                 $scope.youtube_if = $("#current_modify_editor_img")[0].clientWidth;
+         //                 $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
+         //                 for(var i in $scope.rectPosition){
+         //                     $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
+         //                     $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
+         //                     $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
+         //                     $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
+         //                 }
+         //             }
+         //         }
+         //     }, 1);
+         // });
 
          $scope.close_func = function(close_stat){
              var editor_close;
