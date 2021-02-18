@@ -277,8 +277,9 @@
     font-size: 14px;
     letter-spacing: -0.17px;
     color: #121212;
+    margin-bottom: 8px;
 }
-.make_ai > .make_ai_modeling > .make_ai_modeling_item > img{
+.make_ai > .make_ai_modeling > .make_ai_modeling_item > div > img{
     width: 130px;
     height: 74px;
     margin: 0 19px 0 0;
@@ -332,7 +333,7 @@
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item{
     height: 366px;
-    padding: 13px 0 56px;
+    padding: 13px 0 30px 48.5px;
     background-color: #707070;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > p{
@@ -341,16 +342,30 @@
     letter-spacing: -0.17px;
     text-align: left;
     color: #ffffff;
-    margin-left: 48px;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div > p{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2){
+    margin: 22px 0 22px -48.5px;
+    height: 123px;
+    overflow-x: scroll;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div{
+    width: max-content;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div > img{
+    width: 125px;
+    height: 70.1px;
+    margin: 0 24px 0 0;
+    border-radius: 5px;
+    border: solid 2px #cbcbcb;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > p{
     font-size: 14px;
     letter-spacing: -0.17px;
     text-align: left;
     color: #ffffff;
-    margin-left: 48px;
+    margin-bottom: 20px;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div > p > button[type="button"]{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > p > button[type="button"]{
     height: 26px;
     /*margin: 0 5.8px 0 12px;*/
     padding: 4px 14px;
@@ -361,7 +376,7 @@
     letter-spacing: -0.14px;
     color: #ffffff;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > img{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > img{
     width: 130px;
     height: 74px;
     margin: 0 19px 0 0;
