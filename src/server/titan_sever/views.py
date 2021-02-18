@@ -1933,17 +1933,20 @@ class item_detail(Resource):
             item_idx1 = TB_ITEM.query.all()
             for item in item_idx1:
                 items_idx.append(item.idx)
-            item_detail_list = TB_ITEM_DETAIL.query.filter(TB_ITEM_DETAIL.fk_item_idx.in_(items_idx), TB_ITEM_DETAIL.fk_video_idx == video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
+            # item_detail_list = TB_ITEM_DETAIL.query.filter(TB_ITEM_DETAIL.fk_item_idx.in_(items_idx), TB_ITEM_DETAIL.fk_video_idx == video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
+            item_detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
             for item_detail in item_detail_list:
                 objects.append({
                     'idx': item_detail.idx,
                     'fk_item_idx': item_detail.fk_item_idx,
                     'position': item_detail.position,
+                    'position_time': item_detail.position_time,
                     'position_order': item_detail.position_order,
                     'x': item_detail.x,
                     'y': item_detail.y,
                     'width': item_detail.width,
-                    'height': item_detail.height
+                    'height': item_detail.height,
+                    'draw_item_type': item_detail.draw_item_type
                 })
             return result(200, '[GET] Select item_detail successful', objects, None, COMPANY_NAME)
         else:

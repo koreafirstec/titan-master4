@@ -1,50 +1,83 @@
-<div id="popup_new_election_common" class="popup_new_election" style="width: 960px;height: 536px;">
+<div id="popup_new_election_common" class="popup_new_election" style="width: 960px;height: 536px;position: relative;">
     <youtube id="playerWrap" videoid="{{video_id}}" videoidx="{{video_idx}}" itemlist="{{item_list}}" open="{{open}}"></youtube>
-    <div ng-if="item.item_shape_type==0" id="item_video_rect" class="item_video_rect" ng-repeat="item in item_list">
-        <div id="item_{{item.idx}}" class="video_item_position" ng-click="openItem(item.idx)"></div>
+<!--    <div id="item_list" class="item_video_rect" ng-repeat="item in item_list">-->
+    <div id="item_list" class="item_video_rect">
+<!--        <div id="item_{{item.idx}}" class="video_item_position" ng-click="openItem(item.idx)"></div>-->
+<!--        <div id="item_{{item.idx}}" class="video_item_position"></div>-->
+        <div id="item_0" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_1" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_2" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_3" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_4" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_5" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_6" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_7" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_8" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_9" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_10" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_11" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_12" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_13" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_14" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_15" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_16" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_17" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_18" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_19" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_20" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_21" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_22" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_23" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_24" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_25" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_26" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_27" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_28" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_29" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
+        <div id="item_30" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>
     </div>
-    <div ng-if="item.item_shape_type==1" id="img_video_rect" ng-repeat="item in item_list">
-        <div id="img_{{item.idx}}" class="video_item_present">
-            <img src="../images/item_shape/1.png" ng-click="openItem(item.idx)"/>
-        </div>
-    </div>
-    <div ng-show="rect_status == 0">
-        <div id="img_status_{{item.idx}}" class="img_status_rect" ng-if="item.item_shape_type==1" ng-repeat="item in item_list" style="position:absolute;display: none; background-color: rgba(53, 60, 69, 0.7); color: white;" ng-click="openItem(item.idx)">
-            <p class="img_title">{{item.item_title}}</p>
-<!--            <div class="img_status_rect_img_area">-->
-<!--                <img ng-src="{{item.item_img_path}}" style="width: 150px; height: 150px;">-->
-<!--            </div>-->
-<!--            <div class="img_status_rect_text">-->
-<!--                <p class="img_description">{{item.item_description}}</p>-->
-<!--            </div>-->
-        </div>
-        <div id="item_status_{{item.idx}}" class="item_status_rect" ng-if="item.item_shape_type==0" ng-repeat="item in item_list" style="position:absolute;background-color: rgba(53, 60, 69, 0.7); color: white;display: none;" ng-click="openItem(item.idx)">
-            <p class="item_title">{{item.item_title}}</p>
-<!--            <div class="item_status_rect_img_area">-->
-<!--                <img ng-src="{{item.item_img_path}}" style="width: 150px; height: 150px;">-->
-<!--            </div>-->
-<!--            <div class="item_status_rect_text">-->
-<!--                <p class="item_description">{{item.item_description}}</p>-->
-<!--            </div>-->
-        </div>
-    </div>
+<!--    <div ng-if="item.item_shape_type==1" id="img_video_rect" ng-repeat="item in item_list">-->
+<!--        <div id="img_{{item.idx}}" class="video_item_present">-->
+<!--            <img src="../images/item_shape/1.png" ng-click="openItem(item.idx)"/>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div ng-show="rect_status == 0">-->
+<!--        <div id="img_status_{{item.idx}}" class="img_status_rect" ng-if="item.item_shape_type==1" ng-repeat="item in item_list" style="position:absolute;display: none; background-color: rgba(53, 60, 69, 0.7); color: white;" ng-click="openItem(item.idx)">-->
+<!--            <p class="img_title">{{item.item_title}}</p>-->
+<!--&lt;!&ndash;            <div class="img_status_rect_img_area">&ndash;&gt;-->
+<!--&lt;!&ndash;                <img ng-src="{{item.item_img_path}}" style="width: 150px; height: 150px;">&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="img_status_rect_text">&ndash;&gt;-->
+<!--&lt;!&ndash;                <p class="img_description">{{item.item_description}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div id="item_status_{{item.idx}}" class="item_status_rect" ng-if="item.item_shape_type==0" ng-repeat="item in item_list" style="position:absolute;background-color: rgba(53, 60, 69, 0.7); color: white;display: none;" ng-click="openItem(item.idx)">-->
+<!--            <p class="item_title">{{item.item_title}}</p>-->
+<!--&lt;!&ndash;            <div class="item_status_rect_img_area">&ndash;&gt;-->
+<!--&lt;!&ndash;                <img ng-src="{{item.item_img_path}}" style="width: 150px; height: 150px;">&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="item_status_rect_text">&ndash;&gt;-->
+<!--&lt;!&ndash;                <p class="item_description">{{item.item_description}}</p>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
 
-    <div ng-show="item_click" class="item_simple_show_wrap Netflix-Logo-4-hex" id="item_simple_show_wrap_{{idx}}">
-        <div class="alert_modal" id="item_simple_show">
-            <div class="title">{{item_title}}</div>
-            <div class="simple_item_image">
-                <img ng-src="{{item_img_path}}">
-            </div>
-            <div class="simple_item_info">
-<!--                <p class="item_name">{{item_title}}</p>-->
-                <p>{{item_description}}</p>
-<!--                    <p>{{item_price}}원</p>-->
-                <div class="item_simple_show_button_line">
-                    <button ng-if="item_description_toggle==0" type="button" ng-click="buyItem()" class="btn">구매</button>
-                    <button ng-if="item_description_toggle==1" type="button" ng-click="descripItem()" class="btn">상품 설명</button>
-                    <button type="button" ng-click="item_click = false" class="btn">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--    <div ng-show="item_click" class="item_simple_show_wrap Netflix-Logo-4-hex" id="item_simple_show_wrap_{{idx}}">-->
+<!--        <div class="alert_modal" id="item_simple_show">-->
+<!--            <div class="title">{{item_title}}</div>-->
+<!--            <div class="simple_item_image">-->
+<!--                <img ng-src="{{item_img_path}}">-->
+<!--            </div>-->
+<!--            <div class="simple_item_info">-->
+<!--&lt;!&ndash;                <p class="item_name">{{item_title}}</p>&ndash;&gt;-->
+<!--                <p>{{item_description}}</p>-->
+<!--&lt;!&ndash;                    <p>{{item_price}}원</p>&ndash;&gt;-->
+<!--                <div class="item_simple_show_button_line">-->
+<!--                    <button ng-if="item_description_toggle==0" type="button" ng-click="buyItem()" class="btn">구매</button>-->
+<!--                    <button ng-if="item_description_toggle==1" type="button" ng-click="descripItem()" class="btn">상품 설명</button>-->
+<!--                    <button type="button" ng-click="item_click = false" class="btn">취소</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
