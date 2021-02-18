@@ -56,7 +56,7 @@
             <div class="make_ai_item_list">
                 <ul>
                     <li ng-repeat="item in show_itemList | filter: make_ai_item_search">
-                        <button type="button" ng-click="item_click()">
+                        <button type="button" ng-click="item_click(item)">
                             <img ng-src="../images/uploads/{{item.idx}}_product.jpg">
                             <div>
                                 <p>
@@ -76,11 +76,11 @@
             <div class="make_ai_modeling_video">
                 <span>
                     <h1>연결할 동영상</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg" class="make_ai_modeling_video">
+                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg" class="make_ai_modeling_video_img">
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
                 </span>
                 <span class="make_ai_modeling_video_start">
                     <button type="button">AI 모델링 시작</button>
@@ -93,7 +93,7 @@
             <div class="make_ai_modeling_item">
                 <p>연결할 상품</p>
                 <div>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>
@@ -102,11 +102,11 @@
             <div class="make_ai_model_edit_video">
                 <span>
                     <h1>연결된 동영상</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
                 </span>
                 <span>
                     <h1>AI 자동지정 편집</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
                 </span>
                 <span class="make_ai_modeling_video_start">
 <!--                    <button type="button">AI 모델링 시작</button>-->
@@ -119,7 +119,9 @@
             <div class="make_ai_model_edit_item">
                 <p>연결된 동영상 구간</p>
                 <div>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                    <div>
+                        <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
+                    </div>
                 </div>
                 <div>
                     <p>
@@ -127,7 +129,7 @@
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>
