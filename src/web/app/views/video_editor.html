@@ -102,16 +102,13 @@
             <div class="make_ai_modeling_item">
                 <p>연결할 상품</p>
                 <div>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
+                    <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>
 
         <div class="make_ai_model_edit" ng-show="make_ai_level == 4">
             <div class="make_ai_model_edit_video">
-                <span>
-                    <button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">저장</button>
-                </span>
                 <span>
                     <h1>연결된 동영상</h1>
                     <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
@@ -134,6 +131,7 @@
                         모서리를 클릭하여 움직여보세요.
                     </p>
                 </span>
+                <button class="make_ai_model_edit_save_btn" ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">저장</button>
             </div>
             <div class="make_ai_model_edit_item">
                 <p>연결된 동영상 구간</p>
@@ -148,7 +146,7 @@
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                    <img ng-src="../images/uploads/{{image.idx}}_product.jpg">
                 </div>
             </div>
         </div>
