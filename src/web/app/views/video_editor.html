@@ -76,14 +76,14 @@
             <div class="make_ai_modeling_video">
                 <span>
                     <h1>연결할 동영상</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg" class="make_ai_modeling_video_img">
+                    <img ng-src="{{video_image}}">
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
-                    <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">
-                    <button type="button">AI 모델링 시작</button>
+                    <button type="button" ng-click="start_modeling()">AI 모델링 시작</button>
                     <p>
                         AI 모델링 시작 버튼을 누르면<br/>
                         상품 연결을 시작합니다.

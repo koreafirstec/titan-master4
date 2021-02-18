@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, api_item, api_video_capture, api_item_detail) {
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video) {
+
 //         $scope.user_id = AuthService.getUserId();
 //         $scope.user_idx = AuthService.getIdx();
 //
@@ -17,6 +18,8 @@ angular.module('titanApp')
         $scope.selected_video = '';
         $scope.check_item = [];
         $scope.selected_item = '';
+        $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+        $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
 
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
@@ -71,6 +74,7 @@ angular.module('titanApp')
 
         $scope.video_click = function(video){
             $scope.selected_video = video;
+            $scope.video_image = 'https://img.youtube.com/vi/' + $scope.selected_video.video_url.substr(32, 11) + '/hqdefault.jpg';
             $scope.make_ai_level = 2;
         };
 
@@ -83,6 +87,36 @@ angular.module('titanApp')
             $scope.item_idx = item.idx
             $scope.make_ai_level = 3;
         };
+
+        $scope.start_modeling = function () {
+            let api_item_params = {};
+            api_item_params['video_idx'] = $scope.selected_video.idx;
+            api_item_params['video_url'] = $scope.selected_video.video_url;
+            api_item_params['fk_item_idx'] = $scope.selected_item.idx;
+
+            api_make_titan_video.save(api_item_params, function(data){});
+
+            let api_params2 = {};
+            let image_path = ENV.webs + '/make_image/' + $scope.selected_video.idx + '/';
+            let video_image_path = image_path + 'images/';
+            let draw_image_path = image_path + 'draw_images/';
+            api_params2['fk_video_idx'] = $scope.selected_video.idx;
+            let progressTimer = setInterval(function (){
+                api_progress_process.get(api_params2, function (data) {
+                    if(data.status == 200) {
+                        let datas = data.objects[0];
+                        if(datas.draw_img_name != '') {
+                            $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
+                            $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
+                            if (datas.progress == 100) {
+                                clearInterval(progressTimer);
+                                $scope.make_ai_level = 4;
+                            }
+                        }
+                    }
+                });
+            },100);
+        }
 
 
         $scope.video_capture_func = function(video, item){
@@ -810,129 +844,129 @@ angular.module('titanApp')
 //              });
 //         }
 //
-         $scope.ItemEditor = function(item, video_idx){
-             $scope.editor_locker_drawing.map(value => {value.display= "none"});
-             $scope.editor_locker_all.map(value => {value.display= "none"});
-             $scope.editor_locker.map(value => {value.display= "none"});
-             $scope.editor_locker_not_drawing.map(value => {value.display= "none"});
-
-             $("#adding_position").css('display', 'none');
-             $scope.drawing = false;
-             $scope.canvas = document.getElementById('canvas_editor');
-             $scope.canvas_jq = $('#canvas_editor');
-             $rootScope.item_rect_detection = '';
-             $scope.EditorObjects = [];
-             $scope.modify_rect = [];
-             $('#item_detection').css('display', 'none');
-             $('.item_div').css('display', 'none');
-             $('.meta_data_editor_btn').css('display', 'none');
-             $scope.youtube_width = $("youtube iframe")[0].clientWidth;
-             $scope.youtube_height = $("youtube iframe")[0].clientHeight;
-             $scope.tag_name = $("youtube iframe")[0];
-             $scope.w = $('#current_editor_img')[0].clientWidth;
-             $scope.h = $('#current_editor_img')[0].clientHeight;
-             var api_params = {};
-
-             $scope.item_idx = item.fk_item_idx;
-             // console.log($scope.item_idx);
-             $scope.image_frame = parseInt(item.draw_name);
-             $scope.p_time = item.position_time;
-             // $scope.img_url_current = ENV.webs + '/make_image/'+ String(item.fk_item_idx) + '/images/' + item.draw_name + '.jpg';
-             $scope.img_url_current = item.draw_image;
-             api_params['item_idx'] = $scope.item_idx;
-             api_params['video_idx'] = video_idx;
-             api_params['image_frame'] = parseInt(item.draw_name);
-             $rootScope.local_player.seekTo(parseFloat($scope.p_time));
-             var time = parseInt($scope.p_time);
-
-             var hour = Math.floor(time / 3600),
-             minutes = Math.floor((time - (hour * 3600)) / 60),
-             seconds = time - (hour * 3600) - (minutes * 60);
-
-             hour = hour < 10 ? '0' + hour : hour;
-             minutes = minutes < 10 ? '0' + minutes : minutes;
-             seconds = seconds < 10 ? '0' + seconds : seconds;
-             $('#current-time').text(String(hour+":"+minutes+":"+seconds));
-             if($rootScope.local_player.getPlayerState() == 1){
-                 $rootScope.local_player.pauseVideo();
-             }
-             if($scope.canvas.hasChildNodes()){
-                 $scope.canvas_jq.children().remove();
-             }
-
-             api_item_position_detail.get(api_params, function(data){
-                 if(data.status == 200){
-                     if(data.objects != '' && data.objects != undefined){
-                         // var image_path = ENV.webs + '/make_image/' + data.objects[0].fk_item_idx;
-                         // for(var i in data.objects){
-                         //     $scope.editor_locker_drawing.push({
-                         //         "image_frame": parseInt(data.objects[i].position),
-                         //         "draw_name": data.objects[i].position,
-                         //         "position_time": data.objects[i].position_time,
-                         //         "current_time": parseInt(data.objects[i].position_time),
-                         //         "fk_item_idx": data.objects[i].fk_item_idx,
-                         //         "draw_image": image_path+'/images/'+data.objects[i].position+".jpg",
-                         //         "border_color": "5px solid #87ceeb",
-                         //         "display": "inline-block"
-                         //     });
-                         // }
-                         // $scope.editor_locker_all = Array.from(new Set($scope.img_editor_locker.map(JSON.stringify))).map(JSON.parse);
-                         // $scope.editor_locker_drawing = Array.from(new Set($scope.editor_locker_drawing.map(JSON.stringify))).map(JSON.parse);
-                         // $scope.editor_locker = $scope.editor_locker_all;
-                         // console.log($scope.editor_locker_all);
-                         var indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
-                         var index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
-                         // var indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === $scope.image_frame);
-                         $scope.editor_locker_all[indexAll].display = "inline-block";
-                         $scope.editor_locker[index].display = "inline-block";
-                         // $scope.editor_locker_drawing[indexDraw].display = "inline-block";
-                         $("#adding_position").css('display', 'flex');
-                         $('#cancel_position').css('display', 'none');
-                         $scope.modify_rect = data.objects;
-                         var Objects = data.objects;
-                         $scope.rectPosition = [];
-                         for(let i = 0; i < Objects.length; i++){
-                              $scope.rect_position_func(Objects, i)
-                         }
-                     }else{
-                         // $scope.editor_locker_all = Array.from(new Set($scope.img_editor_locker.map(JSON.stringify))).map(JSON.parse);
-                         // $scope.editor_locker = $scope.editor_locker_all;
-                         // console.log($scope.editor_locker_all);
-                         // $scope.editor_locker_drawing = Array.from(new Set($scope.img_editor_locker_drawing.map(JSON.stringify))).map(JSON.parse);
-                         // $scope.editor_locker_not_drawing = Array.from(new Set($scope.img_editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
-                         // console.log($scope.editor_locker_not_drawing);
-                         var indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
-                         var index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
-                         var indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
-                         $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
-                         $scope.editor_locker[index].display = "inline-block";
-                         $scope.editor_locker_all[indexAll].display = "inline-block";
-                         // var add_confirm = confirm("현재 클릭하신 이미지에 영역이 없습니다. 영역을 추가하시겠습니까?");
-                         // if(add_confirm){
-                             indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
-                             index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
-                             indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
-                             $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
-                             $scope.editor_locker[index].display = "inline-block";
-                             $scope.editor_locker_all[indexAll].display = "inline-block";
-                             $('#adding_position').css('display', 'none');
-                             $('#cancel_position').css('display', 'flex');
-                             $scope.initDraw(0);
-                         // }else{
-                         //     indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
-                         //     index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
-                         //     indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
-                         //     $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
-                         //     $scope.editor_locker[index].display = "inline-block";
-                         //     $scope.editor_locker_all[indexAll].display = "inline-block";
-                         //     $('#adding_position').css('display', 'flex');
-                         //     $('#cancel_position').css('display', 'none');
-                         // }
-                     }
-                 }
-             });
-             // console.log($scope.item_rect_detection);
-         }
+//         $scope.ItemEditor = function(item, video_idx){
+//             $scope.editor_locker_drawing.map(value => {value.display= "none"});
+//             $scope.editor_locker_all.map(value => {value.display= "none"});
+//             $scope.editor_locker.map(value => {value.display= "none"});
+//             $scope.editor_locker_not_drawing.map(value => {value.display= "none"});
+//
+//             $("#adding_position").css('display', 'none');
+//             $scope.drawing = false;
+//             $scope.canvas = document.getElementById('canvas_editor');
+//             $scope.canvas_jq = $('#canvas_editor');
+//             $rootScope.item_rect_detection = '';
+//             $scope.EditorObjects = [];
+//             $scope.modify_rect = [];
+//             $('#item_detection').css('display', 'none');
+//             $('.item_div').css('display', 'none');
+//             $('.meta_data_editor_btn').css('display', 'none');
+//             $scope.youtube_width = $("youtube iframe")[0].clientWidth;
+//             $scope.youtube_height = $("youtube iframe")[0].clientHeight;
+//             $scope.tag_name = $("youtube iframe")[0];
+//             $scope.w = $('#current_editor_img')[0].clientWidth;
+//             $scope.h = $('#current_editor_img')[0].clientHeight;
+//             var api_params = {};
+//
+//             $scope.item_idx = item.fk_item_idx;
+//             // console.log($scope.item_idx);
+//             $scope.image_frame = parseInt(item.draw_name);
+//             $scope.p_time = item.position_time;
+//             // $scope.img_url_current = ENV.webs + '/make_image/'+ String(item.fk_item_idx) + '/images/' + item.draw_name + '.jpg';
+//             $scope.img_url_current = item.draw_image;
+//             api_params['item_idx'] = $scope.item_idx;
+//             api_params['video_idx'] = video_idx;
+//             api_params['image_frame'] = parseInt(item.draw_name);
+//             $rootScope.local_player.seekTo(parseFloat($scope.p_time));
+//             var time = parseInt($scope.p_time);
+//
+//             var hour = Math.floor(time / 3600),
+//             minutes = Math.floor((time - (hour * 3600)) / 60),
+//             seconds = time - (hour * 3600) - (minutes * 60);
+//
+//             hour = hour < 10 ? '0' + hour : hour;
+//             minutes = minutes < 10 ? '0' + minutes : minutes;
+//             seconds = seconds < 10 ? '0' + seconds : seconds;
+//             $('#current-time').text(String(hour+":"+minutes+":"+seconds));
+//             if($rootScope.local_player.getPlayerState() == 1){
+//                 $rootScope.local_player.pauseVideo();
+//             }
+//             if($scope.canvas.hasChildNodes()){
+//                 $scope.canvas_jq.children().remove();
+//             }
+//
+//             api_item_position_detail.get(api_params, function(data){
+//                 if(data.status == 200){
+//                     if(data.objects != '' && data.objects != undefined){
+//                         // var image_path = ENV.webs + '/make_image/' + data.objects[0].fk_item_idx;
+//                         // for(var i in data.objects){
+//                         //     $scope.editor_locker_drawing.push({
+//                         //         "image_frame": parseInt(data.objects[i].position),
+//                         //         "draw_name": data.objects[i].position,
+//                         //         "position_time": data.objects[i].position_time,
+//                         //         "current_time": parseInt(data.objects[i].position_time),
+//                         //         "fk_item_idx": data.objects[i].fk_item_idx,
+//                         //         "draw_image": image_path+'/images/'+data.objects[i].position+".jpg",
+//                         //         "border_color": "5px solid #87ceeb",
+//                         //         "display": "inline-block"
+//                         //     });
+//                         // }
+//                         // $scope.editor_locker_all = Array.from(new Set($scope.img_editor_locker.map(JSON.stringify))).map(JSON.parse);
+//                         // $scope.editor_locker_drawing = Array.from(new Set($scope.editor_locker_drawing.map(JSON.stringify))).map(JSON.parse);
+//                         // $scope.editor_locker = $scope.editor_locker_all;
+//                         // console.log($scope.editor_locker_all);
+//                         var indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
+//                         var index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
+//                         // var indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === $scope.image_frame);
+//                         $scope.editor_locker_all[indexAll].display = "inline-block";
+//                         $scope.editor_locker[index].display = "inline-block";
+//                         // $scope.editor_locker_drawing[indexDraw].display = "inline-block";
+//                         $("#adding_position").css('display', 'flex');
+//                         $('#cancel_position').css('display', 'none');
+//                         $scope.modify_rect = data.objects;
+//                         var Objects = data.objects;
+//                         $scope.rectPosition = [];
+//                         for(let i = 0; i < Objects.length; i++){
+//                              $scope.rect_position_func(Objects, i)
+//                         }
+//                     }else{
+//                         // $scope.editor_locker_all = Array.from(new Set($scope.img_editor_locker.map(JSON.stringify))).map(JSON.parse);
+//                         // $scope.editor_locker = $scope.editor_locker_all;
+//                         // console.log($scope.editor_locker_all);
+//                         // $scope.editor_locker_drawing = Array.from(new Set($scope.img_editor_locker_drawing.map(JSON.stringify))).map(JSON.parse);
+//                         // $scope.editor_locker_not_drawing = Array.from(new Set($scope.img_editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
+//                         // console.log($scope.editor_locker_not_drawing);
+//                         var indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
+//                         var index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
+//                         var indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
+//                         $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
+//                         $scope.editor_locker[index].display = "inline-block";
+//                         $scope.editor_locker_all[indexAll].display = "inline-block";
+//                         // var add_confirm = confirm("현재 클릭하신 이미지에 영역이 없습니다. 영역을 추가하시겠습니까?");
+//                         // if(add_confirm){
+//                             indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
+//                             index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
+//                             indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
+//                             $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
+//                             $scope.editor_locker[index].display = "inline-block";
+//                             $scope.editor_locker_all[indexAll].display = "inline-block";
+//                             $('#adding_position').css('display', 'none');
+//                             $('#cancel_position').css('display', 'flex');
+//                             $scope.initDraw(0);
+//                         // }else{
+//                         //     indexNotDraw = $scope.editor_locker_not_drawing.findIndex(notdraw => notdraw.image_frame === $scope.image_frame);
+//                         //     index = $scope.editor_locker.findIndex(idx => idx.image_frame === $scope.image_frame);
+//                         //     indexAll = $scope.editor_locker_all.findIndex(all => all.image_frame === $scope.image_frame);
+//                         //     $scope.editor_locker_not_drawing[indexNotDraw].display = "inline-block";
+//                         //     $scope.editor_locker[index].display = "inline-block";
+//                         //     $scope.editor_locker_all[indexAll].display = "inline-block";
+//                         //     $('#adding_position').css('display', 'flex');
+//                         //     $('#cancel_position').css('display', 'none');
+//                         // }
+//                     }
+//                 }
+//             });
+//             // console.log($scope.item_rect_detection);
+//         }
 //
 //         $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
 //             // var drop_confirm = confirm('현재 영역을 수정하시겠습니까?');
