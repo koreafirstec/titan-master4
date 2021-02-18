@@ -66,11 +66,11 @@ import torch
 # from .ai.utils.plots import plot_one_box
 # from .ai.utils.torch_utils import select_device
 
-from .ai.models.experimental import attempt_load
-from .ai.models.datasets import letterbox
-from .ai.models.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from .ai.models.plots import plot_one_box
-from .ai.models.torch_utils import select_device
+# from .ai.models.experimental import attempt_load
+# from .ai.models.datasets import letterbox
+# from .ai.models.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+# from .ai.models.plots import plot_one_box
+# from .ai.models.torch_utils import select_device
 #############################################################################
 
 from googleapiclient.discovery import build
@@ -1969,7 +1969,8 @@ class item_detail(Resource):
                         'position': item_detail.position,
                         'position_order': item_detail.position_order,
                         'position_time': item_detail.position_time,
-                        'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
+                        # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
+                        'draw_img_name': '/make_images/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                         'x': item_detail.x,
                         'y': item_detail.y,
                         'width': item_detail.width,
@@ -3473,7 +3474,8 @@ class video_capture(Resource):
 
     def post(self):
         objects = []
-
+        print(self.video_idx)
+        print(self.item_idx)
         file_path = MODIFY_IMAGES_DIR + str(self.video_idx) + '/'
         if self.video_url == None:
             self.video_url = TB_VIDEO.query.filter_by(idx=self.video_idx).first().video_url
@@ -3486,6 +3488,8 @@ class video_capture(Resource):
         # for f in files:
         #     os.remove(f)
         url = self.video_url
+        vPafy = pafy.new(url)
+        position = 0
         try:
             vPafy = pafy.new(url)
         except Exception as e:
@@ -3502,33 +3506,36 @@ class video_capture(Resource):
             cv2.imwrite(file_name, image)
             current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
         else:
-            image_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx).first()
-            if image_frame == None:
-                return result(404, "not found", None, None, COMPANY_NAME)
-            self.image_frame = image_frame.position
             play = vPafy.getbest(preftype="mp4")
             cap = cv2.VideoCapture(play.url)
-            current_frame = int(self.image_frame)
-            cap.set(1, current_frame)
-            file_name = images_file_path + str(current_frame).zfill(5) + '.jpg'
-            success, image = cap.read()
-            cv2.imwrite(file_name, image)
-            current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            # success, frame = cap.read()
+            # while(success):
+            # success, frame = cap.read()
+            image_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx,
+                                                         fk_video_idx=self.video_idx).all()
+            for i in image_frame:
+                if int(i.position) % 3000 == 0:
+                    self.image_frame = int(i.position)
+                    cap.set(1, self.image_frame)
+                    file_name = images_file_path + str(self.image_frame).zfill(5) + '.jpg'
+                    success, image = cap.read()
+                    cv2.imwrite(file_name, image)
+                    current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
 
-        position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, position=self.image_frame, fk_video_idx=self.video_idx).all()
-        for p_detail in position_detail:
-            objects.append({
-                'fk_item_idx': p_detail.fk_item_idx,
-                'fk_video_idx': p_detail.fk_video_idx,
-                'position': p_detail.position,
-                'position_time': current_time,
-                'draw_img_name': '/modify_images/'+ str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5)+ '.jpg',
-                'position_order': p_detail.position_order,
-                'x': p_detail.x,
-                'y': p_detail.y,
-                'width': p_detail.width,
-                'height': p_detail.height
-            })
+                    position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, position=self.image_frame, fk_video_idx=self.video_idx).all()
+                    for p_detail in position_detail:
+                        objects.append({
+                            'fk_item_idx': p_detail.fk_item_idx,
+                            'fk_video_idx': p_detail.fk_video_idx,
+                            'position': p_detail.position,
+                            'position_time': current_time,
+                            'draw_img_name': '../modify_images/'+ str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5)+ '.jpg',
+                            'position_order': p_detail.position_order,
+                            'x': p_detail.x,
+                            'y': p_detail.y,
+                            'width': p_detail.width,
+                            'height': p_detail.height
+                        })
         cap.release()
         cv2.destroyAllWindows()
 
@@ -3885,7 +3892,7 @@ class AI_MODEL:
         self.names = self.model.module.names if hasattr(self.model, 'module') else self.model.names
         self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in self.names]
 
-        self.items = {'top': [], 'long_bottom': [], 'skirt': [], 'shoes': [], 'cap': [], 'golfball': [], 'golfbag': [], 'golfclub': []}
+        self.items = {'top': [], 'bottom': [], 'skirt': [], 'shoes': [], 'cap': [], 'golfball': [], 'golfbag': [], 'golfclub': []}
 
     def detect(self, image, position):
         ori_img = image.copy()
@@ -3915,8 +3922,9 @@ class AI_MODEL:
                     label = f'{self.names[int(cls)]} {conf:.2f}'
                     self.items, c1, c2 = plot_one_box(xyxy, image, label=label, color=self.colors[int(cls)], line_thickness=3,
                                          items=self.items, frame=position, ori_img=ori_img)
+
                     boxes.append({
-                        "item_type": cls,
+                        "item_type": int(cls),
                         "x": c1[0] * w,
                         "y": c1[1] * h,
                         "width": (c2[0] - c1[0]) * w,
@@ -4397,27 +4405,27 @@ class make_titan_video(Resource):
             # ai.restore()
 
             # progress 데이터 생성 및 수정/삭제
-            # self.add_process_ai()
+        self.add_process_ai()
             # self.update_item_info(0, 1)
-            # self.delete_item_detail()
+        self.delete_item_detail()
 
             # ../web/app/make_image/{item_idx}
-        # video_image_path = MAKE_IMAGE_DIR + str(self.fk_item_idx) + '/'
+        video_image_path = MAKE_IMAGE_DIR + str(self.video_idx) + '/'
         # modify_image_path = MODIFY_IMAGES_DIR + str(self.video_idx) + '/' + str(self.fk_item_idx) + '_images/'
 
             # ../web/app/make_image/{item_idx} 하위 디렉터리 및 파일 삭제 ignore_errors=True - 에러 무시
-            # if os.path.exists(video_image_path): shutil.rmtree(video_image_path, ignore_errors=True)
-            #
-            # image_dir = video_image_path + 'images'  # 영상 캡쳐 이미지
-            # draw_image_dir = video_image_path + 'draw_images'  # rect 그려진 이미지
-            # try:
-            #     os.makedirs(image_dir)
-            #     os.mkdir(draw_image_dir)
-            # except:
-            #     pass
+        if os.path.exists(video_image_path): shutil.rmtree(video_image_path, ignore_errors=True)
 
-        # images_file_path = video_image_path + 'images/'
-        # # draw_images_file_path = video_image_path + 'draw_images/'
+        image_dir = video_image_path + 'images'  # 영상 캡쳐 이미지
+        draw_image_dir = video_image_path + 'draw_images'  # rect 그려진 이미지
+        try:
+            os.makedirs(image_dir)
+            os.mkdir(draw_image_dir)
+        except:
+            pass
+
+        images_file_path = video_image_path + 'images/'
+        draw_images_file_path = video_image_path + 'draw_images/'
         # directory = os.path.dirname(images_file_path)
         # modify_directory = os.path.dirname(modify_image_path)
         # # draw_directory = os.path.dirname(draw_images_file_path)
@@ -4444,11 +4452,11 @@ class make_titan_video(Resource):
         start_time = time.time()
         position = 1
         while (retval):
-            # image_name = str(position).zfill(5)
-            # image_path = images_file_path + '/' + image_name + '.jpg'
+            image_name = str(position).zfill(5)
+            image_path = images_file_path + image_name + '.jpg'
             # # draw_image_path = draw_images_file_path + '/' + image_name + '.jpg'
             # modify_file_path = modify_image_path + '/' + image_name + '.jpg'
-            # cv2.imwrite(image_path, image)
+            cv2.imwrite(image_path, image)
             # cv2.imwrite(modify_file_path, image)
             # zposition = str(position).zfill(5)
             # objects.append({
@@ -4462,10 +4470,12 @@ class make_titan_video(Resource):
             # if progress_item == None:
             #     print('종료합니다.')
             #     return result(400, "make_titan_out", None, None, COMPANY_NAME)
-            # process_num = (position / total_frame) * 100
-            # process_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+            process_num = (position / total_frame) * 100
+            process_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
             # self.current_time = process_time
             image, boxes = ai.detect(image, position)
+            draw_image_path = draw_images_file_path + '/' + image_name + '.jpg'
+            cv2.imwrite(draw_image_path, image)
 
             if len(boxes):
                 lenP = 0
@@ -4476,7 +4486,7 @@ class make_titan_video(Resource):
                     self.add_item_detail(lenP, position, current_time, box['x'], box['y'], box['width'],
                                          box['height'], 1, box['item_type'], self.video_idx)
             # self.last_image_name = image_name
-            # self.update_process_ai(image_name, process_time, process_num, 0)
+            self.update_process_ai(image_name, process_time, process_num, 0)
             # has_item = TB_ITEM.query.filter_by(idx=self.fk_item_idx).first()
             # if has_item is None:
             #     break
@@ -4496,9 +4506,9 @@ class make_titan_video(Resource):
         # return result(404, "model is not exists", None, None, COMPANY_NAME)
 
     def delete_process_ai(self):
-        delete_ai = TB_PROCCESS_AI.query.filter_by(fk_item_idx=self.fk_item_idx).first()
+        delete_ai = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.video_idx).first()
         if delete_ai is not None:
-            db.session.query(TB_PROCCESS_AI).filter_by(fk_item_idx=self.fk_item_idx).delete()
+            db.session.query(TB_PROCCESS_AI).filter_by(fk_video_idx=self.video_idx).delete()
             db.session.commit()
 
     def update_item_info(self, using, insert_status):
@@ -4532,20 +4542,16 @@ class make_titan_video(Resource):
         #     modify_item_idx.append(m.idx)
         # modify_detail = TB_ITEM_DETAIL.query.filter(TB_ITEM_DETAIL.fk_item_idx == modify_item_idx).first()
         # modify_detail = TB_ITEM_DETAIL.query.join(TB_ITEM, TB_ITEM_DETAIL.fk_item_idx == TB_ITEM.idx).filter(TB_ITEM.fk_video_idx == self.video_idx).first()
-        modify_detail = TB_ITEM_DETAIL.query.filter(TB_ITEM_DETAIL.fk_video_idx == self.video_idx).filter(TB_ITEM_DETAIL.fk_item_idx == self.fk_item_idx).first()
-        if modify_detail is not None:
-            print('MetaData is Exist')
-            print(modify_detail)
-            db.session.query(TB_ITEM_DETAIL).filter_by(fk_video_idx=self.video_idx).filter_by(fk_item_idx=modify_detail.fk_item_idx).delete()
+        item_detail = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=self.video_idx).first()
+        if item_detail is not None:
+            db.session.query(TB_ITEM_DETAIL).filter_by(fk_video_idx=self.video_idx).delete()
             db.session.commit()
-        else:
-            print('MetaData is not Exist')
 
     def add_process_ai(self):
-        progress = TB_PROCCESS_AI.query.filter_by(fk_item_idx=self.fk_item_idx).first()
-        if progress == None:
+        progress = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.video_idx).first()
+        if progress is None:
             new_process = TB_PROCCESS_AI()
-            new_process.fk_item_idx = self.fk_item_idx
+            new_process.fk_video_idx = self.video_idx
             new_process.progress = 0
             new_process.draw_img_name = ''
             new_process.draw_img_time = 0
@@ -4554,9 +4560,9 @@ class make_titan_video(Resource):
             db.session.commit()
 
     def update_process_ai(self, draw_img, current_time, progress_num, ai_status):
-        progress = TB_PROCCESS_AI.query.filter_by(fk_item_idx=self.fk_item_idx).first()
+        progress = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.video_idx).first()
         if progress is not None:
-            progress.fk_item_idx = self.fk_item_idx
+            progress.fk_video_idx = self.video_idx
             progress.progress = progress_num
             progress.draw_img_name = draw_img
             progress.draw_img_time = current_time
@@ -4577,74 +4583,78 @@ class progress_process(Resource):
         self.draw_item_type = 0
         self.position_time = 0
         self.token_manager = TokenManager.instance()
-        self.classes = dataset.load_json('classes.json')
         super(progress_process, self).__init__()
 
     def get(self):
-        item_idx = request.args.get('item_idx')
-        video_idx = request.args.get('fk_video_idx')
-        user_idx = request.args.get('fk_user_idx')
+        fk_video_idx = request.args.get('fk_video_idx')
 
-        file_path = MAKE_IMAGE_DIR + str(item_idx) + '/' + 'draw_images/'
+        # file_path = MAKE_IMAGE_DIR + str(item_idx) + '/' + 'draw_images/'
 
         objects = []
-        process = TB_PROCCESS_AI.query.filter_by(fk_item_idx=item_idx).first()
+        process = TB_PROCCESS_AI.query.filter_by(fk_video_idx=fk_video_idx).first()
 
         if process is not None:
-            img_file = file_path + str(process.draw_img_name) + '.jpg'
-            item_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx). \
-                filter_by(position=process.draw_img_name).first()
-            item_detail_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx). \
-                filter_by(position=process.draw_img_name).all()
-            self.total_position = len(item_detail_list)
-            if item_detail is None:
-                objects.append({
-                    'progress': process.progress,
-                    'fk_item_idx': process.fk_item_idx,
-                    'draw_img_name': process.draw_img_name,
-                    'ai_status': process.ai_status,
-                    'x': self.x,
-                    'left': self.x,
-                    'y': self.y,
-                    'top': self.y,
-                    'width': self.width,
-                    'height': self.height,
-                    'position_order': self.position_order,
-                    'total_position': self.total_position,
-                    'position_time': process.draw_img_time,
-                    # 'draw_item_type': self.classes[str(self.draw_item_type)],
-                    'check': self.check
-                })
-            else:
-                if os.path.isfile(img_file):
-                    self.check = True
-                else:
-                    self.check = False
-                for d in item_detail_list:
-                    self.x = d.x
-                    self.y = d.y
-                    self.width = d.width
-                    self.height = d.height
-                    self.draw_item_type = d.draw_item_type
-                    self.position_order = d.position_order
-                    self.position_time = d.position_time
-                    objects.append({
-                        'progress': process.progress,
-                        'fk_item_idx': process.fk_item_idx,
-                        'draw_img_name': process.draw_img_name,
-                        'ai_status': process.ai_status,
-                        'x': self.x,
-                        'left': self.x,
-                        'y': self.y,
-                        'top': self.y,
-                        'width': self.width,
-                        'height': self.height,
-                        'position_order': self.position_order,
-                        'total_position': self.total_position,
-                        'position_time': process.draw_img_time,
-                        # 'draw_item_type': self.classes[str(self.draw_item_type)],
-                        'check': self.check
-                    })
+            objects.append({
+                'fk_video_idx': process.fk_video_idx,
+                'progress': process.progress,
+                'draw_img_name': process.draw_img_name,
+                'draw_img_time': process.draw_img_time,
+                'ai_status': process.ai_status
+            })
+            # img_file = file_path + str(process.draw_img_name) + '.jpg'
+            # item_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx). \
+            #     filter_by(position=process.draw_img_name).first()
+            # item_detail_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx). \
+            #     filter_by(position=process.draw_img_name).all()
+            # self.total_position = len(item_detail_list)
+            # if item_detail is None:
+            #     objects.append({
+            #         'progress': process.progress,
+            #         'fk_item_idx': process.fk_item_idx,
+            #         'draw_img_name': process.draw_img_name,
+            #         'ai_status': process.ai_status,
+            #         'x': self.x,
+            #         'left': self.x,
+            #         'y': self.y,
+            #         'top': self.y,
+            #         'width': self.width,
+            #         'height': self.height,
+            #         'position_order': self.position_order,
+            #         'total_position': self.total_position,
+            #         'position_time': process.draw_img_time,
+            #         # 'draw_item_type': self.classes[str(self.draw_item_type)],
+            #         'check': self.check
+            #     })
+            # else:
+            #     if os.path.isfile(img_file):
+            #         self.check = True
+            #     else:
+            #         self.check = False
+            #     for d in item_detail_list:
+            #         self.x = d.x
+            #         self.y = d.y
+            #         self.width = d.width
+            #         self.height = d.height
+            #         self.draw_item_type = d.draw_item_type
+            #         self.position_order = d.position_order
+            #         self.position_time = d.position_time
+            #         objects.append({
+            #             'progress': process.progress,
+            #             'fk_item_idx': process.fk_item_idx,
+            #             'draw_img_name': process.draw_img_name,
+            #             'ai_status': process.ai_status,
+            #             'x': self.x,
+            #             'left': self.x,
+            #             'y': self.y,
+            #             'top': self.y,
+            #             'width': self.width,
+            #             'height': self.height,
+            #             'position_order': self.position_order,
+            #             'total_position': self.total_position,
+            #             'position_time': process.draw_img_time,
+            #             # 'draw_item_type': self.classes[str(self.draw_item_type)],
+            #             'check': self.check
+            #         })
             return result(200, "progress_process successful.", objects, None, COMPANY_NAME)
         return result(401, "progress_process fail", objects, None, COMPANY_NAME)
 

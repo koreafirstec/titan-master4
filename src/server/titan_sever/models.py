@@ -97,7 +97,7 @@ class TB_PROCCESS_AI(db.Model):
         'schema': db_name
     }
     idx = db.Column('idx', db.Integer, primary_key=True)
-    fk_item_idx = db.Column('fk_item_idx', db.Integer)
+    fk_video_idx = db.Column('fk_video_idx', db.Integer)
     progress = db.Column('progress', db.Integer)
     draw_img_name = db.Column('draw_img_name', db.String(256))
     draw_img_time = db.Column('draw_img_time', db.Integer)

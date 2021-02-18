@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, AuthService, api_video, api_item) {
-
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video) {
 
 //         $scope.user_id = AuthService.getUserId();
 //         $scope.user_idx = AuthService.getIdx();
@@ -15,9 +14,41 @@ angular.module('titanApp')
         $scope.user_video_list = '';
         $scope.make_ai_video_search = '';
         $scope.make_ai_item_search = '';
+        $scope.modify_success_list = [];
         $scope.selected_video = '';
         $scope.check_item = [];
         $scope.selected_item = '';
+        $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+        $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+
+        $scope.enter_status = false;
+        $scope.modify_rect_down = function(item, enter_status){
+            $scope.position_order = item.position_order;
+            $scope.enter_status = true;
+            $("#meta_data_editor_btn").css('display', 'flex');
+        }
+
+        $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
+            var api_params = {};
+            api_params['fk_item_idx'] = item_idx;
+            api_params['fk_video_idx'] = video_idx;
+            api_params['item_position'] = position;
+            api_params['p_order'] = p_order;
+            api_params['rect_x'] = x * (1920/iw);
+            api_params['rect_y'] = y * (1080/ih);
+            api_params['rect_w'] = w * (1920/iw)+api_params['rect_x'];
+            api_params['rect_h'] = h * (1080/ih)+api_params['rect_y'];
+            api_item_detail.update(api_params, function(data){
+                if(data.status == 200){
+                    $scope.dataStatus = data.status;
+                    $scope.modify_rect = data.objects
+                    $scope.rectPosition = [];
+                    for(let i = 0; i < data.objects.length; i++){
+                         $scope.rect_position_func(data.objects, i)
+                    }
+                }
+            });
+        }
 
         var api_video_params = {};
         api_video_params['user_idx'] = AuthService.getIdx();
@@ -43,6 +74,7 @@ angular.module('titanApp')
 
         $scope.video_click = function(video){
             $scope.selected_video = video;
+            $scope.video_image = 'https://img.youtube.com/vi/' + $scope.selected_video.video_url.substr(32, 11) + '/hqdefault.jpg';
             $scope.make_ai_level = 2;
         };
 
@@ -50,10 +82,181 @@ angular.module('titanApp')
 
         };
 
-        $scope.item_click = function(item) {
+        $scope.item_click = function(item, video) {
             $scope.selected_item = item;
+            console.log($scope.selected_item);
+            $scope.item_idx = item.idx
             $scope.make_ai_level = 3;
         };
+
+        $scope.start_modeling = function () {
+            let api_item_params = {};
+            api_item_params['video_idx'] = $scope.selected_video.idx;
+            api_item_params['video_url'] = $scope.selected_video.video_url;
+            api_item_params['fk_item_idx'] = $scope.selected_item.idx;
+
+            api_make_titan_video.save(api_item_params, function(data){});
+
+            let api_params2 = {};
+            let image_path = ENV.webs + '/make_image/' + $scope.selected_video.idx + '/';
+            let video_image_path = image_path + 'images/';
+            let draw_image_path = image_path + 'draw_images/';
+            api_params2['fk_video_idx'] = $scope.selected_video.idx;
+            let progressTimer = setInterval(function (){
+                api_progress_process.get(api_params2, function (data) {
+                    if(data.status == 200) {
+                        let datas = data.objects[0];
+                        if(datas.draw_img_name != '') {
+                            $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
+                            $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
+                            if (datas.progress == 100) {
+                                clearInterval(progressTimer);
+                                $scope.make_ai_level = 4;
+                            }
+                        }
+                    }
+                });
+            },0);
+        }
+
+
+        $scope.video_capture_func = function(video, item){
+            $scope.make_ai_level = 4;
+            var api_params = {};
+            api_params['video_idx'] = video.idx;
+            api_params['fk_item_idx'] = item.idx;
+            api_item_detail.get(api_params, function(data){
+                if(data.status == 200){
+                    $scope.detail_list = data.objects;
+                    $scope.detail_selected = $scope.detail_list[0];
+                    $scope.get_position_all(video, $scope.detail_selected);
+                }
+            });
+//            var api_capture_params = {}
+//            api_capture_params['video_idx'] = video.idx;
+//            api_capture_params['item_idx'] = item.idx;
+//
+//            api_video_capture.save(api_capture_params, function(data){
+//                if(data.status == 200){
+//                    $scope.captured_video = data.objects;
+//                    console.log(data.objects);
+//                }
+//            });
+        }
+
+
+        $scope.get_position_all = function(video, item){
+            $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
+            $scope.height_img = $('#current_modify_editor_img')[0].clientHeight;
+            var api_params = {};
+            $scope.image_frame = item.position;
+            var i = 0;
+            api_params['image_frame']= item.position;
+            api_params['item_idx']= item.fk_item_idx;
+            api_params['video_idx']= video.idx;
+//            const list = document.querySelector('#modify_list');
+
+//            function doSomething(diff) {
+//              list.scrollLeft += (diff);
+//            }
+
+//            list.addEventListener('wheel', function(e) {
+//              diff = e.deltaY;
+//              if (!ticking) {
+//                window.requestAnimationFrame(function() {
+//                  doSomething(diff);
+//                  ticking = false;
+//                });
+//              }
+//              ticking = true;
+//            }, { passive: true });
+            for(var j in $scope.detail_list){
+                $scope.modify_item_idx = $scope.detail_list[j].fk_item_idx;
+                $scope.editor_i = $scope.detail_list[j].position_order;
+                $scope.img_modify_url_current = ENV.webs + $scope.detail_list[j].draw_img_name;
+                $scope.modify_success_list.push({
+                    "position": $scope.detail_list[j].position,
+                    "detail_index": $scope.detail_list[j].index,
+                    "position_time": $scope.detail_list[j].position_time,
+                    "draw_img_name": $scope.detail_list[j].draw_img_name,
+                    "display": "none",
+                });
+            }
+
+            for(var i in $scope.modify_success){
+                $scope.rect_position_modify_func($scope.modify_success, i);
+            }
+        }
+
+        $scope.rect_position_modify_func = function(Objects, i){
+             $scope.fk_item_idx = $scope.item_idx;
+             $scope.position_order = Objects[i].position_order;
+             $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
+             $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
+             $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
+             $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+             $scope.editor_i = Objects[i].position_order;
+             $scope.rectPosition.push({
+                 item_idx: $scope.fk_item_idx,
+                 position: $scope.image_frame,
+                 p_order: $scope.position_order,
+                 rectLeft: $scope.rectLeft * (1920/$scope.width_img),
+                 rectTop: $scope.rectTop * (1080/$scope.h),
+                 rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
+                 rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+             });
+        }
+
+        $scope.item_position_rect_list = function(item_idx, item_position, video_idx){
+            $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
+            $scope.height_img = $('#current_modify_editor_img')[0].clientHeight;
+            var api_params = {}
+            api_params['item_idx'] = item_idx;
+            api_params['video_idx'] = video_idx;
+            api_params['image_frame'] = parseInt(item_position);
+            api_item_position_detail.get(api_params, function(data){
+                if(data.status == 200){
+                    $scope.modify_rect = data.objects;
+                    var Objects = data.objects;
+                    $scope.rectPosition = [];
+                    console.log(data.objects)
+                    for(let i = 0; i < Objects.length; i++){
+                         $scope.p_time = Objects[i].position_time;
+                         $scope.fk_item_idx = item_idx;
+                         $scope.position_order = Objects[i].position_order;
+                         $scope.editor_i = $scope.position_order;
+                         $scope.item_position_value = Objects[i].position;
+                         $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
+                         $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
+                         $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
+                         $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+                         $scope.rectPosition.push({
+                             item_idx: $scope.fk_item_idx,
+                             position: $scope.image_frame,
+                             p_order: $scope.position_order,
+                             rectLeft: $scope.rectLeft * (1920/$scope.width_img),
+                             rectTop: $scope.rectTop * (1080/$scope.height_img),
+                             rectWidth: $scope.rectWidth * (1920/$scope.width_img)+($scope.rectLeft * (1920/$scope.width_img)),
+                             rectHeight: $scope.rectHeight * (1080/$scope.height_img)+($scope.rectTop * (1080/$scope.height_img)),
+                         });
+                    }
+                }
+            });
+        }
+
+        $scope.ItemModifyEditor = function(item, video_idx, item_idx){
+            const list = document.querySelector('#modify_list');
+
+//            function doSomething(diff) {
+//              list.scrollLeft += (diff);
+//            }
+            var api_params = {};
+            $scope.item_idx = item_idx;
+            $scope.image_frame = parseInt(item.position);
+            $scope.img_modify_url_current = ENV.webs + item.draw_img_name;
+            $scope.item_position_rect_list(item_idx, $scope.image_frame, video_idx);
+        }
+
 
 // video_click 부분------------------------------------------------------------------------------
         // if($scope.main_model != ''){
@@ -622,25 +825,25 @@ angular.module('titanApp')
 //             );
 //         }
 //
-//         $scope.rect_position_func = function(Objects, i){
-//              $scope.fk_item_idx = $scope.item_idx;
-//              $scope.image_frame = Objects[i].position;
-//              $scope.position_order = Objects[i].position_order;
-//              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.w));
-//              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.h));
-//              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.w)) - $scope.rectLeft;
-//              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.h)) - $scope.rectTop;
-//              $scope.editor_i = Objects[i].position_order;
-//              $scope.rectPosition.push({
-//                  item_idx: $scope.fk_item_idx,
-//                  position: $scope.image_frame,
-//                  p_order: $scope.position_order,
-//                  rectLeft: $scope.rectLeft * (1920/$scope.w),
-//                  rectTop: $scope.rectTop * (1080/$scope.h),
-//                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.w)),
-//                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.h)),
-//              });
-//         }
+         $scope.rect_position_func = function(Objects, i){
+              $scope.fk_item_idx = $scope.item_idx;
+              $scope.image_frame = Objects[i].position;
+              $scope.position_order = Objects[i].position_order;
+              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
+              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
+              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
+              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+              $scope.editor_i = Objects[i].position_order;
+              $scope.rectPosition.push({
+                  item_idx: $scope.fk_item_idx,
+                  position: $scope.image_frame,
+                  p_order: $scope.position_order,
+                  rectLeft: $scope.rectLeft * (1920/$scope.w),
+                  rectTop: $scope.rectTop * (1080/$scope.h),
+                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.width_img)),
+                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.height_img)),
+              });
+         }
 //
 //         $scope.ItemEditor = function(item, video_idx){
 //             $scope.editor_locker_drawing.map(value => {value.display= "none"});
@@ -996,7 +1199,7 @@ angular.module('titanApp')
 //                 // }
 //             // }
 //         }
-//         //A.I. 선택하기
+         //A.I. 선택하기
 //         $scope.main_model_click = function(item, main){
 //             var maein_model_click_confirm = confirm('이 동영상으로 하시겠습니까?');
 //             // $rootScope.prev_model_item = "현재 A.I.모델";
@@ -1116,120 +1319,120 @@ angular.module('titanApp')
 //         //
 //         }
 //
-//         $scope.initial_editor = function(){
-//             angular.element('#meta_data_detector').css('display', 'none');
-//             $('#editor_list').css('display', 'none');
-//             angular.element('#item_detection').css('display', 'none');
-//             $scope.editor_title = '동영상 편집';
-//             $rootScope.item_rect_detection = '';
-//             $rootScope.make_titan_status = 200;
-//             $rootScope.item_detect_status = 404;
-//             $scope.img_editor_locker = [];
-//             $scope.img_editor_locker_drawing = [];
-//             $scope.img_editor_locker_not_drawing = [];
-//             $scope.editor_locker = [];
-//             $scope.editor_locker_not_drawing = [];
-//             $scope.editor_locker_all = [];
-//             $scope.editor_locker_drawing = [];
-//             $scope.EditorObjects = [];
-//             $scope.modify_rect = [];
-//             $rootScope.image_capture = [];
-//             $scope.make_item = undefined;
-//             $rootScope.selectedItem = '';
-//             $scope.make_item_title = '선택 없음';
-//             $scope.ai_status = 0;
-//             $scope.modellib = false;
-//             $scope.showlib = true;
-//             $scope.show_item_lib = false;
-//             $scope.item_add_able = false;
-//             $rootScope.meta_data_insert = false;
-//             if($scope.shared_status)
-//                 $('#insert_video_item').css('display', 'none')
-//             else
-//                 $('#insert_video_item').css('display', 'inline-block');
-//             $scope.img_url_current = "";
-//             angular.element('#current_editor_img').css('display', 'none');
-//             angular.element('#editors_none').css('display', 'block');
-//             angular.element('#default_img').css('display', 'block');
-//             angular.element('#editors_title').css('display', 'none');
-//             $(".position_btn").css('cursor', 'not-allowed');
-//             $('#cancel_position').css('display', 'none');
-//             $('.add_ai').css('display', 'flex');
-//             $(".progress").css("display", "none");
-//             $("#current-time").text('00:00:00');
-//             $('#duration').text('00:00:00');
-//         }
+         $scope.initial_editor = function(){
+             angular.element('#meta_data_detector').css('display', 'none');
+             $('#editor_list').css('display', 'none');
+             angular.element('#item_detection').css('display', 'none');
+             $scope.editor_title = '동영상 편집';
+             $rootScope.item_rect_detection = '';
+             $rootScope.make_titan_status = 200;
+             $rootScope.item_detect_status = 404;
+             $scope.img_editor_locker = [];
+             $scope.img_editor_locker_drawing = [];
+             $scope.img_editor_locker_not_drawing = [];
+             $scope.editor_locker = [];
+             $scope.editor_locker_not_drawing = [];
+             $scope.editor_locker_all = [];
+             $scope.editor_locker_drawing = [];
+             $scope.EditorObjects = [];
+             $scope.modify_rect = [];
+             $rootScope.image_capture = [];
+             $scope.make_item = undefined;
+             $rootScope.selectedItem = '';
+             $scope.make_item_title = '선택 없음';
+             $scope.ai_status = 0;
+             $scope.modellib = false;
+             $scope.showlib = true;
+             $scope.show_item_lib = false;
+             $scope.item_add_able = false;
+             $rootScope.meta_data_insert = false;
+             if($scope.shared_status)
+                 $('#insert_video_item').css('display', 'none')
+             else
+                 $('#insert_video_item').css('display', 'inline-block');
+             $scope.img_url_current = "";
+             angular.element('#current_editor_img').css('display', 'none');
+             angular.element('#editors_none').css('display', 'block');
+             angular.element('#default_img').css('display', 'block');
+             angular.element('#editors_title').css('display', 'none');
+             $(".position_btn").css('cursor', 'not-allowed');
+             $('#cancel_position').css('display', 'none');
+             $('.add_ai').css('display', 'flex');
+             $(".progress").css("display", "none");
+             $("#current-time").text('00:00:00');
+             $('#duration').text('00:00:00');
+         }
+
+         $scope.first_work = function(){
+             var first_work_confirm = confirm("처음 화면으로 돌아가시겠습니까?");
+             if(first_work_confirm){
+                 $scope.initial_editor();
+             }
+         }
+
+         $scope.metaDataCancel = function(make_titan_status){
+             var add_cancel = confirm('처음 화면으로 돌아갑니다. 정말 취소 하시겠습니까?');
+             var api_params = {};
+             if(add_cancel){
+                 if(make_titan_status == 403){
+                     clearInterval($scope.progressTimer);
+                     api_params['d_progress_item_idx'] = $scope.make_item_idx;
+                     api_progress_process.delete(api_params, function(data){
+                         if(data.status == 200){
+                             $scope.initial_editor();
+                         }
+                     });
+                 }
+             }
+         }
+
+         $scope.initial_video = function(close_status){
+             $rootScope.selectedItem = '';
+             $rootScope.item_rect_detection = '';
+             $scope.make_item = undefined;
+             $scope.item_add_able = false;
+             $rootScope.meta_data_insert = false;
+             if($scope.shared_status)
+                 $('#insert_video_item').css('display', 'none')
+             else
+                 $('#insert_video_item').css('display', 'inline-block');
+             $(".position_btn").css('cursor', 'not-allowed');
+             $('#Editors_content').focusout(function() {
+                 $(document).unbind();
+             });
+
+             if(close_status == 0){
+                 $route.reload();
+             }else{
+                 $window.location.reload();
+             }
+         }
+
+         $scope.check_left_top = function(y, x, ui){
+             $scope.rectLeft = x;
+             $scope.rectTop = y;
+         }
+
+
+         $scope.check_wid_hei = function(w, h, ui){
+             $scope.rectWidth = w;
+             $scope.rectHeight = h;
+         }
+
+         $scope.offset = function() {
+             var rec = document.getElementById('current_modify_editor_img').getBoundingClientRect(),
+                 bodyElt = document.body;
+             return {
+                 top: rec.top + bodyElt.scrollTop,
+                 left: rec.left + bodyElt.scrollLeft
+             }
+         };
 //
-//         $scope.first_work = function(){
-//             var first_work_confirm = confirm("처음 화면으로 돌아가시겠습니까?");
-//             if(first_work_confirm){
-//                 $scope.initial_editor();
-//             }
-//         }
-//
-//         $scope.metaDataCancel = function(make_titan_status){
-//             var add_cancel = confirm('처음 화면으로 돌아갑니다. 정말 취소 하시겠습니까?');
-//             var api_params = {};
-//             if(add_cancel){
-//                 if(make_titan_status == 403){
-//                     clearInterval($scope.progressTimer);
-//                     api_params['d_progress_item_idx'] = $scope.make_item_idx;
-//                     api_progress_process.delete(api_params, function(data){
-//                         if(data.status == 200){
-//                             $scope.initial_editor();
-//                         }
-//                     });
-//                 }
-//             }
-//         }
-//
-//         $scope.initial_video = function(close_status){
-//             $rootScope.selectedItem = '';
-//             $rootScope.item_rect_detection = '';
-//             $scope.make_item = undefined;
-//             $scope.item_add_able = false;
-//             $rootScope.meta_data_insert = false;
-//             if($scope.shared_status)
-//                 $('#insert_video_item').css('display', 'none')
-//             else
-//                 $('#insert_video_item').css('display', 'inline-block');
-//             $(".position_btn").css('cursor', 'not-allowed');
-//             $('#Editors_content').focusout(function() {
-//                 $(document).unbind();
-//             });
-//
-//             if(close_status == 0){
-//                 $route.reload();
-//             }else{
-//                 $window.location.reload();
-//             }
-//         }
-//
-//         $scope.check_left_top = function(y, x, ui){
-//             $scope.rectLeft = x;
-//             $scope.rectTop = y;
-//         }
-//
-//
-//         $scope.check_wid_hei = function(w, h, ui){
-//             $scope.rectWidth = w;
-//             $scope.rectHeight = h;
-//         }
-//
-//         $scope.offset = function() {
-//             var rec = document.getElementById('current_editor_img').getBoundingClientRect(),
-//                 bodyElt = document.body;
-//             return {
-//                 top: rec.top + bodyElt.scrollTop,
-//                 left: rec.left + bodyElt.scrollLeft
-//             }
-//         };
-//
-//         $scope.back_editor = function(){
-//             if($rootScope.make_titan_status === 200 || $rootScope.item_detect_status === 404){
-// //                let backWork = confirm('이전 작업으로 이동하시겠습니까?');
-//                 if($scope.showlib){
-//                     $rootScope.loading_alert = false;
+         $scope.back_editor = function(){
+             if($rootScope.make_titan_status === 200 || $rootScope.item_detect_status === 404){
+ //                let backWork = confirm('이전 작업으로 이동하시겠습니까?');
+                 if($scope.showlib){
+                     $rootScope.loading_alert = false;
 //                     Modal.open(
 //                         'views/alert_modal.html',
 //                         'AlertCtrl',
@@ -1243,28 +1446,29 @@ angular.module('titanApp')
 //                             }
 //                         }
 //                     );
-//                 }else if($scope.show_item_lib) {
-//                     $scope.editor_title = '동영상 편집';
-//                     $rootScope.loading_alert = false;
-//                     $scope.showlib = true;
-//                     $scope.modellib = $scope.show_item_lib = false;
-//                     if($scope.shared_status)
-//                         $('#insert_video_item').css('display', 'none')
-//                     else
-//                         $('#insert_video_item').css('display', 'inline-block');
-//                     $scope.make_item = undefined;
-//                     $scope.make_item_title = '선택 없음';
-//                     $rootScope.selectedItem = '';
-//                     $("#current-time").text('00:00:00');
-//                     $('#duration').text('00:00:00');
-//                     $scope.make_item = undefined;
-//                     $scope.make_item_title = '선택 없음';
-//                     $rootScope.item_rect_detection = '';
-//                     // angular.element('#video_canvas').css('display', 'flex');
-//                     $rootScope.meta_data_insert = true;
-//                     $rootScope.local_player.stopVideo();
-//                 }
-//             }else{
+                 }else if($scope.show_item_lib) {
+                     $scope.editor_title = '동영상 편집';
+                     $rootScope.loading_alert = false;
+                     $scope.showlib = true;
+                     $scope.modellib = $scope.show_item_lib = false;
+                     if($scope.shared_status)
+                         $('#insert_video_item').css('display', 'none')
+                     else
+                         $('#insert_video_item').css('display', 'inline-block');
+                     $scope.make_item = undefined;
+                     $scope.make_item_title = '선택 없음';
+                     $rootScope.selectedItem = '';
+                     $("#current-time").text('00:00:00');
+                     $('#duration').text('00:00:00');
+                     $scope.make_item = undefined;
+                     $scope.make_item_title = '선택 없음';
+                     $rootScope.item_rect_detection = '';
+                     // angular.element('#video_canvas').css('display', 'flex');
+                     $rootScope.meta_data_insert = true;
+                     $rootScope.local_player.stopVideo();
+                 }
+             }else{
+                console.log("ddd");
 //                 Modal.open(
 //                     'views/alert_modal.html',
 //                     'AlertCtrl',
@@ -1278,344 +1482,263 @@ angular.module('titanApp')
 //                         }
 //                     }
 //                 );
-//             }
-//         }
-//
-//         $(window).resize(function () {
-//             $timeout(function(){
-//                 $('#context2').css('display', 'none');
-//                 var editor_id = document.getElementById('video_Editors_content');
-//                 if(editor_id){
-//                     if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
-//                         $scope.w = $('#current_editor_img')[0].clientWidth;
-//                         $scope.h = $('#current_editor_img')[0].clientHeight;
-//                         $scope.youtube_width = $("youtube iframe")[0].clientWidth;
-//                         $scope.youtube_height = $("youtube iframe")[0].clientHeight;
-//                         // $scope.youtube_canvas = $("#video_canvas")[0].clientWidth;
-//                         $scope.youtube_if = $("#youtube_if")[0].clientWidth;
-//                         $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
-//                         for(var i in $scope.rectPosition){
-//                             $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
-//                             $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
-//                             $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
-//                             $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
-//                         }
-//                     }
-//                 }
-//             }, 1);
-//         });
-//
-//         $scope.close_func = function(close_stat){
-//             var editor_close;
-//             if($scope.ai_status != 100){
-//                 editor_close = confirm('해당 편집기를 종료하시겠습니까?');
-//             }else{
-//                 editor_close = confirm("지금까지 하신 작업을 끝내시고 정말로 종료하시겠습니까?");
-//             }
-//             if(editor_close){
-//                 $scope.item_detection = false;
-//                 if($rootScope.make_titan_status == 200 && $scope.ai_status !== 100){
-//                     $scope.initial_video(close_stat);
-//                     $modalInstance.dismiss('cancel');
-//                     $(document).off("keydown");
-//                 }else if($rootScope.make_titan_status == 200 && $scope.ai_status === 100){
-//                     $scope.initial_video(close_stat);
-//                     $modalInstance.dismiss('cancel');
-//                     $(document).off("keydown");
-//                 }else{
-//                     Modal.open(
-//                         'views/alert_modal.html',
-//                         'AlertCtrl',
-//                         'choiC',
-//                         {
-//                             alertTitle: function () {
-//                                 return '종료';
-//                             },
-//                             alertMsg: function () {
-//                                 return '실행 중인 작업이 있습니다.';
-//                             }
-//                         }
-//                     );
-//                 }
-//             }
-//         }
-//
-//         $(document).on('keydown', function(e){
-//             if($rootScope.make_titan_status !== 200 || $rootScope.item_detect_status !== 404){
-//                 disableF5(e);
-//             }
-//             var code = (e.keyCode ? e.keyCode : e.which);
-//             switch (code) {
-//                 case 27: //ESC
-//                     $scope.close_func(0);
-//                     break;
-//                 default:
-//                     var ids = 0;
-//                     break;
-//             }
-//         });
-//
-//         $scope.close = function(make_titan_status){
-//             $scope.close_func(1);
-//         };
-//
-//
-//         $scope.item_drop = function(){
-//             $scope.make_item_title = "선택 없음";
-//             $scope.make_item = undefined;
-//         }
-//         function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82))) e.preventDefault();
-//             Modal.open(
-//                 'views/alert_modal.html',
-//                 'AlertCtrl',
-//                 'sisung',
-//                 {
-//                     alertTitle: function () {
-//                         return "취소";
-//                     },
-//                     alertMsg: function () {
-//                         return "현재 작업 중입니다. 새로고침을 하시려면 취소 후 이용해주세요.";
-//                     }
-//                 }
-//             );
-//         }
-//
-//         var image_area;
-//         $scope.canvas;
-//         var mouse = {
-//             x: 0,
-//             y: 0,
-//             startX: 0,
-//             startY: 0
-//         };
-//         $scope.drawing = false;
-//         $scope.element = null;
-//         $scope.editor_i = 0;
-//
-//         function setMousePosition(e) {
-//             var ev = e || window.event; //Moz || IE
-//             mouse.x = e.clientX - image_area.getBoundingClientRect().x;
-//             mouse.y = e.clientY - image_area.getBoundingClientRect().y;
-//         };
-//
-//         $scope.multiDraw = function(editor_i){
-//             var multi_confirm;
-//             if($scope.editor_i == 0)
-//                 multi_confirm = confirm("영역을 새로 추가하시겠습니까?");
-//             else
-//                 multi_confirm = confirm("다른 영역을 추가하시겠습니까?");
-//             if(multi_confirm){
-//                 $("#cancel_position").css('display', 'flex');
-//                 $scope.initDraw(editor_i);
-//             }else{
-//                 $("#cancel_position").css('display', 'none');
-//             }
-//         }
-//
-//         $scope.CancelDraw = function(){
-//             $("#cancel_position").css('display', 'none');
-//             $scope.editor_i = 0;
-//             $scope.drawing = false;
-//             $scope.element = null;
-//             $scope.canvas.style.cursor = "default";
-//             $scope.canvas_jq.children().remove();
-//         }
-//
-//         $scope.initDraw = function(editor_i) {
-//             $rootScope.local_player.pauseVideo();
-//             $scope.editor_i = editor_i;
-//             $scope.canvas = document.getElementById('canvas_editor');
-//             $scope.canvas_jq = $('#canvas_editor');
-//             $scope.canvas.style.cursor = "crosshair";
-//             $("#adding_position").css('display', 'flex');
-//             $scope.drawing = true;
-//             $scope.editor_i+=1;
-//             $scope.element = null;
-//
-//             $scope.canvas.onmousemove = function (e) {
-//                 if(!$scope.drawing) return;
-//                 image_area = document.getElementsByClassName('current_editor_img')[0];
-//                 $scope.canvas = document.getElementById('canvas_editor');
-//                 setMousePosition(e);
-//                 if ($scope.element !== null) {
-//                     $scope.element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
-//                     $scope.element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
-//                     $scope.element.style.left = (mouse.x - mouse.startX < 0) ? mouse.x + 'px' : mouse.startX + 'px';
-//                     $scope.element.style.top = (mouse.y - mouse.startY < 0) ? mouse.y + 'px' : mouse.startY + 'px';
-//                     $scope.element.style.border = '1px solid red';
-//                 }
-//             }
-//
-//             $scope.canvas.onmousedown = function (e) {
-//               if(!$scope.drawing) return;
-//               mouse.startX = mouse.x;
-//               mouse.startY = mouse.y;
-//               $scope.element = document.createElement('div');
-//               $scope.element.className = 'editor_rectangle';
-//               $scope.element.id = 'rect_'+$scope.editor_i;
-//               $scope.element.style.left = mouse.x + 'px';
-//               $scope.element.style.top = mouse.y + 'px';
-//               $scope.canvas.appendChild($scope.element)
-//             }
-//
-//             $scope.canvas.onmouseup = function(e){
-//               if ($scope.element !== null) {
-//                 $scope.w = $('#current_editor_img')[0].clientWidth;
-//                 $scope.h = $('#current_editor_img')[0].clientHeight;
-//                 var x = parseInt($scope.element.style.left)*(1920/$scope.w);
-//                 var y = parseInt($scope.element.style.top)*(1080/$scope.h);
-//                 var w = parseInt($scope.element.style.width)*(1920/$scope.w)+x;
-//                 var h = parseInt($scope.element.style.height)*(1080/$scope.h)+y;
-//                 $scope.element = null;
-//                 $scope.drawing = false;
-//                 $scope.canvas.style.cursor = "default";
-//                 $("#cancel_position").css('display', 'none');
-//
-//                 // var insert_confirm = confirm('해당 영역을 추가하시겠습니까?')
-//                 // if(insert_confirm){
-//                     var api_insert_params = {};
-//                     api_insert_params['fk_item_idx'] = $scope.item_idx;
-//                     api_insert_params['fk_video_idx'] = $rootScope.selectedItem.idx;
-//                     // console.log($rootScope.selectedItem)
-//                     api_insert_params['item_position'] = $scope.image_frame;
-//                     api_insert_params['p_order'] = $scope.editor_i;
-//                     api_insert_params['p_time'] = $scope.p_time;
-//                     api_insert_params['rect_x'] = x;
-//                     api_insert_params['rect_y'] = y;
-//                     api_insert_params['rect_w'] = w;
-//                     api_insert_params['rect_h'] = h;
-//                     api_item_detail.save(api_insert_params, function(data){
-//                         if(data.status == 200){
-//                             var rect_position = data.objects[0].rect_position;
-//                             var image_path = ENV.webs + '/make_image/' + $scope.item_idx;
-//                             $scope.modify_rect = data.objects[0].rect_position;
-//                             $scope.rectPosition = [];
-//                             for(let i = 0; i < data.objects[0].rect_position.length; i++){
-//                                  $scope.rect_position_func(data.objects[0].rect_position, i)
-//                             }
-//                             for(let i in rect_position){
-//                                 if(rect_position[i].detail_exists){
-//                                     var editors_id = 0;
-//                                 }else{
-//                                     $scope.editor_locker_drawing.push({
-//                                         "image_frame": parseInt(rect_position[i].draw_img_name),
-//                                         "draw_name": rect_position[i].draw_img_name,
-//                                         "position_time": rect_position[i].position_time,
-//                                         "current_time": parseInt(rect_position[i].position_time),
-//                                         "fk_item_idx": rect_position[i].fk_item_idx,
-//                                         "draw_image": image_path+'/images/'+rect_position[i].draw_img_name+".jpg",
-//                                         "border_color": "5px solid #87ceeb",
-//                                         "display": "inline-block"
-//                                     });
-//                                     const indexNot = $scope.editor_locker_not_drawing.findIndex(notDraw => notDraw.image_frame === $scope.image_frame);
-//                                     const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === $scope.image_frame);
-//                                     const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === $scope.image_frame);
-//                                     $scope.editor_locker_not_drawing.splice(indexNot, 1);
-//                                     $scope.editor_locker_all[indexLock].border_color = "5px solid #87ceeb";
-//                                     $scope.editor_locker_all[indexLock].display = "inline-block";
-//                                     $scope.editor_locker_drawing[indexDraw].border_color = "5px solid #87ceeb";
-//                                     $scope.editor_locker_drawing[indexDraw].display = "inline-block";
-//                                     // console.log("all: ", $scope.editor_locker_all);
-//                                     // console.log("draw: ", $scope.editor_locker_drawing);
-//                                     // console.log("locker: ", $scope.editor_locker);
-//                                 }
-//                             }
-//                             $scope.editor_locker_drawing = Array.from(new Set($scope.editor_locker_drawing.map(JSON.stringify))).map(JSON.parse);
-//                             $scope.editor_locker_drawing.sort(function(a, b) {
-//                                 return a["image_frame"] - b["image_frame"];
-//                             });
-//                             $scope.canvas_jq.children().remove();
-//                             // Modal.open(
-//                             //     'views/alert_modal.html',
-//                             //     'AlertCtrl',
-//                             //     'sisung',
-//                             //     {
-//                             //         alertTitle: function () {
-//                             //             return "성공";
-//                             //         },
-//                             //         alertMsg: function () {
-//                             //             return "영역이 성공적으로 추가 되었습니다.";
-//                             //         }
-//                             //     }
-//                             // );
-//                         }
-//                     });
-//                 // }else{
-//                 //     $scope.drawing = false;
-//                 //     $("#cancel_position").css('display', 'none');
-//                 //     $scope.editor_i = 0;
-//                 //     $scope.canvas_jq.children().remove();
-//                 // }
-//               }
-//             }
-//         }
-//
-//         $scope.position_selected = function(draw_stat){
-//             if(draw_stat == 0){
-//                 $scope.draw_stat = 0;
-//                 console.log($scope.editor_locker_not_drawing);
-//                 $scope.editor_locker = $scope.editor_locker_not_drawing;
-//             }else if(draw_stat == 1){
-//                 $scope.draw_stat = 1;
-//                 console.log($scope.editor_locker_drawing);
-//                 $scope.editor_locker = $scope.editor_locker_drawing;
-//             }else{
-//                 $scope.draw_stat = 2;
-//                 console.log($scope.editor_locker_all);
-//                 $scope.editor_locker = $scope.editor_locker_all;
-//             }
-//         }
-//
-//         $scope.addDetail = function(video) {
-//             Modal.open(
-//                 'views/video_add_detail.html',
-//                 'VideoAddDetailCtrl',
-//                 'sisung',
-//                 {
-//                   video: function() {
-//                      return video;
-//                   },
-//                 },
-//             );
-//         }
-//
-//     }).directive('editorPosition', ['myConfig', 'myValue', function (myConfig, myValue) {
-//     return {
-//         restrict: 'E',
-//         template: '<div></div>',
-//         link: function postLink(scope, elem, attrs) {
-//             elem.resizable({ handles: " n, e, s, w, ne, se, sw, nw"});
-//             elem.on('resizestop', function (event, ui) {
-//                 var posOff = scope.offset(),
-//                 newPosW = ui.size.width,
-//                 newPosH = ui.size.height;
-//                 scope.check_wid_hei(newPosW, newPosH);
-//             });
-//             elem.on('resize', function(event, ui){
-//                 var newPosW = ui.size.width,
-//                 newPosH = ui.size.height;
-//                 scope.check_wid_hei(newPosW, newPosH);
-//             });
-//             elem.on('mouseover',function() {
-//                 elem.addClass('enter');
-//             });
-//             elem.on('mouseleave',function() {
-//                 elem.removeClass('enter');
-//             });
-//             elem.on('drag', function(event, ui){
-//                 var posOff = scope.offset(),
-//                 newPosX = ui.position.left,
-//                 newPosY = ui.position.top;
-//                 scope.check_left_top(newPosY, newPosX);
-//             });
-//             elem.on('dragstop',function(event,ui) {
-//                 var posOff = scope.offset(),
-//                 newPosX = ui.position.left,
-//                 newPosY = ui.position.top;
-//                 scope.check_left_top(newPosY, newPosX);
-//             });
-//             elem.draggable({containment: "#current_editor_img"});
-//         }
-//     }
-// }]
-    });
+             }
+         }
+
+         $(window).resize(function () {
+             $timeout(function(){
+                 $('#context1').css('display', 'none');
+                 var editor_id = document.getElementById('current_modify_editor_img');
+                 if(editor_id){
+                     if($scope.rectPosition != '' || $scope.EditorObjects != '' || $rootScope.item_rect_detection != '' || $scope.modify_rect != ''){
+                         $scope.w = $('#current_modify_editor_img')[0].clientWidth;
+                         $scope.h = $('#current_modify_editor_img')[0].clientHeight;
+                         $scope.youtube_if = $("#current_modify_editor_img")[0].clientWidth;
+                         $scope.calc_value = Math.floor(($scope.youtube_if-$scope.youtube_canvas)/2);
+                         for(var i in $scope.rectPosition){
+                             $scope.rectLeft = Math.floor($scope.rectPosition[i].rectLeft / (1920 / $scope.w));
+                             $scope.rectTop = Math.floor($scope.rectPosition[i].rectTop / (1080 / $scope.h));
+                             $scope.rectWidth = Math.floor($scope.rectPosition[i].rectWidth / (1920 / $scope.w)) - $scope.rectLeft;
+                             $scope.rectHeight = Math.floor($scope.rectPosition[i].rectHeight / (1080 / $scope.h)) - $scope.rectTop;
+                         }
+                     }
+                 }
+             }, 1);
+         });
+
+         $scope.close_func = function(close_stat){
+             var editor_close;
+             if($scope.ai_status != 100){
+                 editor_close = confirm('해당 편집기를 종료하시겠습니까?');
+             }else{
+                 editor_close = confirm("지금까지 하신 작업을 끝내시고 정말로 종료하시겠습니까?");
+             }
+             if(editor_close){
+                 $scope.item_detection = false;
+                 if($rootScope.make_titan_status == 200 && $scope.ai_status !== 100){
+                     $scope.initial_video(close_stat);
+                     $modalInstance.dismiss('cancel');
+                     $(document).off("keydown");
+                 }else if($rootScope.make_titan_status == 200 && $scope.ai_status === 100){
+                     $scope.initial_video(close_stat);
+                     $modalInstance.dismiss('cancel');
+                     $(document).off("keydown");
+                 }else{
+                     Modal.open(
+                         'views/alert_modal.html',
+                         'AlertCtrl',
+                         'choiC',
+                         {
+                             alertTitle: function () {
+                                 return '종료';
+                             },
+                             alertMsg: function () {
+                                 return '실행 중인 작업이 있습니다.';
+                             }
+                         }
+                     );
+                 }
+             }
+         }
+
+         $scope.close = function(make_titan_status){
+             $scope.close_func(1);
+         };
+
+
+         $scope.item_drop = function(){
+             $scope.make_item_title = "선택 없음";
+             $scope.make_item = undefined;
+         }
+
+         var image_area;
+         $scope.canvas;
+         var mouse = {
+             x: 0,
+             y: 0,
+             startX: 0,
+             startY: 0
+         };
+         $scope.drawing = false;
+         $scope.element = null;
+         $scope.editor_i = 0;
+
+         function setMousePosition(e) {
+             var ev = e || window.event; //Moz || IE
+             mouse.x = e.clientX - image_area.getBoundingClientRect().x;
+             mouse.y = e.clientY - image_area.getBoundingClientRect().y;
+         };
+
+         $scope.multiDraw = function(editor_i){
+             $scope.initDraw(editor_i);
+         }
+
+         $scope.CancelDraw = function(){
+             $("#cancel_position").css('display', 'none');
+             $scope.editor_i = 0;
+             $scope.drawing = false;
+             $scope.element = null;
+             $scope.canvas.style.cursor = "default";
+             $scope.canvas_jq.children().remove();
+         }
+
+         $scope.initDraw = function(editor_i) {
+             $rootScope.local_player.pauseVideo();
+             $scope.editor_i = editor_i;
+             $scope.canvas = document.getElementById('canvas_editor');
+             $scope.canvas_jq = $('#canvas_editor');
+             $scope.canvas.style.cursor = "crosshair";
+             $("#adding_position").css('display', 'flex');
+             $scope.drawing = true;
+             $scope.editor_i+=1;
+             $scope.element = null;
+
+             $scope.canvas.onmousemove = function (e) {
+                 if(!$scope.drawing) return;
+                 image_area = document.getElementsByClassName('current_editor_img')[0];
+                 $scope.canvas = document.getElementById('canvas_editor');
+                 setMousePosition(e);
+                 if ($scope.element !== null) {
+                     $scope.element.style.width = Math.abs(mouse.x - mouse.startX) + 'px';
+                     $scope.element.style.height = Math.abs(mouse.y - mouse.startY) + 'px';
+                     $scope.element.style.left = (mouse.x - mouse.startX < 0) ? mouse.x + 'px' : mouse.startX + 'px';
+                     $scope.element.style.top = (mouse.y - mouse.startY < 0) ? mouse.y + 'px' : mouse.startY + 'px';
+                     $scope.element.style.border = '1px solid red';
+                 }
+             }
+
+             $scope.canvas.onmousedown = function (e) {
+               if(!$scope.drawing) return;
+               mouse.startX = mouse.x;
+               mouse.startY = mouse.y;
+               $scope.element = document.createElement('div');
+               $scope.element.className = 'editor_rectangle';
+               $scope.element.id = 'rect_'+$scope.editor_i;
+               $scope.element.style.left = mouse.x + 'px';
+               $scope.element.style.top = mouse.y + 'px';
+               $scope.canvas.appendChild($scope.element)
+             }
+
+             $scope.canvas.onmouseup = function(e){
+               if ($scope.element !== null) {
+                 $scope.w = $('#current_editor_img')[0].clientWidth;
+                 $scope.h = $('#current_editor_img')[0].clientHeight;
+                 var x = parseInt($scope.element.style.left)*(1920/$scope.w);
+                 var y = parseInt($scope.element.style.top)*(1080/$scope.h);
+                 var w = parseInt($scope.element.style.width)*(1920/$scope.w)+x;
+                 var h = parseInt($scope.element.style.height)*(1080/$scope.h)+y;
+                 $scope.element = null;
+                 $scope.drawing = false;
+                     var api_insert_params = {};
+                     api_insert_params['fk_item_idx'] = $scope.item_idx;
+                     api_insert_params['fk_video_idx'] = $rootScope.selectedItem.idx;
+                     // console.log($rootScope.selectedItem)
+                     api_insert_params['item_position'] = $scope.image_frame;
+                     api_insert_params['p_order'] = $scope.editor_i;
+                     api_insert_params['p_time'] = $scope.p_time;
+                     api_insert_params['rect_x'] = x;
+                     api_insert_params['rect_y'] = y;
+                     api_insert_params['rect_w'] = w;
+                     api_insert_params['rect_h'] = h;
+                     api_item_detail.save(api_insert_params, function(data){
+                         if(data.status == 200){
+                             var rect_position = data.objects[0].rect_position;
+                             var image_path = ENV.webs + '/make_image/' + $scope.item_idx;
+                             $scope.modify_rect = data.objects[0].rect_position;
+                             $scope.rectPosition = [];
+                             for(let i = 0; i < data.objects[0].rect_position.length; i++){
+                                  $scope.rect_position_func(data.objects[0].rect_position, i)
+                             }
+                             for(let i in rect_position){
+                                 if(rect_position[i].detail_exists){
+                                     var editors_id = 0;
+                                 }else{
+                                     $scope.editor_locker_drawing.push({
+                                         "image_frame": parseInt(rect_position[i].draw_img_name),
+                                         "draw_name": rect_position[i].draw_img_name,
+                                         "position_time": rect_position[i].position_time,
+                                         "current_time": parseInt(rect_position[i].position_time),
+                                         "fk_item_idx": rect_position[i].fk_item_idx,
+                                         "draw_image": image_path+'/images/'+rect_position[i].draw_img_name+".jpg",
+                                         "border_color": "5px solid #87ceeb",
+                                         "display": "inline-block"
+                                     });
+                                 }
+                             }
+                             $scope.canvas_jq.children().remove();
+                         }
+                     });
+               }
+             }
+         }
+
+         $scope.position_selected = function(draw_stat){
+             if(draw_stat == 0){
+                 $scope.draw_stat = 0;
+                 console.log($scope.editor_locker_not_drawing);
+                 $scope.editor_locker = $scope.editor_locker_not_drawing;
+             }else if(draw_stat == 1){
+                 $scope.draw_stat = 1;
+                 console.log($scope.editor_locker_drawing);
+                 $scope.editor_locker = $scope.editor_locker_drawing;
+             }else{
+                 $scope.draw_stat = 2;
+                 console.log($scope.editor_locker_all);
+                 $scope.editor_locker = $scope.editor_locker_all;
+             }
+         }
+
+         $scope.addDetail = function(video) {
+             Modal.open(
+                 'views/video_add_detail.html',
+                 'VideoAddDetailCtrl',
+                 'sisung',
+                 {
+                   video: function() {
+                      return video;
+                   },
+                 },
+             );
+         }
+
+     }).directive('modifyEditposition', ['myConfig', 'myValue', function (myConfig, myValue) {
+    return {
+        restrict: 'E',
+        template: '<div></div>',
+        link: function postLink(scope, elem, attrs) {
+            let position_order = $(this).data('position');
+            elem.resizable({ handles: " n, e, s, w, ne, se, sw, nw"});
+            elem.on('resizestop', function (event, ui) {
+                var posOff = scope.offset(),
+                newPosW = ui.size.width,
+                newPosH = ui.size.height;
+                scope.check_wid_hei(newPosW, newPosH);
+            });
+            elem.on('resize', function(event, ui){
+                var newPosW = ui.size.width,
+                newPosH = ui.size.height;
+                scope.check_wid_hei(newPosW, newPosH);
+            });
+            elem.on('mouseover',function() {
+                elem.addClass('enter');
+            });
+            elem.on('mouseleave',function() {
+                elem.removeClass('enter');
+            });
+            elem.on('drag', function(event, ui){
+                var posOff = scope.offset(),
+                newPosX = ui.position.left,
+                newPosY = ui.position.top;
+                scope.check_left_top(newPosY, newPosX);
+            });
+            elem.on('dragstop',function(event,ui) {
+                var posOff = scope.offset(),
+                newPosX = ui.position.left,
+                newPosY = ui.position.top;
+                scope.check_left_top(newPosY, newPosX);
+            });
+            elem.draggable({containment: "#current_modify_editor_img"});
+        }
+    }
+}]);
+//    });

@@ -69,8 +69,8 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None, items=None
         category = label.split(' ')[0]
 
         for idx, item in enumerate(items[category]):
-            if int(item['frame'].split('-')[-1]) == int(frame) - 1 and int(item['frame'].split('-')[0]) > int(frame) - 5:
-            # if int(item['frame'].split('-')[-1]) == int(frame) - 1:
+            # if int(item['frame'].split('-')[-1]) == int(frame) - 1 and int(item['frame'].split('-')[0]) > int(frame) - 5:
+            if int(item['frame'].split('-')[-1]) == int(frame) - 1:
                 hists = []
                 anchors = item['anchors'][-1]
                 imgs = [anchors['item_img'], item_img]
@@ -85,29 +85,31 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None, items=None
                 if ret >= similarity:
                     similarity = ret
                     prev_item_idx = idx
-        
+
         if prev_item_idx is not None:
-            # print('similarity:', similarity)
-            if similarity >= 0.97:
-                anchors = items[category][prev_item_idx]['anchors'][-1]
-                # cv2.imwrite('D:\\yolov5_new\\prev_' + category + str(prev_item_idx) + '.jpg', anchors['item_img'])
-                # cv2.imwrite('D:\\yolov5_new\\new_' + category + str(prev_item_idx) + '.jpg', item_img)
-                # print('category:', category)
-                prev_c1 = anchors['start']
-                prev_c2 = anchors['end']
+            # if similarity >= 0.97:
+            anchors = items[category][prev_item_idx]['anchors'][-1]
+            # cv2.imwrite('D:\\yolov5_new\\prev_' + category + str(prev_item_idx) + '.jpg', anchors['item_img'])
+            # cv2.imwrite('D:\\yolov5_new\\new_' + category + str(prev_item_idx) + '.jpg', item_img)
+            # print('category:', category)
+            prev_c1 = anchors['start']
+            prev_c2 = anchors['end']
 
-                c1, c2 = list(c1), list(c2)
-                
-                for i in range(2):
-                    # c1[i] = round(prev_c1[i] + (c1[i] - prev_c1[i]) * similarity)
-                    # c2[i] = round(prev_c2[i] + (c2[i] - prev_c2[i]) * similarity)
-                    if c1[i] < prev_c1[i] + 10 and c1[i] > prev_c1[i] - 10:
-                        c1[i] = prev_c1[i]
-                    if c2[i] < prev_c2[i] + 10 and c2[i] > prev_c2[i] - 10:
-                        c2[i] = prev_c2[i]
-                c1, c2 = tuple(c1), tuple(c2)
+            c1, c2 = list(c1), list(c2)
 
-            items[category][prev_item_idx]['frame'] = items[category][prev_item_idx]['frame'].split('-')[0] + '-' + frame
+            for i in range(2):
+                # c1[i] = round(prev_c1[i] + (c1[i] - prev_c1[i]) * similarity)
+                # c2[i] = round(prev_c2[i] + (c2[i] - prev_c2[i]) * similarity)
+                c1[i] = round(prev_c1[i] + (c1[i] - prev_c1[i]) / 2)
+                c2[i] = round(prev_c2[i] + (c2[i] - prev_c2[i]) / 2)
+                # if c1[i] < prev_c1[i] + 10 and c1[i] > prev_c1[i] - 10:
+                #     c1[i] = prev_c1[i]
+                # if c2[i] < prev_c2[i] + 10 and c2[i] > prev_c2[i] - 10:
+                #     c2[i] = prev_c2[i]
+            c1, c2 = tuple(c1), tuple(c2)
+
+            items[category][prev_item_idx]['frame'] = items[category][prev_item_idx]['frame'].split('-')[
+                                                          0] + '-' + frame
             items[category][prev_item_idx]['anchors'].append({'item_img': item_img, 'start': c1, 'end': c2})
         else:
             items[category].append({'frame': frame, 'anchors': [{'item_img': item_img, 'start': c1, 'end': c2}]})
@@ -117,8 +119,8 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None, items=None
     if label:
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        lc2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        cv2.rectangle(img, c1, lc2, color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
     return items, c1, c2
