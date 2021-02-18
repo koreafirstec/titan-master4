@@ -98,6 +98,39 @@
             </div>
         </div>
 
+        <div class="make_ai_model_edit" ng-show="make_ai_level == 4">
+            <div class="make_ai_model_edit_video">
+                <span>
+                    <h1>연결된 동영상</h1>
+                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                </span>
+                <span>
+                    <h1>AI 자동지정 편집</h1>
+                    <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                </span>
+                <span class="make_ai_modeling_video_start">
+<!--                    <button type="button">AI 모델링 시작</button>-->
+                    <p>
+                        자동지정된 구간을 편집하고 싶으시다면<br/>
+                        모서리를 클릭하여 움직여보세요.
+                    </p>
+                </span>
+            </div>
+            <div class="make_ai_model_edit_item">
+                <p>연결된 동영상 구간</p>
+                <div>
+                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                </div>
+                <div>
+                    <p>
+                        연결된 상품
+                        <button type="button">전체삭제</button>
+                        <button type="button">선택삭제</button>
+                    </p>
+                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
+                </div>
+            </div>
+        </div>
 
 
 

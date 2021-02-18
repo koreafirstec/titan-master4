@@ -285,3 +285,86 @@
     border-radius: 5px;
     border: solid 2px #e6e6e6;
 }
+
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video{
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    min-width: 1200px;
+    height: 336.2px;
+    padding: 27.5px 0 30px 48.5px;
+    /*border: solid 0.3px #cbcbcb;*/
+    background-color: #3d3d3d;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > span {
+    display: inline-block;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > span > h1 {
+    font-size: 14px;
+    letter-spacing: -0.17px;
+    color: #ffffff;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > span > img {
+    width: 450px;
+    height: 253.1px;
+    margin: 5.6px 25px 0 0;
+    border-radius: 5px;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > .make_ai_modeling_video_start{
+    position: absolute;
+    bottom: 30px;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > .make_ai_modeling_video_start > button[type="button"]{
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #ffffff;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > .make_ai_modeling_video_start > p{
+    margin: 11.3px 0 0.2px 8px;
+    font-family: AppleSDGothicNeo;
+    font-size: 12px;
+    line-height: 1.25;
+    color: #cbcbcb;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item{
+    height: 366px;
+    padding: 13px 0 56px;
+    background-color: #707070;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > p{
+    font-size: 14px;
+    line-height: 3;
+    letter-spacing: -0.17px;
+    text-align: left;
+    color: #ffffff;
+    margin-left: 48px;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div > p{
+    font-size: 14px;
+    letter-spacing: -0.17px;
+    text-align: left;
+    color: #ffffff;
+    margin-left: 48px;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div > p > button[type="button"]{
+    height: 26px;
+    /*margin: 0 5.8px 0 12px;*/
+    padding: 4px 14px;
+    border: solid 0.5px #ffffff;
+    border-radius: 4px;
+    background: none;
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #ffffff;
+}
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > img{
+    width: 130px;
+    height: 74px;
+    margin: 0 19px 0 0;
+    border-radius: 5px;
+    border: solid 2px #e6e6e6;
+}

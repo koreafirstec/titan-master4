@@ -43,6 +43,7 @@ angular.module('titanApp')
 
         $scope.video_click = function(video){
             $scope.selected_video = video;
+            $scope.make_ai_level = 2;
         };
 
         $scope.item_check = function (item) {
@@ -51,6 +52,7 @@ angular.module('titanApp')
 
         $scope.item_click = function(item) {
             $scope.selected_item = item;
+            $scope.make_ai_level = 3;
         };
 
 // video_click 부분------------------------------------------------------------------------------
