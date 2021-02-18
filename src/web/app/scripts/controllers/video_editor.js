@@ -57,7 +57,7 @@ angular.module('titanApp')
             api_item_detail.update(api_params, function(data){
                 if(data.status == 200){
                     $scope.dataStatus = data.status;
-                    $scope.modify_rect = data.objects
+                    $scope.modify_rect = data.objects;
                     $scope.rectPosition = [];
                     for(let i = 0; i < data.objects.length; i++){
                          $scope.rect_position_func(data.objects, i)
@@ -168,6 +168,8 @@ angular.module('titanApp')
 
         $scope.position_all = function(all_position){
             $scope.modify_success_list = all_position;
+            $scope.start_time = '';
+            $scope.end_time = '';
         }
 
 
@@ -870,6 +872,7 @@ angular.module('titanApp')
                   rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.width_img)),
                   rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.height_img)),
               });
+              // $scope.modify_rect = $scope.rectPosition;
          }
 //
 //         $scope.ItemEditor = function(item, video_idx){
@@ -1037,67 +1040,68 @@ angular.module('titanApp')
 //             return s;
 //         }
 //
-//         $scope.position_editor_delete = function(position, item_idx, p_order, video_idx){
-//             var drop_confirm = confirm('현재 영역을 삭제하시겠습니까?');
-//
-//             if(drop_confirm){
-//                 var api_params = {};
-//
-//                 api_params['rect_item_idx'] = item_idx;
-//                 api_params['rect_video_idx'] = video_idx;
-//                 api_params['rect_position'] = position;
-//                 api_params['p_order'] = p_order;
-//                 var image_path = ENV.webs + '/make_image/' + item_idx;
-//                 api_item_detail.delete(api_params, function(data){
-//                     if(data.status == 200){
-//                         if(data.objects != '' && data.objects != undefined){
-//                             $scope.dataStatus = data.status;
-//                             // var um = $scope.editor_locker_not_drawing.filter(function (not_drawing) { return not_drawing.image_frame == position });
-//                             $scope.modify_rect = data.objects;
-//                             $scope.rectPosition = [];
-//                             for(let i = 0; i < data.objects.length; i++){
-//                                  $scope.rect_position_func(data.objects, i)
-//                             }
-//                             const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
-//                             const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
-//                             const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
-//                             $scope.editor_locker[index].border_color = "5px solid red";
-//                             $scope.editor_locker_all[indexLock].border_color = "5px solid red";
-//                             $scope.editor_locker_drawing[indexDraw].border_color = "5px solid red";
-//                             $('#item_modify_div_'+p_order).css('display', 'none');
-//                             $('#item_modify_div_video_'+p_order).css('display', 'none');
-//                         }else{
-//                             $scope.editor_locker_not_drawing.push({
-//                                "image_frame": parseInt(position),
-//                                "draw_name": lpad(String(position), 5, 0),
-//                                "position_time": $scope.p_time,
-//                                "current_time": parseInt($scope.p_time),
-//                                "fk_item_idx": item_idx,
-//                                "draw_image": image_path+'/images/'+lpad(String(position), 5, 0)+".jpg",
-//                                "border_color": "5px solid #fff",
-//                                "display": "inline-block"
-//                             });
-//                             $scope.editor_locker_not_drawing = Array.from(new Set($scope.editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
-//                             $scope.editor_locker_not_drawing.sort(function(a, b) {
-//                                 return a["image_frame"] - b["image_frame"];
-//                             });
-//                             $('.item_modify_div').css('display', 'none');
-//                             // const indexNot = $scope.editor_locker_not_drawing.findIndex(notDraw => notDraw.image_frame === position);
-//                             // const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
-//                             // const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
-//                             // const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
-//                             // if($scope.draw_stat != 2)
-//                             //     $scope.editor_locker.splice(index, 1);
-//                             // $scope.editor_locker_drawing.splice(indexDraw, 1);
-//                             // $scope.editor_locker_all[indexLock].border_color = "5px solid #fff";
-//                             // $scope.editor_locker_all[indexLock].display = "inline-block";
-//                         }
-//                     }
-//                 });
-//             }else{
-//                 alert("취소하였습니다.");
-//             }
-//         }
+        $scope.position_editor_delete = function(position, item_idx, p_order, video_idx){
+            // var drop_confirm = confirm('현재 영역을 삭제하시겠습니까?');
+            //
+            // if(drop_confirm){
+            var api_params = {};
+
+            api_params['rect_item_idx'] = item_idx;
+            api_params['rect_video_idx'] = video_idx;
+            api_params['rect_position'] = position;
+            api_params['p_order'] = p_order;
+
+            // console.log(item_idx, position, p_order, video_idx)
+            api_item_detail.delete(api_params, function(data) {
+                if (data.status == 200) {
+                    // $scope.modify_success_list = datat.objects;
+                    $scope.modify_rect = data.objects;
+                    for (let i = 0; i < data.objects.length; i++) {
+                        $scope.rect_position_func(data.objects, i)
+                    }
+                }
+            });
+            // var image_path = ENV.webs + '/make_image/' + item_idx;
+            // api_item_detail.delete(api_params, function(data){
+            //     if(data.status == 200){
+            //         for(let i = 0; i < data.objects.length; i++){
+            //              $scope.rect_position_func(data.objects, i)
+            //         }
+                    // if(data.objects != '' && data.objects != undefined){
+                    // $scope.dataStatus = data.status;
+                    // var um = $scope.editor_locker_not_drawing.filter(function (not_drawing) { return not_drawing.image_frame == position });
+                    // $scope.modify_rect = data.objects;
+                    // $scope.rectPosition = [];
+
+                        // }else{
+                        //     $scope.editor_locker_not_drawing.push({
+                        //        "image_frame": parseInt(position),
+                        //        "draw_name": lpad(String(position), 5, 0),
+                        //        "position_time": $scope.p_time,
+                        //        "current_time": parseInt($scope.p_time),
+                        //        "fk_item_idx": item_idx,
+                        //        "draw_image": image_path+'/images/'+lpad(String(position), 5, 0)+".jpg",
+                        //        "border_color": "5px solid #fff",
+                        //        "display": "inline-block"
+                        //     });
+                        //     $scope.editor_locker_not_drawing = Array.from(new Set($scope.editor_locker_not_drawing.map(JSON.stringify))).map(JSON.parse);
+                        //     $scope.editor_locker_not_drawing.sort(function(a, b) {
+                        //         return a["image_frame"] - b["image_frame"];
+                        //     });
+                        //     $('.item_modify_div').css('display', 'none');
+                            // const indexNot = $scope.editor_locker_not_drawing.findIndex(notDraw => notDraw.image_frame === position);
+                            // const indexLock = $scope.editor_locker_all.findIndex(lock => lock.image_frame === position);
+                            // const indexDraw = $scope.editor_locker_drawing.findIndex(draw => draw.image_frame === position);
+                            // const index = $scope.editor_locker.findIndex(idx => idx.image_frame === position);
+                            // if($scope.draw_stat != 2)
+                            //     $scope.editor_locker.splice(index, 1);
+                            // $scope.editor_locker_drawing.splice(indexDraw, 1);
+                            // $scope.editor_locker_all[indexLock].border_color = "5px solid #fff";
+                            // $scope.editor_locker_all[indexLock].display = "inline-block";
+                        // }
+                    // }
+                // });
+        }
 //
 //         $scope.position_editor_all_drop = function(rectPosition, item_idx, position, video_idx){
 //             var drop_confirm = confirm('모든 영역을 삭제하시겠습니까?');

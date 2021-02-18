@@ -2057,6 +2057,7 @@ class item_detail(Resource):
         print(rect_item_idx, rect_item_position, p_order)
         drop_detail_info = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=rect_item_idx, fk_video_idx=rect_video_idx, position=rect_item_position,
                                                           position_order=p_order).first()
+        print(drop_detail_info.fk_item_idx, drop_detail_info.position)
         if drop_detail_info is not None:
             db.session.query(TB_ITEM_DETAIL).filter_by(fk_item_idx=rect_item_idx, fk_video_idx=rect_video_idx, position=rect_item_position,
                                                        position_order=p_order).delete()
