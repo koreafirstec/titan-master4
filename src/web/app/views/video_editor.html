@@ -84,6 +84,11 @@
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
+                    <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
+                        <i class="fa fa-spinner fa-spin"></i><br/>
+                        상품연결중…<br/>
+                        {{modeling_progress}}%
+                    </span>
                     <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">

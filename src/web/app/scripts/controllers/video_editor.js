@@ -20,6 +20,8 @@ angular.module('titanApp')
         $scope.selected_item = '';
         $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
+        $scope.modeling_loading = false;
+        $scope.modeling_progress = 0;
 
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
@@ -90,6 +92,7 @@ angular.module('titanApp')
         };
 
         $scope.start_modeling = function () {
+            $scope.modeling_loading = true;
             let api_item_params = {};
             api_item_params['video_idx'] = $scope.selected_video.idx;
             api_item_params['video_url'] = $scope.selected_video.video_url;
@@ -109,6 +112,7 @@ angular.module('titanApp')
                         if(datas.draw_img_name != '') {
                             $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
                             $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
+                            $scope.modeling_progress = datas.progress;
                             if (datas.progress == 100) {
                                 clearInterval(progressTimer);
                                 $scope.make_ai_level = 4;
