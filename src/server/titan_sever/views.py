@@ -1041,6 +1041,7 @@ class Video(Resource):
         self.video_explanation = self.parser.parse_args()["video_explanation"]
         self.video_category = self.parser.parse_args()["video_category"]
         self.video_auto_preview = self.parser.parse_args()["video_shared"]
+        self.video_shared = self.parser.parse_args()["video_shared"]
         self.create_date = datetime.now()
 
         super(Video, self).__init__()
@@ -1207,7 +1208,7 @@ class Video(Resource):
         new_video.video_status_value = 0
         new_video.video_auto_preview = 0
         new_video.video_shape = 0
-        new_video.video_shared = 0
+        new_video.video_shared = self.video_shared
         db.session.add(new_video)
         db.session.commit()
 

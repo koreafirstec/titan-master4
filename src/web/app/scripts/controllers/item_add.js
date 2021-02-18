@@ -55,6 +55,7 @@ angular.module('titanApp')
                     // });
                 }
             })
+
         }
 //        $(document).on('mousedown', function(e){
 //           var container2 = $("#video_item_insert_list");

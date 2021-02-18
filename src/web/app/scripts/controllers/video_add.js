@@ -18,14 +18,20 @@ angular.module('titanApp')
         var api_params = {};
         api_params['fk_user_idx'] = $scope.user_idx;
         // api_params['video_url'] = 'https://www.youtube.com/watch?v=' + video.id;
-        api_params['video_url'] = $("#video_url").val();;
+        api_params['video_url'] = $("#video_url").val();
         api_params['video_title'] = $scope.video_title;
         api_params['video_explanation'] = $scope.video_explanation;
         api_params['video_duration'] = $scope.video_duration;
         api_params['video_source'] = $scope.video_source;
         api_params['video_category'] = $scope.video_category;
-        api_params['video_shared'] = $scope.video_shared;
-
+        var chk = $("sh_en").is(":checked");
+        if(document.getElementById('sh_en').checked) {
+            console.log("en", $("#sh_en").val())
+            api_params['video_shared'] = $("#sh_en").val();
+        }else{
+            console.log("dis")
+            api_params['video_shared'] = $("#sh_dis").val();
+        }
         api_video.save(api_params, function (data) {
             if (data.status == 200) {
                 $rootScope.show_videoList = data.objects;
