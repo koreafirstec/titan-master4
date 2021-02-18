@@ -56,6 +56,7 @@ angular.module('titanApp')
                     $location.url('/item_list', true);
                 }
             })
+
         }
 //        $(document).on('mousedown', function(e){
 //           var container2 = $("#video_item_insert_list");

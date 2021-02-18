@@ -84,10 +84,9 @@ angular.module('titanApp')
 
         };
 
-        $scope.item_click = function(item, video) {
+        $scope.item_click = function(item) {
             $scope.selected_item = item;
-            console.log($scope.selected_item);
-            $scope.item_idx = item.idx
+            $scope.item_idx = item.idx;
             $scope.make_ai_level = 3;
         };
 

@@ -316,6 +316,19 @@
     position: relative;
     margin-top: 14px;
 }
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_video > .make_ai_model_edit_save_btn{
+    position: absolute;
+    right: 20px;
+    width: 72px;
+    height: 26px;
+    padding: 4px 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    letter-spacing: -0.14px;
+    color: #ffffff;
+}
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_video > span > h1 {
     position: absolute;
     font-size: 14px;
@@ -325,7 +338,7 @@
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_video > span > img {
     width: 450px;
-    height: 253.1px;
+    height: 253px;
     margin: 5.6px 25px 0 0;
     border-radius: 5px;
 }
