@@ -12,26 +12,17 @@
                 </li>
                 <li ng-show="li_info_add" class="li_info_add">
                     <span class="item_add_img">
-                        <img src="" ng-show="">
+<!--                             onerror="var blankSrc = '/images/common/no_item.png'; this.src = blankSrc;"-->
+                        <img class="insert_img ng-scope"
+                             ng-src={{ShowPicture(item_img_path)}} id="imageFile" alt="remote image" ng-click="Uploads('imageFile')"
+                             ng-model="item_img_path" required accept=".gif, .jpg, .png"/>
+                        <input type="file" id="TEST" class="select_ui2 input-round select_file_btn Netflix-Logo-3-hex-back"
+                                ng-file-select="onFileSelect($file,'TEST')" style="display:none" onclick="this.value=null"/>
+<!--                        <div class="thumbnail__wrap">-->
+<!--                            <img ng-src="../images/common/no_item.png">-->
+<!--                        </div>-->
                     </span>
                     <table class="">
-<!--                        <tr>-->
-<!--                            이미지 입력하는 부분 참고-->
-<!--                            <td>-->
-<!--                                <div ng-show="img_select == 1" class="thumbnail__wrap" style="width: 120px;">-->
-<!--                                    <img class="insert_img ng-scope" style="height: 170px;"-->
-<!--                                         ng-src={{ShowPicture(item_img_path)}} id="imageFile" alt="remote image" ng-click="Uploads('imageFile')"-->
-<!--                                         onerror="var blankSrc = '/images/common/noimg.png'; this.src = blankSrc;"-->
-<!--                                         ng-model="item_img_path" required accept=".gif, .jpg, .png"/>-->
-<!--                                    <input type="file" id="TEST" class="select_ui2 input-round select_file_btn Netflix-Logo-3-hex-back"-->
-<!--                                            ng-file-select="onFileSelect($file,'TEST')" style="display:none" onclick="this.value=null"/>-->
-<!--                                </div>-->
-<!--                                <div class="thumbnail__wrap" style="width: 120px;">-->
-<!--                                    <img ng-src="../images/common/noimg.png" ng-show="img_select == 0" style="height: 170px;">-->
-<!--                                </div>-->
-<!--                            </td>-->
-
-<!--                        </tr>-->
                         <tr>
                             <th>상품명</th>
                             <td>
@@ -41,7 +32,7 @@
                         <tr>
                             <th>상품코드</th>
                             <td>
-                                <input type="text" class="item_add_code" ng-model="item_price">
+                                <input type="text" class="item_add_code"><!--ng-model=""-->
                             </td>
                         </tr>
                         <tr>

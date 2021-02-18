@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('ItemAddCtrl', function ($scope, $route, api_item) {
+    .controller('ItemAddCtrl', function ($scope, $route, $q, $upload, ENV, api_item) {
         $scope.li_info_add = true;
         $scope.li_category = false;
         $scope.li_option = false;
 
+        $scope.item_img_path = "/images/common/no_item.png";
         $scope.item_title = '';
         $scope.item_price = '';
         $scope.item_explanation = '';
@@ -37,6 +38,7 @@ angular.module('titanApp')
             api_params['item_price'] = $scope.item_price;
             api_params['item_explanation'] = $scope.item_explanation;
             api_params['item_url'] = $scope.item_url;
+            api_params['item_img_path'] = $scope.item_img_path;
 
             api_item.save(api_params, function (data) {
                 if(data.status==200){
@@ -144,130 +146,134 @@ angular.module('titanApp')
 //
 //         $scope.item_idx = 0;
 //
-//         $scope.calculateAspectRatioFit = function (srcWidth, srcHeight, maxWidth, maxHeight) {
-//             var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-//             return { width: srcWidth*ratio, height: srcHeight*ratio };
-//         };
-//
-//         $scope.generateThumbnail = function(url,prefix,file, width, height, quality) {
-//             var deferred = $q.defer();
-//             var canvasElement = document.createElement('canvas');
-//             var imagenElement = document.createElement('img');
-//             imagenElement.onload = function () {
-//                 var dimensions = $scope.calculateAspectRatioFit(imagenElement.width, imagenElement.height, width, height);
-//                 canvasElement.width = dimensions.width;
-//                 canvasElement.height = dimensions.height;
-//
-//                 var context = canvasElement.getContext('2d');
-//                 context.drawImage(imagenElement, 0, 0, dimensions.width, dimensions.height);
-//
-//                 var file = canvasElement.toDataURL('image/jpeg', 0.9);
-//                 var blob = $scope.dataURItoBlob(file);
-//
-//                 $scope.upload = $upload.upload({
-//                     url: url,
-//                     method: 'POST',
-//                     file: blob
-//                 }).success(function(data, status, headers, config) {
-//                     if(status == 200){
-//                         $scope.item_img_path = data.objects['fileurl'] + "?cb=" + new Date().getTime();;
-//                         // console.log("URL : " + $scope.item_img_path);
-//                     }else{
-//                         alert("문제가 발생했습니다.");
-//                     }
-//                 });
-//
-//             };
-//             imagenElement.src = file;
-//         };
-//
-//         $scope.dataURItoBlob = function(dataURI) {
-//         // convert base64/URLEncoded data component to raw binary data held in a string
-//             var byteString;
-//             if (dataURI.split(',')[0].indexOf('base64') >= 0){
-//                 byteString = atob(dataURI.split(',')[1]);
-//             } else
-//                 byteString = unescape(dataURI.split(',')[1]);
-//
-//             // separate out the mime component
-//             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-//
-//             // write the bytes of the string to a typed array
-//             var ia = new Uint8Array(byteString.length);
-//             for (var i = 0; i < byteString.length; i++) {
-//                 ia[i] = byteString.charCodeAt(i);
-//             }
-//
-//             return new Blob([ia], {type:mimeString});
-//         };
-//
-//         $scope.Uploads = function(){
-//            var fileUp = document.getElementById("TEST");
-//            var imageUp = document.getElementById("imageFile");
-//            if ($scope.$root.$$phase == '$apply' || $scope.$root.$$phase == '$digest') {
-//                 imageUp.onclick = function() {
-//                     fileUp.click();
-//                 };
-//            }else{
-//                 $scope.$apply(function() {
-//                     imageUp.onclick = function() {
-//                         fileUp.click();
-//                     };
-//                 });
-//            }
-//         }
-//
-//         $scope.onFileSelect = function($file,prefix) {
+         $scope.calculateAspectRatioFit = function (srcWidth, srcHeight, maxWidth, maxHeight) {
+             var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+             return { width: srcWidth*ratio, height: srcHeight*ratio };
+         };
+
+         $scope.generateThumbnail = function(url,prefix,file, width, height, quality) {
+             var deferred = $q.defer();
+             var canvasElement = document.createElement('canvas');
+             var imagenElement = document.createElement('img');
+             imagenElement.onload = function () {
+                 var dimensions = $scope.calculateAspectRatioFit(imagenElement.width, imagenElement.height, width, height);
+                 canvasElement.width = dimensions.width;
+                 canvasElement.height = dimensions.height;
+
+                 var context = canvasElement.getContext('2d');
+                 context.drawImage(imagenElement, 0, 0, dimensions.width, dimensions.height);
+
+                 var file = canvasElement.toDataURL('image/jpeg', 0.9);
+                 var blob = $scope.dataURItoBlob(file);
+
+                 $scope.upload = $upload.upload({
+                     url: url,
+                     method: 'POST',
+                     file: blob
+                 }).success(function(data, status, headers, config) {
+                     if(status == 200){
+                         console.log(data.objects)
+//                         $scope.item_img_path = data.objects['fileurl'] + "?cb=" + new Date().getTime();
+                         $scope.item_img_path = data.objects['fileurl'];
+                         // console.log("URL : " + $scope.item_img_path);
+                     }else{
+                         alert("문제가 발생했습니다.");
+                     }
+                 });
+
+             };
+             imagenElement.src = file;
+         };
+
+         $scope.dataURItoBlob = function(dataURI) {
+         // convert base64/URLEncoded data component to raw binary data held in a string
+             var byteString;
+             if (dataURI.split(',')[0].indexOf('base64') >= 0){
+                 byteString = atob(dataURI.split(',')[1]);
+             } else
+                 byteString = unescape(dataURI.split(',')[1]);
+
+             // separate out the mime component
+             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+             // write the bytes of the string to a typed array
+             var ia = new Uint8Array(byteString.length);
+             for (var i = 0; i < byteString.length; i++) {
+                 ia[i] = byteString.charCodeAt(i);
+             }
+
+             return new Blob([ia], {type:mimeString});
+         };
+
+         $scope.Uploads = function(){
+            var fileUp = document.getElementById("TEST");
+            var imageUp = document.getElementById("imageFile");
+            if ($scope.$root.$$phase == '$apply' || $scope.$root.$$phase == '$digest') {
+                 imageUp.onclick = function() {
+                     fileUp.click();
+                 };
+            }else{
+                 $scope.$apply(function() {
+                     imageUp.onclick = function() {
+                         fileUp.click();
+                     };
+                 });
+            }
+         }
+
+         $scope.onFileSelect = function($file,prefix) {
 //             $rootScope.timeout = true;
-// //            var item_idx = document.querySelector('input[id='+prefix+']').files[0];
-// //            var item_idx = 999;
-//             $scope.imgVersion++;
-//             //+ '&imgVersion='+$scope.imgVersion
-//             var url = ENV.host + "/api/file_upload?&prefix=" + prefix + '&item_idx=' + $scope.item_idx;
-//             var file = null;
-//             file = document.querySelector('input[id='+prefix+']').files[0];
-//             var reader = new FileReader();
-//
-//             reader.onload = function (e) {
-//                 //4:3 416:312 = 4:3
-//                 $scope.generateThumbnail(url,prefix,e.target.result,416,312,50);
-//                 document.getElementById(prefix).value = "";
-//             };
-//
-//             reader.readAsDataURL(file);
-//         };
-//         function preview(prefix, item_idx) {
-//             $scope.i = 0;
-//             var input = document.getElementById('sample_images');
-//             if (input.files && input.files[0]) {
-//
+//             var item_idx = document.querySelector('input[id='+prefix+']').files[0];
+             $scope.item_idx = 999
+ //            var item_idx = 999;
+             $scope.imgVersion++;
+             //+ '&imgVersion='+$scope.imgVersion
+             var url = ENV.host + "/api/file_upload?&prefix=" + prefix + '&item_idx=' + $scope.item_idx;
+             var file = null;
+             file = document.querySelector('input[id='+prefix+']').files[0];
+             var reader = new FileReader();
+
+             reader.onload = function (e) {
+                 //4:3 416:312 = 4:3
+                 $scope.generateThumbnail(url,prefix,e.target.result,416,312,50);
+                 document.getElementById(prefix).value = "";
+             };
+
+             reader.readAsDataURL(file);
+         };
+         function preview(prefix, item_idx) {
+             $scope.i = 0;
+             var input = document.getElementById('sample_images');
+             if (input.files && input.files[0]) {
+
 //                 builder_uploader(item_idx, prefix).then(() => {
 //                     console.log("work successfully");
 //                 });
-//
-//                 $(input.files).each(function () {
-//                     $scope.i++;
-//                     var reader = new FileReader();
-//                     reader.readAsDataURL(this);
-//                     reader.onload = function (e) {
-//                         var url = ENV.host + "/api/file_upload?&prefix=" + prefix + '&fk_item_idx=' + $scope.item_idx + "&group_idx=" + group_idx + "&umm="+ $scope.i;
-//                         var blob = $scope.dataURItoBlob(e.target.result);
-//                         $scope.upload = $upload.upload({
-//                             url: url,
-//                             method: 'POST',
-//                             file: blob
-//                         }).success(function (data, status, headers, config) {
-//                             if (status == 200) {
-//                                 // $scope.item_img_path = data.objects['fileurl'] + "?cb=" + new Date().getTime();
-//                                 // console.log("URL : " + $scope.item_img_path);
-//                             } else {
-//                                 alert("문제가 발생했습니다.");
-//                             }
-//                         });
-//                     }
-//                 });
-//             }
-//         }
+
+                 $(input.files).each(function () {
+                     $scope.i++;
+                     var reader = new FileReader();
+                     reader.readAsDataURL(this);
+                     reader.onload = function (e) {
+                         var url = ENV.host + "/api/file_upload?&prefix=" + prefix + '&fk_item_idx=' + $scope.item_idx + "&group_idx=" + group_idx + "&umm="+ $scope.i;
+                         var blob = $scope.dataURItoBlob(e.target.result);
+                         $scope.upload = $upload.upload({
+                             url: url,
+                             method: 'POST',
+                             file: blob
+                         }).success(function (data, status, headers, config) {
+                             if (status == 200) {
+                                 console.log(data.object)
+                                 $scope.item_img_path = data.object['fileurl'] + "?cb=" + new Date().getTime();
+                                 console.log("URL : " + $scope.item_img_path);
+                             } else {
+                                 alert("문제가 발생했습니다.");
+                             }
+                         });
+                     }
+                 });
+             }
+         }
 //
 //         $scope.add_new_item = async function(item, video_idx, item_img_path, main, sub){
 //             var api_params = {}
@@ -339,9 +345,9 @@ angular.module('titanApp')
 //               return ret;
 //             }
 //
-//             $scope.ShowPicture = function(image_path){
-//                 return ENV.webs + "/" + image_path;
-//             }
+             $scope.ShowPicture = function(image_path){
+                 return ENV.webs + "/" + image_path;
+             }
 //
 //             $scope.close = function () {
 //                 $modalInstance.dismiss('cancel')
@@ -408,17 +414,16 @@ angular.module('titanApp')
 //                 console.log(key[0] + ', ' + key[1]);
 //             }
 //         }
-//     }).directive('fileModel', ['$parse', function($parse) {
-//         function fn_link(scope, element, attrs) {
-//             var onChange = $parse(attrs.fileModel);
-//             element.on('change', function (event) {
-//                 onChange(scope, { $files: event.target.files });
-//             });
-//         }
-//
-//         return {
-//             link: fn_link
-//         }
-//     }
-//     ]
-    });
+     }).directive('fileModel', ['$parse', function($parse) {
+         function fn_link(scope, element, attrs) {
+             var onChange = $parse(attrs.fileModel);
+             element.on('change', function (event) {
+                 onChange(scope, { $files: event.target.files });
+             });
+         }
+
+         return {
+             link: fn_link
+         }
+     }
+     ]);
