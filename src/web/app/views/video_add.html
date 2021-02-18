@@ -9,8 +9,8 @@
         <form ng-submit="videoAdd()" class="video_add_section">
             <div class="video_add-left">
                 <div>등록한 동영상 썸네일</div>
-                <div class="no_image_video_add" ng-show="video_id == ''"></div>
-                <img ng-src="https://img.youtube.com/vi/{{video_id}}/hqdefault.jpg" class="image_video_add" ng-show="video_id != ''">
+<!--                <div class="no_image_video_add"></div>-->
+                <img ng-src="../images/common/no_video.png" class="image_video_add">
             </div>
             <div class="video_add-right">
                 <table>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr>
                         <th>URL</th>
-                        <td colspan="2"><input type="text" ng-model="video_url"></td>
+                        <td colspan="2"><input type="text" id="video_url" ng-model="youtube_video_url"></td>
                         <td></td>
                     </tr>
                     <tr>
