@@ -66,11 +66,11 @@ import torch
 # from .ai.utils.plots import plot_one_box
 # from .ai.utils.torch_utils import select_device
 
-from .ai.models.experimental import attempt_load
-from .ai.models.datasets import letterbox
-from .ai.models.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from .ai.models.plots import plot_one_box
-from .ai.models.torch_utils import select_device
+# from .ai.models.experimental import attempt_load
+# from .ai.models.datasets import letterbox
+# from .ai.models.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+# from .ai.models.plots import plot_one_box
+# from .ai.models.torch_utils import select_device
 #############################################################################
 
 from googleapiclient.discovery import build
