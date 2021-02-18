@@ -1545,32 +1545,20 @@ class Item(Resource):
         # self.input_item()
         input = self.parser.parse_args()
         new_item = TB_ITEM()
-
         new_item.create_date = self.create_date
         new_item.item_title = self.item_title
         new_item.item_price = self.item_price
         new_item.item_explanation = self.item_explanation
         new_item.item_url = self.item_url
-
-        # new_item.fk_video_idx = self.fk_video_idx
-        # new_item.fk_user_idx = self.fk_user_idx
-        # new_item.item_description = self.item_description
-        # new_item.item_redirect_url = self.item_redirect_url
-        # new_item.item_description_url = self.item_description_url
-        # new_item.fk_item_main_type = self.fk_item_main_type
-        # new_item.fk_item_sub_type = self.fk_item_sub_type
-        # new_item.item_img_path = self.item_img_path
-        # new_item.item_shape = self.item_shape
-        # new_item.using = self.using
-        # new_item.item_description_toggle = self.item_description_toggle
-        # new_item.make_request = self.make_request
-        # new_item.insert_status = self.insert_status
+        new_item.item_img_path = self.item_img_path
 
         db.session.add(new_item)
+        db.session.commit()
+        print(new_item.idx)
         # db.session.flush()
 
-        if os.path.isfile(UPLOAD_FOLDER + '/0_product.jpg'):
-            file_old_name = UPLOAD_FOLDER + '/0_product.jpg'
+        if os.path.isfile(UPLOAD_FOLDER + '/999_product.jpg'):
+            file_old_name = UPLOAD_FOLDER + '/999_product.jpg'
             file_new_name = UPLOAD_FOLDER + '/' + str(new_item.idx) + '_product.jpg'
             if os.path.isfile(file_new_name):
                 if os.path.isfile(file_old_name):
@@ -1585,7 +1573,7 @@ class Item(Resource):
                 print(savename)
             new_item.item_img_path = '/images/uploads/' + str(new_item.idx) + '_product.jpg'
         else:
-            new_item.item_img_path = '/images/common/noimg.png'
+            new_item.item_img_path = '/images/common/no_item.png'
         db.session.commit()
         db.session.refresh(new_item)
 
@@ -4757,6 +4745,7 @@ class FileUploadAPI(Resource):
                 if str(file_name).find('.') != -1:
                     print("path : ", os.path.join(UPLOAD_FOLDER))
                     savename = str(item_idx) + "_product.jpg"
+                    print(savename)
                     file.save(os.path.join(UPLOAD_FOLDER, savename))
                     object = {
                         "fileurl": "/images/uploads/" + savename
