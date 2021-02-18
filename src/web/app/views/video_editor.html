@@ -101,7 +101,7 @@
         <div class="make_ai_model_edit" ng-show="make_ai_level == 4">
             <div class="make_ai_model_edit_video">
                 <span>
-                    <button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">수정</button>
+                    <button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">저장</button>
                 </span>
                 <span>
                     <h1>연결된 동영상</h1>
@@ -138,7 +138,7 @@
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
-                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
+                    <img ng-repeat="image in selected_item" ng-src="../images/uploads/{{image.idx}}_product.jpg">
                 </div>
             </div>
         </div>

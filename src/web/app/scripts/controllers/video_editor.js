@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video) {
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video) {
 
 //         $scope.user_id = AuthService.getUserId();
 //         $scope.user_idx = AuthService.getIdx();
@@ -84,6 +84,7 @@ angular.module('titanApp')
 
         $scope.item_click = function(item, video) {
             $scope.selected_item = item;
+            console.log($scope.selected_item);
             $scope.item_idx = item.idx
             $scope.make_ai_level = 3;
         };
@@ -824,25 +825,25 @@ angular.module('titanApp')
 //             );
 //         }
 //
-//         $scope.rect_position_func = function(Objects, i){
-//              $scope.fk_item_idx = $scope.item_idx;
-//              $scope.image_frame = Objects[i].position;
-//              $scope.position_order = Objects[i].position_order;
-//              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.w));
-//              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.h));
-//              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.w)) - $scope.rectLeft;
-//              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.h)) - $scope.rectTop;
-//              $scope.editor_i = Objects[i].position_order;
-//              $scope.rectPosition.push({
-//                  item_idx: $scope.fk_item_idx,
-//                  position: $scope.image_frame,
-//                  p_order: $scope.position_order,
-//                  rectLeft: $scope.rectLeft * (1920/$scope.w),
-//                  rectTop: $scope.rectTop * (1080/$scope.h),
-//                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.w)),
-//                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.h)),
-//              });
-//         }
+         $scope.rect_position_func = function(Objects, i){
+              $scope.fk_item_idx = $scope.item_idx;
+              $scope.image_frame = Objects[i].position;
+              $scope.position_order = Objects[i].position_order;
+              $scope.rectLeft = Math.floor(Objects[i].x / (1920 / $scope.width_img));
+              $scope.rectTop = Math.floor(Objects[i].y / (1080 / $scope.height_img));
+              $scope.rectWidth = Math.floor(Objects[i].width / (1920 / $scope.width_img)) - $scope.rectLeft;
+              $scope.rectHeight = Math.floor(Objects[i].height / (1080 / $scope.height_img)) - $scope.rectTop;
+              $scope.editor_i = Objects[i].position_order;
+              $scope.rectPosition.push({
+                  item_idx: $scope.fk_item_idx,
+                  position: $scope.image_frame,
+                  p_order: $scope.position_order,
+                  rectLeft: $scope.rectLeft * (1920/$scope.w),
+                  rectTop: $scope.rectTop * (1080/$scope.h),
+                  rectWidth: $scope.rectWidth * (1920/$scope.w)+($scope.rectLeft * (1920/$scope.width_img)),
+                  rectHeight: $scope.rectHeight * (1080/$scope.h)+($scope.rectTop * (1080/$scope.height_img)),
+              });
+         }
 //
 //         $scope.ItemEditor = function(item, video_idx){
 //             $scope.editor_locker_drawing.map(value => {value.display= "none"});
