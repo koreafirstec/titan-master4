@@ -87,6 +87,7 @@ angular.module('titanApp')
       $rootScope.seconds = 0;
       var item_detection;
       var unique;
+      $rootScope.remove_item_list = false;
       scope.item_detection_jq;
       $("#backward_btn").on('click', function(e){
           if(scope.videoid){
@@ -135,6 +136,11 @@ angular.module('titanApp')
           api_item_detail.get(api_params, function (data) {
               $timeout(function () {
                   dataObjects = data.objects;
+                  $rootScope.item_list = [];
+                    let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === 0)});
+                    for(let i in item_list) {
+                        drawRect(item_list[i]);
+                    }
               }, 500);
           });
       }
@@ -180,22 +186,24 @@ angular.module('titanApp')
                     let seekTime = e.target.getAttribute("data-seek");
                     player.seekTo(parseFloat(seekTime), true);
                 });
-                item_list = JSON.parse(scope.itemlist);
-                if(item_list.length > 0) {
-                    item_list = JSON.parse(scope.itemlist);
-                    if (item_list.length > 0) {intervals.push($interval(function () { createDiv(item_list.length);}, 0));}
-                }else{
-                    var api_params = {};
-                    api_params['video_idx'] = scope.videoidx;
-                    api_params['detail_exists'] = 'exists';
-                    api_item.get(api_params, function(data){
-                        if(data.status == 200){
-                            item_list = data.objects;
-                            $rootScope.item_list = data.objects;
-                            if (item_list.length > 0) {intervals.push($interval(function () { createDiv(item_list.length);}, 0));}
-                        }
-                    });
-                }
+                // item_list = JSON.parse(scope.itemlist);
+                // if(item_list.length > 0) {
+                //     item_list = JSON.parse(scope.itemlist);
+                //     if (item_list.length > 0) {intervals.push($interval(function () { createDiv(item_list.length);}, 0));}
+                // }else{
+                //     var api_params = {};
+                //     api_params['video_idx'] = scope.videoidx;
+                //     api_params['detail_exists'] = 'exists';
+                //     api_item.get(api_params, function(data){
+                //         if(data.status == 200){
+                //             item_list = data.objects;
+                //             $rootScope.item_list = data.objects;
+                //             if (item_list.length > 0) {intervals.push($interval(function () { createDiv(item_list.length);}, 0));}
+                //         }
+                //     });
+                // }
+
+                intervals.push($interval(function () { createDiv();}, 0));
             }else if(player.getPlayerState() == 2){
                 clearInterval($rootScope.myTimer);
                //  angular.forEach(intervals, function(interval) {
@@ -232,162 +240,234 @@ angular.module('titanApp')
          intervals.length = 0;
        }
 
-      function createDiv(item_length) {
-          if(item_length > 1) {
-            intervals.push($interval(function() { createDiv(item_length - 1); }, 0, 1));
-          }
-          angular.element('#item_'+item_list[item_length-1].idx).css('display', 'none');
-          angular.element('#img_'+item_list[item_length-1].idx).css('display', 'none');
-          angular.element('#item_status_'+item_list[item_length-1].idx).css('display', 'none');
-          angular.element('#img_status_'+item_list[item_length-1].idx).css('display', 'none');
-          count = parseInt(player.getCurrentTime() + 0.8) * 30;
-          count = dataObjects.filter(function(d) { return (d.fk_item_idx == item_list[item_length-1].idx && d.position == count)});
-//          count = dataObjects.indexOf(count);
-//          var item = dataObjects[count];
+       function createDiv() {
+            $rootScope.newTime = Number(player.getCurrentTime().toFixed(2));
+            let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime + 0.01)})
 
-          if(count.length > 0){
-              for(var i in count){
-                  var current_position = parseInt(player.getCurrentTime() + 0.8) * 30;
-                  if(count[i] != undefined) {
-                      if(item_list[item_length-1].using == 1 && item_list[item_length-1].item_shape_type == 0){
-                          angular.element('#img_'+item_list[item_length-1].idx).css('display', 'none');
-                          angular.element('#img_status_'+item_list[item_length-1].idx).css('display', 'none');
-                          var left = Math.floor(count[i].x / (1920 / player.f.offsetWidth));
-                          var top = Math.floor(count[i].y / (1080 / player.f.offsetHeight));
-                          var width = Math.floor(count[i].width / (1920 / player.f.offsetWidth)) - left;
-                          var height = Math.floor(count[i].height / (1080 / player.f.offsetHeight)) - top;
-                          var drawtype = "item_";
-                          var p_order = count[i].position_order;
-                          var total_position = count[i].total_position;
-//                          item_detection = document.getElementById('item_video_rect');
-//                          scope.item_detection_jq = $('#item_video_rect');
+           if(item_list.length !== 0 && $rootScope.item_list !== item_list) {
+               drawRect(item_list);
+                $rootScope.item_list = item_list;
+           }
+
+
+
+          //   // if(item_list.length !== 0 && $rootScope.item_list !== item_list) {
+          //   //     $rootScope.item_list = item_list;
+          //   //     drawRect($rootScope.item_list);
+          //   // }
+          //
+          //  if($rootScope.remove_item_list) {
+          //      $rootScope.item_list.splice(0, $rootScope.item_list.splice.length);
+          //      $rootScope.remove_item_list = false;
+          //  }
+          //
+          //
+          // if(item_list.length !== 0) {
+          //     for(let j in item_list) {
+          //         if($rootScope.item_list.indexOf(item_list[j]) === -1) {
+          //           drawRect(item_list[j]);
+          //         }
+          //     }
+          //     $rootScope.remove_item_list = true;
+          // }
+
+        }
+
+        function drawRect(item_list) {
+            // $rootScope.item_list.push(item_list);
+            // for(let i in item_list) {
+            //     let item = item_list[i];
+            //     let left = Math.floor(item.x / (1920 / 953));
+            //     let top = Math.floor(item.y / (1080 / 536));
+            //     let width = Math.floor(item.width / (1920 / 953));
+            //     let height = Math.floor(item.height / (1080 / 536));
+            //
+            //     // let item_id = '#item_' + item.idx;
+            //     let item_id = '#item_' + i;
+            //     $(item_id).css('left', left);
+            //     $(item_id).css('top', top);
+            //     $(item_id).css('width', width);
+            //     $(item_id).css('height', height);
+            //     $(item_id).css('display', 'inline-block');
+            // }
+
+            for(let i = 0; i <= 30; i++) {
+                let item_id = '#item_' + i;
+                if(i < item_list.length) {
+                    let item = item_list[i];
+                    let left = Math.floor(item.x / (1920 / 953));
+                    let top = Math.floor(item.y / (1080 / 536));
+                    let width = Math.floor(item.width / (1920 / 953));
+                    let height = Math.floor(item.height / (1080 / 536));
+
+                    // let item_id = '#item_' + item.idx;
+                    $(item_id).css('left', left);
+                    $(item_id).css('top', top);
+                    $(item_id).css('width', width);
+                    $(item_id).css('height', height);
+                    $(item_id).css('display', 'inline-block');
+                } else {
+                    $(item_id).css('display', 'none');
+                }
+            }
+        }
+
+//       function createDiv(item_length) {
+//           if(item_length > 1) {
+//             intervals.push($interval(function() { createDiv(item_length - 1); }, 0, 1));
+//           }
+//           angular.element('#item_'+item_list[item_length-1].idx).css('display', 'none');
+//           angular.element('#img_'+item_list[item_length-1].idx).css('display', 'none');
+//           angular.element('#item_status_'+item_list[item_length-1].idx).css('display', 'none');
+//           angular.element('#img_status_'+item_list[item_length-1].idx).css('display', 'none');
+//           count = parseInt(player.getCurrentTime() + 0.8) * 30;
+//           count = dataObjects.filter(function(d) { return (d.fk_item_idx == item_list[item_length-1].idx && d.position == count)});
+// //          count = dataObjects.indexOf(count);
+// //          var item = dataObjects[count];
 //
-//                          if(count[count.length-1].position_order == 1){
-//                              if(count[i].position != current_position){
-//                                  if(item_detection.hasChildNodes())
-//                                      scope.item_detection_jq.children().remove();
-//                              }else{
-//                                  if(item_detection.hasChildNodes())
-//                                      scope.item_detection_jq.children().remove();
-//                              }
-//                          }
-                          drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count[i]);
-                      }else if(item_list[item_length-1].using == 1 && item_list[item_length-1].item_shape_type == 1){
-                          angular.element('#item_'+item_list[item_length-1].idx).css('display', 'none');
-                          angular.element('#item_status_'+item_list[item_length-1].idx).css('display', 'none');
-                          var left = Math.floor(count[i].x / (1920 / player.f.offsetWidth));
-                          var top = Math.floor(count[i].y / (1080 / player.f.offsetHeight));
-                          var width = Math.floor(count[i].width / (1920 / player.f.offsetWidth)) - left;
-                          var height = Math.floor(count[i].height / (1080 / player.f.offsetHeight)) - top;
-                          var drawtype = "img_";
-                          var p_order = count[i].position_order;
-                          var total_position = count[i].total_position;
-//                          item_detection = document.getElementById('item_video_rect');
-//                          scope.item_detection_jq = $('#item_video_rect');
+//           if(count.length > 0){
+//               for(var i in count){
+//                   var current_position = parseInt(player.getCurrentTime() + 0.8) * 30;
+//                   if(count[i] != undefined) {
+//                       if(item_list[item_length-1].using == 1 && item_list[item_length-1].item_shape_type == 0){
+//                           angular.element('#img_'+item_list[item_length-1].idx).css('display', 'none');
+//                           angular.element('#img_status_'+item_list[item_length-1].idx).css('display', 'none');
+//                           var left = Math.floor(count[i].x / (1920 / player.f.offsetWidth));
+//                           var top = Math.floor(count[i].y / (1080 / player.f.offsetHeight));
+//                           var width = Math.floor(count[i].width / (1920 / player.f.offsetWidth)) - left;
+//                           var height = Math.floor(count[i].height / (1080 / player.f.offsetHeight)) - top;
+//                           var drawtype = "item_";
+//                           var p_order = count[i].position_order;
+//                           var total_position = count[i].total_position;
+// //                          item_detection = document.getElementById('item_video_rect');
+// //                          scope.item_detection_jq = $('#item_video_rect');
+// //
+// //                          if(count[count.length-1].position_order == 1){
+// //                              if(count[i].position != current_position){
+// //                                  if(item_detection.hasChildNodes())
+// //                                      scope.item_detection_jq.children().remove();
+// //                              }else{
+// //                                  if(item_detection.hasChildNodes())
+// //                                      scope.item_detection_jq.children().remove();
+// //                              }
+// //                          }
+//                           drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count[i]);
+//                       }else if(item_list[item_length-1].using == 1 && item_list[item_length-1].item_shape_type == 1){
+//                           angular.element('#item_'+item_list[item_length-1].idx).css('display', 'none');
+//                           angular.element('#item_status_'+item_list[item_length-1].idx).css('display', 'none');
+//                           var left = Math.floor(count[i].x / (1920 / player.f.offsetWidth));
+//                           var top = Math.floor(count[i].y / (1080 / player.f.offsetHeight));
+//                           var width = Math.floor(count[i].width / (1920 / player.f.offsetWidth)) - left;
+//                           var height = Math.floor(count[i].height / (1080 / player.f.offsetHeight)) - top;
+//                           var drawtype = "img_";
+//                           var p_order = count[i].position_order;
+//                           var total_position = count[i].total_position;
+// //                          item_detection = document.getElementById('item_video_rect');
+// //                          scope.item_detection_jq = $('#item_video_rect');
+// //
+// //                          if(count[i].position != current_position){
+// //                              if(item_detection.hasChildNodes())
+// //                                  scope.item_detection_jq.children().remove();
+// //                          }
+//                           drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count[i]);
+//                       }
+//                   }
+//               }
+//           }
+// //          else{
+// //              item_detection = document.getElementById('item_video_rect');
+// //              scope.item_detection_jq = $('#item_video_rect');
+// //              if(item_detection.hasChildNodes())
+// //                  scope.item_detection_jq.children().remove();
+// //          }
+//       }
+
+//       function drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count_detail) {
+//           $rootScope.total_position = total_position;
+//           $rootScope.position = current_position;
+//           $rootScope.count = count;
+//           $rootScope.item_idx = item_list[item_length - 1].idx;
+//           var video_left = left; // 그려진 rect에 왼쪽
+//           var video_top = top; // 그려진 rect에 위쪽
+//           var Rect_Status = document.getElementById(drawtype+"status_"+item_list[item_length-1].idx); // 필요 없음
 //
-//                          if(count[i].position != current_position){
-//                              if(item_detection.hasChildNodes())
-//                                  scope.item_detection_jq.children().remove();
-//                          }
-                          drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count[i]);
-                      }
-                  }
-              }
-          }
-//          else{
-//              item_detection = document.getElementById('item_video_rect');
-//              scope.item_detection_jq = $('#item_video_rect');
-//              if(item_detection.hasChildNodes())
-//                  scope.item_detection_jq.children().remove();
-//          }
-      }
-
-      function drawRect(left, top, width, height, item_length, drawtype, current_position, count, total_position, p_order, count_detail) {
-          $rootScope.total_position = total_position;
-          $rootScope.position = current_position;
-          $rootScope.count = count;
-          $rootScope.item_idx = item_list[item_length - 1].idx;
-          var video_left = left; // 그려진 rect에 왼쪽
-          var video_top = top; // 그려진 rect에 위쪽
-          var Rect_Status = document.getElementById(drawtype+"status_"+item_list[item_length-1].idx); // 필요 없음
-
-          var vtop = parseInt(video_top - (250 - height) / 2);
-          var vleft = video_left + width + 4;
-          var wleft = parseInt(video_left - (260 + 10));
-          var name_top = video_top;
-          var name_left = video_left;
-          var name_wleft = parseInt(video_left - (200 + 10));
-          if (name_left >= 600) { // rect 왼쪽 값이 600보다 크거나 같으면
-              if (name_wleft < 0) {
-                  $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", parseInt(video_top - (250 - height) / 2));
-                  $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", parseInt(video_left - (200 - width) / 2));
-              } else {
-                  angular.element("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", name_wleft);
-                  if (0 > name_top) {
-                      $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", 0);
-                  } else {
-                      $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", name_top);
-                  }
-              }
-          } else {
-              angular.element("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", name_left);
-              if (0 > name_top) {
-                  $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", 0);
-              } else {
-                  $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", name_top);
-              }
-          }
-
-          if (vleft >= 600) { // rect 왼쪽 값이 600보다 크거나 같으면
-              if (wleft < 0) {
-                  $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("bottom", parseInt(video_top - (250 - height) / 2));
-                  $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", parseInt(video_left - (260 - width) / 2));
-              } else {
-                  $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", wleft);
-                  if (0 > vtop) {
-                      $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", 0);
-                  } else {
-                      $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", vtop);
-                  }
-              }
-          } else {
-              angular.element("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", vleft);
-              if (0 > vtop) {
-                  $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", 0);
-              } else {
-                  $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", vtop);
-              }
-          }
-
-          angular.element('#' + drawtype + item_list[item_length - 1].idx).css('display', 'inline-block');
-          if(scope.modifyposition != undefined){
-              $('#' + drawtype + item_list[item_length - 1].idx).css('left', parseInt(left) + parseInt(scope.modifyposition));
-          }else{
-              $('#' + drawtype + item_list[item_length - 1].idx).css('left', left);
-          }
-          $('#' + drawtype + item_list[item_length - 1].idx).css('top', top);
-          $('#item_' + item_list[item_length - 1].idx).css('width', width);
-          $('#item_' + item_list[item_length - 1].idx).css('height', height);
-          $('#' + drawtype + item_list[item_length - 1].idx).css('position', 'absolute');
-          $('#item_' + item_list[item_length - 1].idx).css('border', '1px solid #fff');
-          $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css('display', 'inline-block');
-          $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css('position', 'absolute');
-          $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css('display', 'inline-block');
-          $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css('position', 'absolute');
-//          var count_detection = count_detail
-//          count_detection = document.createElement('div');
-//          count_detection.id = 'item_video_rect_' + count_detail.position_order;
-//          count_detection.setAttribute("ng-click","openItem("+item_list[item_length - 1].idx+")");
-//          count_detection.style.cssText = 'display: flex; position: absolute; border: 1px solid white; cursor: pointer;';
-//          item_detection.appendChild(count_detection);
+//           var vtop = parseInt(video_top - (250 - height) / 2);
+//           var vleft = video_left + width + 4;
+//           var wleft = parseInt(video_left - (260 + 10));
+//           var name_top = video_top;
+//           var name_left = video_left;
+//           var name_wleft = parseInt(video_left - (200 + 10));
+//           if (name_left >= 600) { // rect 왼쪽 값이 600보다 크거나 같으면
+//               if (name_wleft < 0) {
+//                   $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", parseInt(video_top - (250 - height) / 2));
+//                   $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", parseInt(video_left - (200 - width) / 2));
+//               } else {
+//                   angular.element("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", name_wleft);
+//                   if (0 > name_top) {
+//                       $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", 0);
+//                   } else {
+//                       $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", name_top);
+//                   }
+//               }
+//           } else {
+//               angular.element("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("left", name_left);
+//               if (0 > name_top) {
+//                   $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", 0);
+//               } else {
+//                   $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css("top", name_top);
+//               }
+//           }
 //
-//          count_detection.style.left = left + "px";
-//          count_detection.style.top = top + "px";
-//          count_detection.style.width = width + "px";
-//          count_detection.style.height = height + "px";
+//           if (vleft >= 600) { // rect 왼쪽 값이 600보다 크거나 같으면
+//               if (wleft < 0) {
+//                   $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("bottom", parseInt(video_top - (250 - height) / 2));
+//                   $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", parseInt(video_left - (260 - width) / 2));
+//               } else {
+//                   $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", wleft);
+//                   if (0 > vtop) {
+//                       $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", 0);
+//                   } else {
+//                       $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", vtop);
+//                   }
+//               }
+//           } else {
+//               angular.element("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("left", vleft);
+//               if (0 > vtop) {
+//                   $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", 0);
+//               } else {
+//                   $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css("top", vtop);
+//               }
+//           }
 //
-//          count_detection.classList = [count_detail.position_order];
-      }
+//           angular.element('#' + drawtype + item_list[item_length - 1].idx).css('display', 'inline-block');
+//           if(scope.modifyposition != undefined){
+//               $('#' + drawtype + item_list[item_length - 1].idx).css('left', parseInt(left) + parseInt(scope.modifyposition));
+//           }else{
+//               $('#' + drawtype + item_list[item_length - 1].idx).css('left', left);
+//           }
+//           $('#' + drawtype + item_list[item_length - 1].idx).css('top', top);
+//           $('#item_' + item_list[item_length - 1].idx).css('width', width);
+//           $('#item_' + item_list[item_length - 1].idx).css('height', height);
+//           $('#' + drawtype + item_list[item_length - 1].idx).css('position', 'absolute');
+//           $('#item_' + item_list[item_length - 1].idx).css('border', '1px solid #fff');
+//           $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css('display', 'inline-block');
+//           $("#"+drawtype + "status_" + item_list[item_length - 1].idx).css('position', 'absolute');
+//           $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css('display', 'inline-block');
+//           $("#item_simple_show_wrap_" + item_list[item_length - 1].idx).css('position', 'absolute');
+// //          var count_detection = count_detail
+// //          count_detection = document.createElement('div');
+// //          count_detection.id = 'item_video_rect_' + count_detail.position_order;
+// //          count_detection.setAttribute("ng-click","openItem("+item_list[item_length - 1].idx+")");
+// //          count_detection.style.cssText = 'display: flex; position: absolute; border: 1px solid white; cursor: pointer;';
+// //          item_detection.appendChild(count_detection);
+// //
+// //          count_detection.style.left = left + "px";
+// //          count_detection.style.top = top + "px";
+// //          count_detection.style.width = width + "px";
+// //          count_detection.style.height = height + "px";
+// //
+// //          count_detection.classList = [count_detail.position_order];
+//       }
 
       scope.$watch('videoid', function(newValue, oldValue) {
          if (newValue == oldValue) {
@@ -573,34 +653,34 @@ angular.module('titanApp')
         });
     }
 
-    $scope.openItem = function(item_idx) {
-        $scope.openTime = true;
-        if($scope.item_click == 1 && $scope.idx == item_idx) {
-            $scope.item_click = 0;
-            return;
-        }
-        $scope.idx = item_idx;
-
-        $scope.item_title = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_title;
-        $scope.item_description = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description;
-        $scope.item_price = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_price.toLocaleString();
-        $scope.item_redirect_url = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_redirect_url;
-        $scope.item_description_url = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description_url;
-        $scope.item_description_toggle = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description_toggle;
-        $scope.item_img_path = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_img_path;
-        $scope.item_click = 1;
-        $scope.idx = item_idx;
-
-        history_param = {};
-        history_param['fk_user_idx'] = parseInt($scope.user_idx);
-        history_param['fk_item_idx'] = $scope.idx;
-        history_param['action_status'] = 0;
-        api_item_history.save(history_param, function (data) {});
-
-        $timeout(function () {
-	        $scope.openTime = false;
-        }, 5000, true );
-    }
+    // $scope.openItem = function(item_idx) {
+    //     $scope.openTime = true;
+    //     if($scope.item_click == 1 && $scope.idx == item_idx) {
+    //         $scope.item_click = 0;
+    //         return;
+    //     }
+    //     $scope.idx = item_idx;
+    //
+    //     $scope.item_title = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_title;
+    //     $scope.item_description = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description;
+    //     $scope.item_price = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_price.toLocaleString();
+    //     $scope.item_redirect_url = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_redirect_url;
+    //     $scope.item_description_url = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description_url;
+    //     $scope.item_description_toggle = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_description_toggle;
+    //     $scope.item_img_path = $rootScope.item_list.filter(function(d) { return d.idx == item_idx })[0].item_img_path;
+    //     $scope.item_click = 1;
+    //     $scope.idx = item_idx;
+    //
+    //     history_param = {};
+    //     history_param['fk_user_idx'] = parseInt($scope.user_idx);
+    //     history_param['fk_item_idx'] = $scope.idx;
+    //     history_param['action_status'] = 0;
+    //     api_item_history.save(history_param, function (data) {});
+    //
+    //     $timeout(function () {
+	//         $scope.openTime = false;
+    //     }, 5000, true );
+    // }
 
     $scope.buyItem = function() {
         history_param = {};
