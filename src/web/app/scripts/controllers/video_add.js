@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-.controller('VideoAddCtrl', function ($scope, $rootScope, $route, Modal, api_search_youtube, AuthService, api_video, $location) {
+.controller('VideoAddCtrl', function ($scope, $rootScope, $route, $modalInstance, Modal, api_search_youtube, AuthService, api_video, $location) {
     $scope.item = '';
     $scope.video_id = '';
     $scope.image_url = "../images/common/no_video.png";
@@ -38,21 +38,26 @@ angular.module('titanApp')
                 $rootScope.selected_video_status_title = "나의 상품 동영상 수";
                 // $route.reload();
                 $location.url('/video_list', true);
-                // $modalInstance.dismiss('ok');
+                $modalInstance.dismiss('ok');
             }
         });
     }
 
+
+
+
     $scope.search_youtube = function () {
         Modal.open(
-        'views/popup_video_add.html',
-        'VideoAddCtrl',
-        '',
-        {
-            // user_idx: function () {
-            //     return user_idx;
-            // }
-        });
+             'views/popup_video_add.html',
+             'VideoAddCtrl',
+             'sisung',
+             {
+                 user_idx: function () {
+                     return user_idx;
+                 }
+             }
+       )
+//       $modalInstance.dismiss('ok');
     }
     var _apiKey = "AIzaSyAfUtyjlvezoWXOKnrJKS-zyLJ3_j-vtVM";
     $scope.search_status = false;
