@@ -107,6 +107,7 @@ var VideoAddExampleCtrl = function ($scope, $rootScope, $route, $modalInstance, 
                 })
             }
         }
+
         $scope.addDetail = function(video_id) {
             $scope.youtube_video_url = "https://www.youtube.com/watch?v="+video_id;
             $("#video_url").val($scope.youtube_video_url);
