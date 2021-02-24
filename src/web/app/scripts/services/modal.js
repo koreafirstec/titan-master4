@@ -8,7 +8,7 @@ angular.module('titanApp')
                     templateUrl: templateUrl,
                     controller: controller,
                     backdrop: 'static',
-                    keyboard: true,
+                    keyboard: false,
                     size: size,
                     resolve: resolve
                 });

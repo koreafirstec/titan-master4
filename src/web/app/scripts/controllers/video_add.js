@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-.controller('VideoAddCtrl', function ($scope, $rootScope, $route, $modalInstance, Modal, api_search_youtube, AuthService, api_video, $location) {
+.controller('VideoAddCtrl', function ($scope, $rootScope, $route, Modal, api_search_youtube, AuthService, api_video, $location) {
     $scope.item = '';
     $scope.video_id = '';
     $scope.image_url = "../images/common/no_video.png";
@@ -17,7 +17,6 @@ angular.module('titanApp')
     $scope.videoAdd = function() {
         var api_params = {};
         api_params['fk_user_idx'] = $scope.user_idx;
-        // api_params['video_url'] = 'https://www.youtube.com/watch?v=' + video.id;
         api_params['video_url'] = $("#video_url").val();
         api_params['video_title'] = $scope.video_title;
         api_params['video_explanation'] = $scope.video_explanation;
@@ -36,68 +35,25 @@ angular.module('titanApp')
             if (data.status == 200) {
                 $rootScope.show_videoList = data.objects;
                 $rootScope.selected_video_status_title = "나의 상품 동영상 수";
-                // $route.reload();
                 $location.url('/video_list', true);
                 $modalInstance.dismiss('ok');
             }
         });
     }
 
-
-
-
     $scope.search_youtube = function () {
         Modal.open(
              'views/popup_video_add.html',
-             'VideoAddCtrl',
+             VideoAddExampleCtrl,
              'sisung',
-             {
-                 user_idx: function () {
-                     return user_idx;
-                 }
-             }
        )
-//       $modalInstance.dismiss('ok');
     }
-    var _apiKey = "AIzaSyAfUtyjlvezoWXOKnrJKS-zyLJ3_j-vtVM";
-    $scope.search_status = false;
-    $scope.search_value_status = false;
+});
 
-    $scope.search = function(searchTitle) {
-        $scope.video_list = [];
-        var api_params = {};
-        if (searchTitle) {
-            $scope.search_status = true;
-            $scope.search_value_status = false;
-            api_params['search_title'] = searchTitle;
-            api_search_youtube.get(api_params, function (data) {
-                if (data.status == 200) {
-                    $scope.search_status = false;
-                    $scope.search_value_status = false;
-                    if (data.objects != '' && data.objects != undefined) {
-                        console.log(data.objects);
-                        $scope.video_list = data.objects;
-                    } else {
-                        $scope.video_list = [];
-                        $scope.searchTitle = '';
-                        $scope.search_status = false;
-                        $scope.search_value_status = true;
-                    }
-                } else {
-                    console.log('서버 에러 해당 사이트 관리자에게 문의해주세요.');
-                    if (data.objects != '' && data.objects != undefined) {
-                        $scope.video_list = data.objects;
-                        $scope.search_status = false;
-                        $scope.search_value_status = false;
-                    } else {
-                        $scope.video_list = [];
-                        $scope.searchTitle = '';
-                        $scope.search_status = false;
-                        $scope.search_value_status = true;
-                    }
-                }
-            })
-        }
+var VideoAddExampleCtrl = function ($scope, $rootScope, $route, $modalInstance, api_search_youtube, AuthService, api_video, $location) {
+        var _apiKey = "AIzaSyAfUtyjlvezoWXOKnrJKS-zyLJ3_j-vtVM";
+        $scope.search_status = false;
+        $scope.search_value_status = false;
 //       if(searchTitle) {
 //           youtubeFactory.getVideosFromSearchByParams({
 //               q: searchTitle,
@@ -115,19 +71,55 @@ angular.module('titanApp')
 //               }
 //           });
 //       }
-    };
-    $scope.addDetail = function(video_id) {
-        $scope.youtube_video_url = "https://www.youtube.com/watch?v="+video_id;
-        $("#video_url").val($scope.youtube_video_url);
-        $scope.video_id = video_id;
-        $scope.image_url = "https://img.youtube.com/vi/"+video_id+"/hqdefault.jpg";
-        $(".image_video_add").attr("ng-src", $scope.image_url)
-        $(".image_video_add").attr("src", $scope.image_url)
-        var e = jQuery.Event("keypress", {keyCode: 27});
-        $("#esc_button").trigger(e);
-    };
+        $scope.search = function(searchTitle) {
+            $scope.video_list = [];
+            var api_params = {};
+            if (searchTitle) {
+                $scope.search_status = true;
+                $scope.search_value_status = false;
+                api_params['search_title'] = searchTitle;
+                api_search_youtube.get(api_params, function (data) {
+                    if (data.status == 200) {
+                        $scope.search_status = false;
+                        $scope.search_value_status = false;
+                        if (data.objects != '' && data.objects != undefined) {
+                            console.log(data.objects);
+                            $scope.video_list = data.objects;
+                        } else {
+                            $scope.video_list = [];
+                            $scope.searchTitle = '';
+                            $scope.search_status = false;
+                            $scope.search_value_status = true;
+                        }
+                    } else {
+                        console.log('서버 에러 해당 사이트 관리자에게 문의해주세요.');
+                        if (data.objects != '' && data.objects != undefined) {
+                            $scope.video_list = data.objects;
+                            $scope.search_status = false;
+                            $scope.search_value_status = false;
+                        } else {
+                            $scope.video_list = [];
+                            $scope.searchTitle = '';
+                            $scope.search_status = false;
+                            $scope.search_value_status = true;
+                        }
+                    }
+                })
+            }
+        }
+        $scope.addDetail = function(video_id) {
+            $scope.youtube_video_url = "https://www.youtube.com/watch?v="+video_id;
+            $("#video_url").val($scope.youtube_video_url);
+            $scope.video_id = video_id;
+            $scope.image_url = "https://img.youtube.com/vi/"+video_id+"/hqdefault.jpg";
+            $(".image_video_add").attr("ng-src", $scope.image_url)
+            $(".image_video_add").attr("src", $scope.image_url)
+            var e = jQuery.Event("keypress", {keyCode: 27});
+            $("#esc_button").trigger(e);
+        };
 
-    $scope.close = function () {
-        $modalInstance.dismiss('cancel');
+
+        $scope.close = function () {
+            $modalInstance.dismiss('cancel');
+        };
     };
-});
