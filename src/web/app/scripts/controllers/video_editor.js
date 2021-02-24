@@ -77,9 +77,9 @@ angular.module('titanApp')
                     item: function () {
                         return $scope.selected_video;
                     },
-                    // video_status: function () {
-                    //     return video_status;
-                    // }
+                    video_status: function () {
+                        return 0;
+                    }
                 }
             );
         };
