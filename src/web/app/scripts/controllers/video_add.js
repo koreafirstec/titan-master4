@@ -14,14 +14,14 @@ angular.module('titanApp')
     $scope.video_category = '';
     $scope.video_shared = '';
 
-    $scope.videoAdd = function() {
+    $scope.videoAdd = function(title, duration, source) {
         var api_params = {};
         api_params['fk_user_idx'] = $scope.user_idx;
         api_params['video_url'] = $("#video_url").val();
-        api_params['video_title'] = $scope.video_title;
+        api_params['video_title'] = $("#video_title").val();
         api_params['video_explanation'] = $scope.video_explanation;
-        api_params['video_duration'] = $scope.video_duration;
-        api_params['video_source'] = $scope.video_source;
+        api_params['video_duration'] = $("#video_duration").val();
+        api_params['video_source'] = $("#video_source").val();
         api_params['video_category'] = $scope.video_category;
         var chk = $("sh_en").is(":checked");
         if(document.getElementById('sh_en').checked) {
@@ -36,7 +36,6 @@ angular.module('titanApp')
                 $rootScope.show_videoList = data.objects;
                 $rootScope.selected_video_status_title = "나의 상품 동영상 수";
                 $location.url('/video_list', true);
-                $modalInstance.dismiss('ok');
             }
         });
     }
@@ -80,10 +79,10 @@ var VideoAddExampleCtrl = function ($scope, $rootScope, $route, $modalInstance, 
                 api_params['search_title'] = searchTitle;
                 api_search_youtube.get(api_params, function (data) {
                     if (data.status == 200) {
+                        console.log(data.objects)
                         $scope.search_status = false;
                         $scope.search_value_status = false;
                         if (data.objects != '' && data.objects != undefined) {
-                            console.log(data.objects);
                             $scope.video_list = data.objects;
                         } else {
                             $scope.video_list = [];
@@ -108,15 +107,30 @@ var VideoAddExampleCtrl = function ($scope, $rootScope, $route, $modalInstance, 
             }
         }
 
-        $scope.addDetail = function(video_id) {
-            $scope.youtube_video_url = "https://www.youtube.com/watch?v="+video_id;
+        $scope.addDetail = function(video) {
+            $scope.youtube_video_url = "https://www.youtube.com/watch?v="+video.id;
             $("#video_url").val($scope.youtube_video_url);
-            $scope.video_id = video_id;
-            $scope.image_url = "https://img.youtube.com/vi/"+video_id+"/hqdefault.jpg";
+            $("#video_title").val(video.title);
+            $scope.video_duration = video.duration;
+            var beforeStr = String($scope.video_duration)
+            var afterStr = beforeStr.split(":")
+            switch(afterStr.length){
+                case 1:
+                    $scope.video_duration = "00:"+String(afterStr[0]).padStart(2, '0')
+                    break;
+                case 2:
+                    $scope.video_duration = String(afterStr[0]).padStart(2, '0')+":"+String(afterStr[1]).padStart(2, '0')
+                    break;
+                case 3:
+                    $scope.video_duration = String(afterStr[0]).padStart(2, '0')+":"+String(afterStr[1]).padStart(2, '0')+":"+String(afterStr[2]).padStart(2, '0')
+                    break;
+            }
+            $("#video_duration").val($scope.video_duration);
+            $("#video_source").val("youtube");
+            $scope.video_id = video.id;
+            $scope.image_url = "https://img.youtube.com/vi/"+video.id+"/hqdefault.jpg";
             $(".image_video_add").attr("ng-src", $scope.image_url)
             $(".image_video_add").attr("src", $scope.image_url)
-            var e = jQuery.Event("keypress", {keyCode: 27});
-            $("#esc_button").trigger(e);
         };
 
 

@@ -5130,31 +5130,45 @@ class SearchYoutube(Resource):
 
         search_title = request.args.get('search_title')
         try:
-            DEVELOPER_KEY = "AIzaSyAmEqE9mZWPIY0qSIkQfHok7ugaR0t871s"
-            YOUTUBE_API_SERVICE_NAME = "youtube"
-            YOUTUBE_API_VERSION = "v3"
-            youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
-
-            search_response2 = youtube.search().list(
-                q=search_title,
-                pageToken="CDIQAA",
-                order="date",
-                part="snippet",
-                maxResults=50
-                ).execute()
-
-            for search_result in search_response2.get("items", []):
-                print(search_result)
-                if search_result["id"]["kind"] == "youtube#video":
-                    objects.append({
-                        "id": search_result["id"]["videoId"],
-                        "title": search_result["snippet"]["title"],
-                        "channel": search_result["snippet"]["channelTitle"],
-                        "duration": search_result["snippet"]["publishedAt"],
-                    })
+            search = SearchVideos(str(search_title), mode="json", max_results=50)
+            list = json.loads(search.result())
+            for i in list["search_result"]:
+                objects.append({
+                    "id": i["id"],
+                    "title": i["title"],
+                    "channel": i["channel"],
+                    "duration": i["duration"],
+                })
+            # DEVELOPER_KEY = "AIzaSyAmEqE9mZWPIY0qSIkQfHok7ugaR0t871s"
+            # YOUTUBE_API_SERVICE_NAME = "youtube"
+            # YOUTUBE_API_VERSION = "v3"
+            #
+            # youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
+            #
+            # search_response2 = youtube.search().list(
+            #     q=search_title,
+            #     pageToken="CDIQAA",
+            #     order="date",
+            #     part="snippet",
+            #     maxResults=50
+            #     ).execute()
+            #
+            # for search_result in search_response2.get("items", []):
+            #     print(search_result)
+            #     if search_result["id"]["kind"] == "youtube#video":
+            #         search_detail = youtube.videos().list(
+            #             id=search_result["id"]["videoId"],
+            #             part="id,snippet,contentDetails,statistics"
+            #         ).execute()
+            #         objects.append({
+            #             "id": search_result["id"]["videoId"],
+            #             "title": search_result["snippet"]["title"],
+            #             "channel": search_result["snippet"]["channelTitle"],
+            #             "duration": search_detail['items'][0]['contentDetails']['duration'],
+            #         })
         except Exception as e:
             print(e)
-            search = SearchVideos(str(search_title), offset=1, mode="json", max_results=20)
+            search = SearchVideos(str(search_title), mode="json", max_results=50)
             list = json.loads(search.result())
             for i in list["search_result"]:
                 objects.append({

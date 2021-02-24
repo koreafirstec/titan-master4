@@ -6,7 +6,7 @@
             <button type="button"><img src="../images/common/icons/video_add_1.png"></button>
             <button type="button" ng-click="search_youtube()"><img src="../images/common/icons/video_add_2.png"></button>
         </div>
-        <form ng-submit="videoAdd()" class="video_add_section">
+        <form ng-submit="videoAdd(video_title, video_duration, video_source)" class="video_add_section">
             <div class="video_add-left">
                 <div>등록한 동영상 썸네일</div>
 <!--                <div class="no_image_video_add"></div>-->
@@ -22,7 +22,7 @@
                     </colgroup>
                     <tr>
                         <th>제목</th>
-                        <td colspan="2"><input type="text" ng-model="video_title"></td>
+                        <td colspan="2"><input type="text" id="video_title" ng-model="video_title"></td>
                         <td class="video_add_table_title_advise">
                             <span>(<span>0</span>/48)</span>
                             <span>*공백제외</span>
@@ -37,13 +37,13 @@
                     </tr>
                     <tr>
                         <th>길이</th>
-                        <td><input type="text" ng-model="video_duration"></td>
+                        <td><input type="text" id="video_duration" ng-model="video_duration"></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <th>플랫폼</th>
-                        <td><input type="text" ng-model="video_source"></td>
+                        <td><input type="text" id="video_source" ng-model="video_source"></td>
                         <td></td>
                         <td></td>
                     </tr>
