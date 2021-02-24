@@ -245,3 +245,13 @@
     text-align: left;
     color: #b4b4b4;
 }
+
+@media screen and (max-width: 1610px){
+    .video_add{
+        width: unset;
+        /*height: unset;*/
+    }
+    /*.video_add > .video_add_section{*/
+    /*    display: unset;*/
+    /*}*/
+}

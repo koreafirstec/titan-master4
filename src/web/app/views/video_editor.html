@@ -137,9 +137,9 @@
                 <p class="make_ai_model_edit_item_time">연결된 동영상 구간 <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
                 <div>
                     <div>
-<!--                        <ul>-->
-<!--                            <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>-->
-<!--                        </ul>-->
+                        <ul>
+                            <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>
+                        </ul>
                         <img ng-repeat="image in modify_success_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
                         <ul>
                             <li ng-repeat="image in modify_success_list">{{image.position_time_d}}</li>

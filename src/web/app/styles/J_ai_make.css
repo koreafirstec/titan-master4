@@ -3,6 +3,7 @@
     width: 100%;
     height: 650px;
     max-width: 1280px;
+    min-width: 1200px;
 }
 .make_ai > .make_ai_level{
     font-size: 0;

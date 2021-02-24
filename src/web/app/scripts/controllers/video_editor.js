@@ -64,7 +64,25 @@ angular.module('titanApp')
                     }
                 }
             });
+            $scope.videoDetails();
         }
+
+        $scope.videoDetails = function () {
+            console.log('모달 오픈');
+            Modal.open(
+                'views/popup_common.html',
+                'PopupYoutubeCtrl',
+                'sisung',
+                {
+                    item: function () {
+                        return $scope.selected_video;
+                    },
+                    // video_status: function () {
+                    //     return video_status;
+                    // }
+                }
+            );
+        };
 
         var api_video_params = {};
         api_video_params['user_idx'] = AuthService.getIdx();

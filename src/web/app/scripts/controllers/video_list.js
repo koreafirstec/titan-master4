@@ -252,9 +252,6 @@ angular.module('titanApp')
                     video_status: function () {
                         return video_status;
                     }
-                    // popup_common_status: function () {
-                    //     return popup_common_status;
-                    // }
                 }
             );
         };

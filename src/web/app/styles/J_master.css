@@ -47,7 +47,7 @@ section.content {
     z-index: -999;
     padding: 30px 40px;
     overflow-y: auto;
-    min-width: 1366px;
+    /*min-width: 1366px;*/
 }
 section.content > .title{
     height: 41px;
