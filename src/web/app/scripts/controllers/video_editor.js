@@ -25,6 +25,12 @@ angular.module('titanApp')
         $scope.start_time = '';
         $scope.end_time = '';
 
+
+    //  광고 부분
+        $scope.advertising_level = 1;
+
+    //  광고 부분
+
         $scope.enter_status = false;
         $scope.modify_rect_down = function(item, enter_status){
             $scope.position_order = item.position_order;
@@ -1793,4 +1799,6 @@ angular.module('titanApp')
         }
     }
 }]);
+
+
 //    });

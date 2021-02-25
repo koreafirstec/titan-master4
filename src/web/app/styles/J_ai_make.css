@@ -36,6 +36,7 @@
 .make_ai > .make_ai_video_select{
     border: solid 0.3px #cbcbcb;
     background-color: #ffffff;
+    position: relative;
 }
 .make_ai > .make_ai_video_select > div{
     padding: 14px 0 12px 27px;
@@ -128,6 +129,7 @@
 .make_ai > .make_ai_item_select{
     border: solid 0.3px #cbcbcb;
     background-color: #ffffff;
+    position: relative;
 }
 .make_ai > .make_ai_item_select > div{
     padding: 14px 0 12px 27px;
@@ -227,7 +229,7 @@
     position: relative;
     width: 100%;
     max-width: 1280px;
-    min-width: 1200px;
+    /*min-width: 1200px;*/
     height: 336.2px;
     padding: 27.5px 0 30px 48.5px;
     border: solid 0.3px #cbcbcb;
@@ -306,7 +308,7 @@
     position: relative;
     width: 100%;
     max-width: 1280px;
-    min-width: 1200px;
+    /*min-width: 1200px;*/
     height: 336.2px;
     padding: 27.5px 0 30px 48.5px;
     /*border: solid 0.3px #cbcbcb;*/
@@ -398,6 +400,7 @@
     margin: 22px 0 22px -48.5px;
     height: 123px;
     overflow-x: scroll;
+    overflow-y: hidden;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div{
     width: max-content;
@@ -446,4 +449,60 @@
     margin: 0 19px 0 0;
     border-radius: 5px;
     border: solid 2px #e6e6e6;
+}
+
+.context_back > li > button{
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 4px 8px;
+}
+
+@media screen and (max-width: 1366px){
+    .make_ai_model_edit_link_video{
+        display: none !important;
+    }
+}
+
+
+.advertising_level{
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.22px;
+    text-align: left;
+    color: #707070;
+    margin-bottom: 9px;
+}
+.advertising_level > span{
+    font-weight: bold;
+    color: #121212;
+}
+.advertising_level_next{
+    position: absolute;
+    right: 38px;
+    bottom: 22px;
+    height: 38px;
+    padding: 7px 40px;
+    background-color: #4d20a3;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.19px;
+    text-align: center;
+    color: #ffffff;
+}
+.advertising_number > button[type="button"]{
+    padding: 6px 19px 6px 20px;
+    border-radius: 5px;
+    border: solid 1px #b4b4b4;
+    background-color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.19px;
+    text-align: center;
+    color: #b4b4b4;
+}
+.advertising_number > button[type="button"].selected{
+    border: solid 1px #4d20a3;
+    color: #4d20a3;
 }
