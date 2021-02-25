@@ -204,8 +204,8 @@
     color: #ffffff;
 }
 
-@media screen and (max-width: 1366px){
-    .category > .category_contents{
+@media screen and (max-width: 1366px) {
+    .category > .category_contents {
         display: unset;
     }
 }
