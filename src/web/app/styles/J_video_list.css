@@ -97,3 +97,8 @@
     color: #a5a5a5;
     margin-top: 4px;
 }
+@media screen and (max-width: 1366px){
+    .video_list_explanation{
+        display: none;
+    }
+}

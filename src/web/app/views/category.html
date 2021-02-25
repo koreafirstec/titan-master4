@@ -1,0 +1,76 @@
+<i manage-nav></i>
+<section class="content">
+    <h1 class="title">카테고리 편집</h1>
+    <div class="category">
+        <p>* 기존 카테고리명 / 등록된 카테고리명 변경은 해당 카테고리 더블클릭 후 이름을 변경해주세요.</p>
+        <div class="category_contents">
+            <div class="category-left">
+                <div class="contents_area">
+                    <h1 class="title">카테고리 분류</h1>
+                    <div class="video_list_search">
+                        <input type="text" placeholder="카테고리명을 검색해보세요"/>
+                        <button type="button">
+                            <img src="../images/common/icons/ic-search.png" alt="">
+                        </button>
+                    </div>
+                    <div class="category_list">
+                        <button type="button" class="">삭제 <span>X</span></button>
+                        <div>
+                            <ul>
+                                <li class="top_category">(대분류) 아우터 <span>30</span></li>
+                                <li class="top_category">(대분류) 상의 <span>30</span></li>
+                                <li class="top_category">(대분류) 하의 <span>30</span></li>
+                                <li class="middle_category">(중분류) 바지 <span>30</span></li>
+                                <li class="bottom_category">(소분류) 슬랙스 <span>30</span></li>
+                                <li class="semi_category">(상세분류) 지오다노 <span>30</span></li>
+                                <li class="top_category">(대분류) 악세사리 <span>30</span></li>
+                                <li class="middle_category">(중분류) 반지 <span>30</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="category-right">
+                <div class="contents_area">
+                    <h1 class="title">카테고리 정보 입력 (새 카테고리)</h1>
+                    <form ng-submit="" class="category_form">
+                        <table>
+                            <colgroup>
+                                <col width="30%">
+                                <col width="70%">
+                            </colgroup>
+                            <tr>
+                                <th>카테고리 분류</th>
+                                <td colspan="3">
+                                    <button type="button" class="selected">대분류</button>
+                                    <button type="button">중분류</button>
+                                    <button type="button">소분류</button>
+                                    <button type="button">상세분류</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>카테고리 명</th>
+                                <td colspan="3">
+                                    <input type="text" placeholder="ex)(대분류)하의, (중분류)바지, (소분류)슬랙스"/>
+                                    <button type="button">+ 추가</button>
+                                </td>
+                            </tr>
+<!--                            <tr>-->
+<!--                                <th></th>-->
+<!--                                <td><input type="text" id="video_duration" ng-model="video_duration"></td>-->
+<!--                            </tr>-->
+                            <tr>
+                                <th>공개설정</th>
+                                <td colspan="3">
+                                    <input id="sh_en" type="radio" name="video_shared" ng-model="video_shared" value="0" checked/> 공개
+                                    <input id="sh_dis" type="radio" name="video_shared" ng-model="video_shared" value="1"/> 비공개
+                                </td>
+                            </tr>
+                        </table>
+                        <button type="submit" class="category_info_save_btn">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

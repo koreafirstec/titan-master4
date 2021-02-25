@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video, $interval) {
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video, $interval, Modal) {
 
 //         $scope.user_id = AuthService.getUserId();
 //         $scope.user_idx = AuthService.getIdx();

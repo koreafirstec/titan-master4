@@ -125,7 +125,8 @@
 
 .popup_youtube_search{
     width: 800px;
-    height: 770px;
+    height: 90%;
+    max-height: 770px;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.12);
     border: solid 0.3px #707070;
     background-color: #f7f7f7;
@@ -246,12 +247,17 @@
     color: #b4b4b4;
 }
 
-@media screen and (max-width: 1610px){
+@media screen and (max-width: 1366px){
     .video_add{
         width: unset;
-        /*height: unset;*/
     }
-    /*.video_add > .video_add_section{*/
-    /*    display: unset;*/
-    /*}*/
+    .video_add > .video_add_section{
+        padding-right: 18px;
+    }
+    .video_add .video_add_table_title_advise{
+        display: none;
+    }
+    .video_add > .video_add_section > .video_add-right > table > colgroup > col:nth-child(4){
+        display: none;
+    }
 }

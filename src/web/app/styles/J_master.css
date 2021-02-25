@@ -70,7 +70,7 @@ section.content > .title > span{
 
 .title {
     width: 100%;
-    min-width: 400px;
+    /*min-width: 400px;*/
     height: 82px;
     /*margin: 80px auto;*/
 }

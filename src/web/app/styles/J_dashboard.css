@@ -5,7 +5,8 @@
     display: inline-block;
 }
 .dashboard > .dashboard-left{
-    width: 794px;
+    width: 100%;
+    max-width: 794px;
     margin-right: 20px;
 }
 .dashboard > .dashboard-right{
@@ -206,4 +207,13 @@ ul.item_ranking {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
+}
+
+@media screen and (max-width: 1366px){
+    .dashboard{
+        display: unset;
+    }
+    .dashboard > .dashboard-left{
+        margin: 0;
+    }
 }
