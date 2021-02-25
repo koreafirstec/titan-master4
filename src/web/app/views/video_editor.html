@@ -3,8 +3,8 @@
     <h1 class="title">AI 만들기</h1>
     <div class="make_ai">
         <ul class="make_ai_level">
-            <li class="" ng-click="make_ai_level = 1" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
-            <li class="" ng-click="make_ai_level = 2" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
+            <li class="" ng-click="video_selected()" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
+            <li class="" ng-click="item_selected()" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
             <li class="" ng-click="make_ai_level = 3" ng-class="{'selected': make_ai_level == 3}">AI 모델링</li>
             <li class="" ng-click="video_capture_func(selected_video, selected_item)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
         </ul>
@@ -116,8 +116,8 @@
                 </span>
                 <span style="position: relative;">
                     <h1>AI 자동지정 편집</h1>
-<!--                    <img ng-show="modify_success_list == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">-->
-                    <img ng-show="modify_success_list != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
+                    <img ng-show="modify_success_list.length == 0" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-show="modify_success_list.length != 0" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>

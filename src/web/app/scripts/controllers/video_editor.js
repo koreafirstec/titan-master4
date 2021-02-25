@@ -17,7 +17,7 @@ angular.module('titanApp')
         $scope.modify_success_list = [];
         $scope.selected_video = '';
         $scope.check_item = [];
-        $scope.selected_item = '';
+        $scope.selected_item = null;
         $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
         $scope.modeling_loading = false;
@@ -70,11 +70,10 @@ angular.module('titanApp')
                     }
                 }
             });
-            $scope.videoDetails();
+//            $scope.videoDetails();
         }
 
         $scope.videoDetails = function () {
-            console.log('모달 오픈');
             Modal.open(
                 'views/popup_common.html',
                 'PopupYoutubeCtrl',
@@ -121,6 +120,21 @@ angular.module('titanApp')
         $scope.item_check = function (item) {
 
         };
+
+        $scope.video_selected = function(){
+            $scope.make_ai_level = 1;
+            $scope.selected_video = null;
+            $scope.selected_item = null;
+            $scope.modify_success_list = [];
+            $scope.modify_rect = null;
+        }
+
+        $scope.item_selected = function(){
+            $scope.make_ai_level = 2;
+            $scope.selected_item = null;
+            $scope.modify_success_list = [];
+            $scope.modify_rect = null;
+        }
 
         $scope.item_click = function(item) {
             $scope.selected_item = item;
@@ -169,25 +183,17 @@ angular.module('titanApp')
         $scope.video_capture_func = function(video, item){
             $scope.make_ai_level = 4;
             var api_params = {};
-            api_params['video_idx'] = video.idx;
-            api_params['fk_item_idx'] = item.idx;
-            api_item_detail.get(api_params, function(data){
-                if(data.status == 200){
-                    $scope.detail_list = data.objects;
-                    $scope.detail_selected = $scope.detail_list[0];
-                    $scope.get_position_all(video, $scope.detail_selected);
-                }
-            });
-//            var api_capture_params = {}
-//            api_capture_params['video_idx'] = video.idx;
-//            api_capture_params['item_idx'] = item.idx;
-//
-//            api_video_capture.save(api_capture_params, function(data){
-//                if(data.status == 200){
-//                    $scope.captured_video = data.objects;
-//                    console.log(data.objects);
-//                }
-//            });
+            if(item != null){
+                api_params['video_idx'] = video.idx;
+                api_params['fk_item_idx'] = item.idx;
+                api_item_detail.get(api_params, function(data){
+                    if(data.status == 200){
+                        $scope.detail_list = data.objects;
+                        $scope.detail_selected = $scope.detail_list[0];
+                        $scope.get_position_all(video, $scope.detail_selected);
+                    }
+                });
+            }
         }
 
         $scope.position_all = function(all_position){
