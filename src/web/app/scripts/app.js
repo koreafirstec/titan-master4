@@ -135,6 +135,11 @@ angular
                 templateUrl: 'views/item_list.html',
                 controller: 'ItemListCtrl'
             })
+            .when('/advertising', {
+                activePage: 'item_list',
+                templateUrl: 'views/advertising.html',
+                controller: 'VideoEditorCtrl'
+            })
             .otherwise({
                 redirectTo: '/login'
             });

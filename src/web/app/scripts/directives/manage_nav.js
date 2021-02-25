@@ -99,7 +99,8 @@ angular.module('titanApp')
                     {idx: 6, title: '상품', page: 'item_add', class: '', groups: 0, icon: '../images/common/icons/ic-goods.png'},
                     {idx: 7, title: '상품 등록', page: 'item_add', class: '', groups: 0, icon: ''},
                     {idx: 8, title: '상품 관리', page: 'item_list', class: '', groups: 0, icon: ''},
-                    {idx: 9, title: 'AI 만들기', page: 'video_editor', class: '', groups: 0, icon: '../images/common/icons/ic-ai-make.png'}
+                    {idx: 9, title: 'AI 만들기', page: 'video_editor', class: '', groups: 0, icon: '../images/common/icons/ic-ai-make.png'},
+                    {idx: 10, title: '광고', page: 'advertising', class: '', groups: 0, icon: '../images/common/icons/ic-advertising.png'}
                 ];
                 scope.options = [
                     {idx: 1, title: '사이트맵', page: 'sitemap', class: '', groups: 0, icon: '../images/common/icons/ic-sitemap.png'},

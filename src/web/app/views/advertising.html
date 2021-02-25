@@ -1,0 +1,70 @@
+<i manage-nav></i>
+<section class="content">
+    <h1 class="title">광고</h1>
+    <p class="advertising_level" ng-show="advertising_level == 1"><span>1단계</span> 동영상 선택</p>
+    <p class="advertising_level" ng-show="advertising_level == 2"><span>2단계</span> 이미지 선택 및 편집</p>
+    <div class="make_ai" style="margin: 0;">
+        <div class="make_ai_video_select" ng-show="advertising_level == 1">
+            <div>
+                <h1>검색</h1>
+                <span class="make_ai_video_search">
+                    <input type="text" placeholder="Search" ng-model="make_ai_video_search"/>
+                    <button type="button">
+                        <img src="../images/common/icons/ic-search.png" alt="">
+                    </button>
+                </span>
+                <span class="make_ai_video_search_guide">동영상은 한 번에 1개만 선택할 수 있습니다.</span>
+            </div>
+            <div>
+                <h1>검색결과</h1>
+            </div>
+            <div>
+                필터
+            </div>
+            <div class="make_ai_video_list">
+                <ul>
+                    <li ng-repeat="video in show_videoList | filter:make_ai_video_search">
+                        <button type="button" ng-click="video_click(video)">
+                            <img ng-src="https://img.youtube.com/vi/{{video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                            <div>
+                                <p>{{video.video_title}}</p>
+                                <p>{{video.video_duration}}</p>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+                <button type="button" class="advertising_level_next" ng-click="advertising_level = 2">다음</button>
+            </div>
+        </div>
+        <div class="make_ai_item_select" ng-show="advertising_level == 2">
+            <div class="advertising_number">
+                <button type="button" class="selected">1번 광고</button>
+                <button type="button">2번 광고</button>
+            </div>
+<!--            <div>-->
+<!--                <h1>상품 검색결과</h1>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                필터-->
+<!--            </div>-->
+            <div class="make_ai_item_list">
+                <ul>
+<!--                    <li ng-repeat="item in show_itemList | filter: make_ai_item_search">-->
+<!--                        <button type="button" ng-click="item_click(item, selected_video)">-->
+<!--                            <img ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
+<!--                            <div>-->
+<!--                                <p>-->
+<!--                                     <input type="checkbox" ng-click="video_check_one(item.idx)">-->
+<!--                                    {{item.item_title}}-->
+<!--                                </p>-->
+<!--                                <p>{{item.item_price}}</p>-->
+<!--                            </div>-->
+<!--                        </button>-->
+<!--                    </li>-->
+                </ul>
+<!--                <button type="button" class="make_ai_item_select_btn" ng-click="item_click()">확인</button>-->
+            </div>
+            <button type="button" class="advertising_level_next" ng-click="advertising_level = 3">다음</button>
+        </div>
+    </div>
+</section>
