@@ -203,7 +203,7 @@ angular.module('titanApp')
                 //     });
                 // }
 
-                intervals.push($interval(function () { createDiv();}, 0));
+                intervals.push($interval(function () { createDiv();}, 16));
             }else if(player.getPlayerState() == 2){
                 clearInterval($rootScope.myTimer);
                //  angular.forEach(intervals, function(interval) {
@@ -241,13 +241,26 @@ angular.module('titanApp')
        }
 
        function createDiv() {
-            $rootScope.newTime = Number(player.getCurrentTime().toFixed(2));
-            let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime + 0.01)})
+            // $rootScope.newTime = Number(player.getCurrentTime().toFixed(2));
+            // $rootScope.newTime = (Math.round(Number(player.getCurrentTime()) * 100.0) / 100.0).toFixed(2);
+           $rootScope.newTime = player.getCurrentTime();
+            // let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime + 0.01)})
+           // let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime)})
+           var prevTime = $rootScope.newTime - 0.05;
+           var futureTime = $rootScope.newTime + 0.05;
 
-           if(item_list.length !== 0 && $rootScope.item_list !== item_list) {
-               drawRect(item_list);
-                $rootScope.item_list = item_list;
-           }
+
+           // console.log(prevTime + " / " +  dataObjects[0].position_time + " / "  + futureTime);
+
+           let item_list = dataObjects.filter( d=> {return (d.position_time >= prevTime && d.position_time <= futureTime)})
+           // console.log(item_list.length);
+
+           drawRect(item_list);
+
+           // if(item_list.length !== 0 && $rootScope.item_list !== item_list) {
+           //      drawRect(item_list);
+           //      $rootScope.item_list = item_list;
+           // }
 
 
 
@@ -293,6 +306,11 @@ angular.module('titanApp')
 
             for(let i = 0; i <= 30; i++) {
                 let item_id = '#item_' + i;
+                $(item_id).css('display', 'none');
+            }
+
+            for(let i = 0; i <= 30; i++) {
+                let item_id = '#item_' + i;
                 if(i < item_list.length) {
                     let item = item_list[i];
                     let left = Math.floor(item.x / (1920 / 953));
@@ -306,9 +324,10 @@ angular.module('titanApp')
                     $(item_id).css('width', width);
                     $(item_id).css('height', height);
                     $(item_id).css('display', 'inline-block');
-                } else {
-                    $(item_id).css('display', 'none');
                 }
+                // else {
+                //     $(item_id).css('display', 'none');
+                // }
             }
         }
 
