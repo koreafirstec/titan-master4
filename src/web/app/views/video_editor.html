@@ -56,15 +56,17 @@
             </div>
             <div>
                 필터
+                <button type="button" class="make_ai_item_select_btn" ng-click="item_check()">확인</button>
             </div>
             <div class="make_ai_item_list">
                 <ul>
                     <li ng-repeat="item in show_itemList | filter: make_ai_item_search">
-                        <button type="button" ng-click="item_click(item, selected_video)">
+                        <button type="button" ng-click="item_list_click(item)">
                             <img ng-src="../images/uploads/{{item.idx}}_product.jpg">
                             <div>
                                 <p>
-                                     <input type="checkbox" ng-click="video_check_one(item.idx)">
+                                    <input type="checkbox" id="make_ai_item-{{item.idx}}" class="make_ai_item_chk">
+                                    <label class=""></label>
                                     {{item.item_title}}
                                 </p>
                                 <p>{{item.item_price}}</p>
@@ -102,6 +104,7 @@
             <div class="make_ai_modeling_item">
                 <p>연결할 상품</p>
                 <div>
+<!--                    <img ng-repeat="item in selected_item" ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
                     <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
@@ -134,9 +137,14 @@
                 <button class="make_ai_model_edit_save_btn" ng-click="videoDetails()">저장</button>
             </div>
             <div class="make_ai_model_edit_item">
-                <p class="make_ai_model_edit_item_time">연결된 동영상 구간 <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
-                <div>
-                    <div>
+                <p class="make_ai_model_edit_item_time">연결된 동영상 구간
+                    <input type="text" id="StartTime" ng-model="start_time" placeholder="00:00"> - <input type="text" id="EndTime" ng-model="end_time" placeholder="00:00">
+                    <button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button>
+                    <button ng-click="position_all(modify_rect_position)">전체보기</button>
+                </p>
+
+                <div id="make_ai_model_edit_item_scroll">
+                    <div id="make_ai_model_edit_item_scroll_list">
                         <ul>
                             <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>
                         </ul>
@@ -145,13 +153,18 @@
                             <li ng-repeat="image in modify_success_list">{{image.position_time_d}}</li>
                         </ul>
                     </div>
+<!--                    <div id="make_ai_model_edit_item_scroll_item" class="make_ai_model_edit_item_scroll_item">-->
+<!--                        00:01-->
+<!--                    </div>-->
                 </div>
+                <input type="range" min="0" max="{{modify_success_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
                 <div>
                     <p>
                         연결된 상품
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
+<!--                    <img ng-repeat="item in selected_item" ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
                     <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>

@@ -131,6 +131,8 @@ var VideoAddExampleCtrl = function ($scope, $rootScope, $route, $modalInstance, 
             $scope.image_url = "https://img.youtube.com/vi/"+video.id+"/hqdefault.jpg";
             $(".image_video_add").attr("ng-src", $scope.image_url)
             $(".image_video_add").attr("src", $scope.image_url)
+
+            $scope.close();
         };
 
 

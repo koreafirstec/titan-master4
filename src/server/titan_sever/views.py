@@ -1951,26 +1951,27 @@ class item_detail(Resource):
             return result(200, '[GET] Select item_detail successful', objects, None, COMPANY_NAME)
         else:
             item_detail_video_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=fk_item_idx, fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
-            for item_detail in item_detail_video_list:
-                if item_detail.position_order == 1:
-                    index += 1
-                    objects.append({
-                        'index': index,
-                        'idx': item_detail.idx,
-                        'fk_item_idx': item_detail.fk_item_idx,
-                        'position': item_detail.position,
-                        'position_order': item_detail.position_order,
-                        'position_time': int(item_detail.position_time),
-                        'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
-                        # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
-                        'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
-                        'x': item_detail.x,
-                        'y': item_detail.y,
-                        'width': item_detail.width,
-                        'height': item_detail.height
-                    })
-            a = list({timeP['position_time']: timeP for timeP in objects}.values())
-            return result(200, '[GET] Select item_detail successful', a, None, COMPANY_NAME)
+            if item_detail_video_list is not None:
+                for item_detail in item_detail_video_list:
+                    if item_detail.position_order == 1:
+                        index += 1
+                        objects.append({
+                            'index': index,
+                            'idx': item_detail.idx,
+                            'fk_item_idx': item_detail.fk_item_idx,
+                            'position': item_detail.position,
+                            'position_order': item_detail.position_order,
+                            'position_time': int(item_detail.position_time),
+                            'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
+                            # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
+                            'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
+                            'x': item_detail.x,
+                            'y': item_detail.y,
+                            'width': item_detail.width,
+                            'height': item_detail.height
+                        })
+                a = list({timeP['position_time']: timeP for timeP in objects}.values())
+                return result(200, '[GET] Select item_detail successful', a, None, COMPANY_NAME)
         # return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
 
     def post(self):
@@ -3340,27 +3341,30 @@ class item_position_detail(Resource):
     def __init__(self):
         print("item_position_detail INIT")
         self.parser = reqparse.RequestParser()
-        self.position_detail = ''
+        self.parser.add_argument("item_idx", type=str, location="json")
+        # self.parser.add_argument("item_idx", type=str, location="json", action="append")
+        self.parser.add_argument("image_frame", type=str, location="json")
+        self.parser.add_argument("video_idx", type=str, location="json")
+
         self.token_manager = TokenManager.instance()
+        self.item_idx = self.parser.parse_args()["item_idx"]
+        self.image_frame = self.parser.parse_args()["image_frame"]
+        self.video_idx = self.parser.parse_args()["video_idx"]
+        self.position_detail = ''
         super(item_position_detail, self).__init__()
 
-    def get(self):
+    def post(self):
         objects = []
-        image_frame = request.args.get('image_frame')
-        item_idx = request.args.get('item_idx')
-        video_idx = request.args.get('video_idx')
-        next_position = request.args.get('next_position')
+        # image_frame = request.args.get('image_frame')
+        # item_idx = request.args.get('item_idx')
+        # video_idx = request.args.get('video_idx')
 
-        if next_position is not None:
-            next_position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).first()
-            if next_position_detail is not None:
-                print('하하하하')
-            return result(200, "item_position_detail get success", None, None, COMPANY_NAME)
-        if image_frame != None:
-            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).all()
+        if self.image_frame != None:
+            # for i in self.item_idx:
+            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
             for p_detail in position_detail:
                 objects.append({
-                    'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
+                    'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
                     'position_time': p_detail.position_time,
                     'position_order': p_detail.position_order,
@@ -3372,14 +3376,16 @@ class item_position_detail(Resource):
                     'height': p_detail.height
                 })
         else:
-            image_modify_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx).first()
+            # for i in self.item_idx:
+            #     print(i)
+            image_modify_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx).first()
             if image_modify_frame == None:
                 return result(404, "item_modify_frame not found", None, None, COMPANY_NAME)
-            image_frame = image_modify_frame.position
-            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).all()
+            self.image_frame = image_modify_frame.position
+            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
             for p_detail in position_detail:
                 objects.append({
-                    'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
+                    'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
                     'position_time': p_detail.position_time,
                     'position_order': p_detail.position_order,
