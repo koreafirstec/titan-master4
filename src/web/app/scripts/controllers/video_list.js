@@ -408,18 +408,15 @@ angular.module('titanApp')
         });
 
         $scope.change_video_list_height = function() {
-            var change_video_list = document.getElementById("contents");
-            if(change_video_list){
-                width = change_video_list.offsetWidth;
-                margin = change_video_list.offsetLeft;
-                if (margin == 260){
-                    height = change_video_list.offsetHeight - 195 +'px';
-                    document.getElementById("library-table-wrap").style.maxHeight = height;
-                }
-                else if (width <= 768) {
-                    height = change_video_list.offsetHeight - 135 +'px';
-                    document.getElementById("library-table-wrap").style.maxHeight = height;
-                }
+            width = document.getElementById("contents").offsetWidth;
+            margin = document.getElementById("contents").offsetLeft;
+            if (margin == 260){
+                height = document.getElementById("contents").offsetHeight - 195 +'px';
+                document.getElementById("library-table-wrap").style.maxHeight = height;
+            }
+            else if (width <= 768) {
+                height = document.getElementById("contents").offsetHeight - 135 +'px';
+                document.getElementById("library-table-wrap").style.maxHeight = height;
             }
         }
     });
