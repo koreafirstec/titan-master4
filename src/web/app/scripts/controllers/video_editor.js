@@ -48,7 +48,9 @@ angular.module('titanApp')
         $scope.modify_rect_down = function(item, enter_status){
             $scope.position_order = item.position_order;
             $scope.enter_status = true;
-            $("#meta_data_editor_btn").css('display', 'flex');
+            $("#meta_data_editor_btn").css('display', 'block');
+            $("#meta_data_editor_btn").css('left', item.x/(1920/$scope.width_img));
+            $("#meta_data_editor_btn").css('top', item.y/(1080/$scope.height_img));
         }
 
         $scope.position_molra = function(s, e){
@@ -87,6 +89,7 @@ angular.module('titanApp')
                 }
             });
 //            $scope.videoDetails();
+            $("#meta_data_editor_btn").css('display', 'none');
         }
 
         $scope.videoDetails = function () {
@@ -1117,6 +1120,7 @@ angular.module('titanApp')
                     }
                 }
             });
+            $("#meta_data_editor_btn").css('display', 'none');
             // var image_path = ENV.webs + '/make_image/' + item_idx;
             // api_item_detail.delete(api_params, function(data){
             //     if(data.status == 200){
