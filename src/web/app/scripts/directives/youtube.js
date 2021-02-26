@@ -89,6 +89,7 @@ angular.module('titanApp')
       var unique;
       $rootScope.remove_item_list = false;
       scope.item_detection_jq;
+      // const category = ['top', 'bottom', 'skirt', 'shoes', 'cap', 'golfball', 'golfbag', 'golfclub'];
       $("#backward_btn").on('click', function(e){
           if(scope.videoid){
               var current_time = player.getCurrentTime()-5;
@@ -203,7 +204,7 @@ angular.module('titanApp')
                 //     });
                 // }
 
-                intervals.push($interval(function () { createDiv();}, 16));
+                intervals.push($interval(function () { createDiv();}, 28));
             }else if(player.getPlayerState() == 2){
                 clearInterval($rootScope.myTimer);
                //  angular.forEach(intervals, function(interval) {
@@ -246,8 +247,10 @@ angular.module('titanApp')
            $rootScope.newTime = player.getCurrentTime();
             // let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime + 0.01)})
            // let item_list = dataObjects.filter(function(d) { return (Number(d.position_time.toFixed(2)) === $rootScope.newTime)})
-           var prevTime = $rootScope.newTime - 0.05;
-           var futureTime = $rootScope.newTime + 0.05;
+           // var prevTime = $rootScope.newTime - 0.05;
+           // var futureTime = $rootScope.newTime + 0.05;
+           var prevTime = $rootScope.newTime - 0.0166666666666666666666665;
+           var futureTime = $rootScope.newTime + 0.0166666666666666666666665;
 
 
            // console.log(prevTime + " / " +  dataObjects[0].position_time + " / "  + futureTime);
@@ -261,8 +264,6 @@ angular.module('titanApp')
            //      drawRect(item_list);
            //      $rootScope.item_list = item_list;
            // }
-
-
 
           //   // if(item_list.length !== 0 && $rootScope.item_list !== item_list) {
           //   //     $rootScope.item_list = item_list;
@@ -323,6 +324,7 @@ angular.module('titanApp')
                     $(item_id).css('top', top);
                     $(item_id).css('width', width);
                     $(item_id).css('height', height);
+                    // $(item_id).text(category[item.draw_item_type]);
                     $(item_id).css('display', 'inline-block');
                 }
                 // else {
