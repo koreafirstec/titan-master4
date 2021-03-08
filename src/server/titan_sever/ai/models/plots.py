@@ -19,8 +19,8 @@ from PIL import Image, ImageDraw
 from scipy.signal import butter, filtfilt
 from sklearn.cluster import KMeans
 
-from utils.general import xywh2xyxy, xyxy2xywh
-from utils.metrics import fitness
+from .general import xywh2xyxy, xyxy2xywh
+from .metrics import fitness
 
 # Settings
 matplotlib.rc('font', **{'size': 11})
@@ -116,87 +116,16 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None, items=None
         else:
             items[category].append({'frame': frame, 'anchors': [{'item_img': item_img, 'start': c1, 'end': c2}]})
 
-    # # Circle
-    # # item_img = img[c1[1]:c2[1], c1[0]:c2[0]]
-    # width = img.shape[1]
-    # height = img.shape[0]
-    # image_area = width * height
-    # item_area = (c2[0] - c1[0]) * (c2[1] - c1[1])
-    # ratio = image_area / item_area / 10 - 12
-
-    # out_radius = 10 - round(ratio)
-    # if out_radius <= 8:
-    #     out_radius = 8
-    # # print('category', category)
-    # # print('image_area / item_area:', image_area / item_area)
-    # # print('out_radius:', out_radius)
-    # in_radius = round(out_radius * 0.6)
-    # # in_radius = 6
-
-    # xmin = c2[0] - out_radius if c2[0] - out_radius >= 0 else 0
-    # xmax = c2[0] + out_radius if c2[0] + out_radius <= width else width
-    # ymin = c1[1] - out_radius if c1[1] - out_radius >= 0 else 0
-    # ymax = c1[1] + out_radius if c1[1] + out_radius <= height else height
-    # circle_area = ori_img[ymin:ymax, xmin:xmax]
-    # # cv2.imwrite('D:\\yolov5_new\\test_' + category + str(xmin) + '.jpg', circle_area)
-    # circle_area = cv2.cvtColor(circle_area, cv2.COLOR_BGR2RGB)
-    # circle_area = circle_area.reshape((circle_area.shape[0] * circle_area.shape[1], 3))
-
-    # clt = KMeans(n_clusters = 1)
-    # clt.fit(circle_area)
-    # color = clt.cluster_centers_[0]
-    # color = [color[2], color[1], color[0]]
-
-    # # 반전색
-    # color = [255 - color[0], 255 - color[1], 255 - color[2]]
-
-    # # 우측 상단
-    # # cv2.circle(img, (c2[0], c1[1]), in_radius, color, thickness=-1, lineType=cv2.LINE_AA)
-    # # cv2.circle(img, (c2[0], c1[1]), out_radius, color, thickness=2, lineType=cv2.LINE_AA)
-
-    # # 우측 하단
-    # if category == 'top':
-    #     icon = cv2.imread(category + '.jpg')
-    #     in_radius = in_radius * 2
-    #     item_width = c2[0] - round((c2[0] - c1[0]) * 0.2)
-    #     item_height = c2[1] - round((c2[1] - c1[1]) * 0.2)
-
-    #     # xmin = c2[0] - in_radius if c2[0] - in_radius >= 0 else 0
-    #     # xmax = c2[0] + in_radius if c2[0] + in_radius <= width else width
-    #     # ymin = c2[1] - in_radius if c2[1] - in_radius >= 0 else 0
-    #     # ymax = c2[1] + in_radius if c2[1] + in_radius <= height else height
-    #     xmin = item_width - in_radius if item_width - in_radius >= 0 else 0
-    #     xmax = item_width + in_radius if item_width + in_radius <= width else width
-    #     ymin = item_height - in_radius if item_height - in_radius >= 0 else 0
-    #     ymax = item_height + in_radius if item_height + in_radius <= height else height
-    #     circle_area = ori_img[ymin:ymax, xmin:xmax]
-    #     icon = cv2.resize(icon, dsize=(xmax - xmin, ymax - ymin), interpolation=cv2.INTER_AREA)
-
-    #     icon_ = ~cv2.cvtColor(icon, cv2.COLOR_BGR2GRAY)
-    #     ret, mask = cv2.threshold(icon_, 10, 255, cv2.THRESH_BINARY)
-    #     mask_inv = cv2.bitwise_not(mask)
-
-    #     fg = cv2.bitwise_and(icon, icon, mask=mask)
-    #     bg = cv2.bitwise_and(circle_area, circle_area, mask=mask_inv)
-    #     sum_img = cv2.add(fg, bg)
-
-    #     img[ymin:ymax, xmin:xmax] = sum_img
-
-    #     cv2.circle(img, (item_width, item_height), out_radius, color, thickness=2, lineType=cv2.LINE_AA)
-    # else:
-    #     cv2.circle(img, (c2[0], c2[1]), in_radius, color, thickness=-1, lineType=cv2.LINE_AA)
-    #     cv2.circle(img, (c2[0], c2[1]), out_radius, color, thickness=2, lineType=cv2.LINE_AA)
-
     # Rect
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     if label:
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
-        cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        lc2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        cv2.rectangle(img, c1, lc2, color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
-    return items
+    return items, c1, c2
 
 
 def plot_wh_methods():  # from utils.plots import *; plot_wh_methods()
