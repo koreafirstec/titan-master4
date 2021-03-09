@@ -97,10 +97,11 @@ class Discriminator:
         if not os.path.exists(model_path):
             os.mkdir(model_path)
         image_len = len(dataset)
-        # device = torch.device('cpu')
+        device = torch.device('cpu')
         netD = _netD_result(1, num_classes)
-        netD.load_state_dict(torch.load("./titan_sever/acgan/"+str(self.model_name)))
-        # netD.load_state_dict(torch.load("./titan_sever/acgan/"+str(self.model_name), map_location=device))
+        # GPU
+        # netD.load_state_dict(torch.load("./titan_sever/acgan/"+str(self.model_name)))
+        netD.load_state_dict(torch.load("./titan_sever/acgan/"+str(self.model_name), map_location=device))
 
         input = torch.FloatTensor(batchSize, 3, imageSize, imageSize)
         noise = torch.FloatTensor(batchSize, nz, 1, 1)
@@ -110,11 +111,12 @@ class Discriminator:
         real_label = 1
         fake_label = 0
 
-        netD.cuda()
-        dis_criterion.cuda()
-        aux_criterion.cuda()
-        input, dis_label, aux_label = input.cuda(), dis_label.cuda(), aux_label.cuda()
-        noise, eval_noise = noise.cuda(), eval_noise.cuda()
+        # GPU
+        # netD.cuda()
+        # dis_criterion.cuda()
+        # aux_criterion.cuda()
+        # input, dis_label, aux_label = input.cuda(), dis_label.cuda(), aux_label.cuda()
+        # noise, eval_noise = noise.cuda(), eval_noise.cuda()
 
         input = Variable(input)
         noise = Variable(noise)
@@ -139,8 +141,8 @@ class Discriminator:
             images, labels, path = data
             paths += data[2]
             batch_size = images.size(0)
-            images = images.cuda()
-            labels = labels.cuda()
+            # images = images.cuda()
+            # labels = labels.cuda()
             with torch.no_grad():
                 input.resize_as_(images).copy_(images)
                 dis_label.resize_(batch_size).fill_(real_label)

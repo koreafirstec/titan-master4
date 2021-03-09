@@ -399,7 +399,7 @@
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2){
     margin: 22px 0 22px -48.5px;
     height: 123px;
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div{

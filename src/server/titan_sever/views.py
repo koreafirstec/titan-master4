@@ -1948,6 +1948,7 @@ class item_detail(Resource):
                     'fk_video_idx': item_detail.fk_video_idx,
                     'position': item_detail.position,
                     'position_order': item_detail.position_order,
+                    'image_time': item_detail.position_time,
                     'position_time': int(item_detail.position_time),
                     'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
                     'draw_item_type': item_detail.draw_item_type,
@@ -1973,6 +1974,7 @@ class item_detail(Resource):
                         'fk_video_idx': item_detail.fk_video_idx,
                         'position': item_detail.position,
                         'position_order': item_detail.position_order,
+                        'image_time': item_detail.position_time,
                         'position_time': int(item_detail.position_time),
                         'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
                         'draw_item_type': item_detail.draw_item_type,
@@ -2049,10 +2051,10 @@ class item_detail(Resource):
         rect_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.fk_item_idx, fk_video_idx=self.fk_video_idx, position=self.item_position,
                                                      position_order=self.p_order).first()
         if rect_detail is not None:
-            rect_detail.x = self.rect_x
-            rect_detail.y = self.rect_y
-            rect_detail.width = self.rect_w
-            rect_detail.height = self.rect_h
+            rect_detail.x = int(float(self.rect_x))
+            rect_detail.y = int(float(self.rect_y))
+            rect_detail.width = int(float(self.rect_w))
+            rect_detail.height = int(float(self.rect_h))
             db.session.commit()
 
         modify_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.fk_item_idx, fk_video_idx=self.fk_video_idx, position=self.item_position).all()
@@ -3360,12 +3362,14 @@ class item_position_detail(Resource):
         print("item_position_detail INIT")
         self.parser = reqparse.RequestParser()
         self.parser.add_argument("item_idx", type=str, location="json")
+        self.parser.add_argument("position_time", type=str, location="json")
         # self.parser.add_argument("item_idx", type=str, location="json", action="append")
         self.parser.add_argument("image_frame", type=str, location="json")
         self.parser.add_argument("video_idx", type=str, location="json")
 
         self.token_manager = TokenManager.instance()
         self.item_idx = self.parser.parse_args()["item_idx"]
+        self.position_time = self.parser.parse_args()["position_time"]
         self.image_frame = self.parser.parse_args()["image_frame"]
         self.video_idx = self.parser.parse_args()["video_idx"]
         self.position_detail = ''
@@ -3376,11 +3380,11 @@ class item_position_detail(Resource):
         # image_frame = request.args.get('image_frame')
         # item_idx = request.args.get('item_idx')
         # video_idx = request.args.get('video_idx')
-
         if self.image_frame != None:
             # for i in self.item_idx:
-            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
+            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame, position_time=self.position_time).all()
             for p_detail in position_detail:
+                # if p_detail.draw_item_type == 2:
                 objects.append({
                     'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
@@ -3393,7 +3397,7 @@ class item_position_detail(Resource):
                     'y': p_detail.y,
                     'width': p_detail.width,
                     'height': p_detail.height,
-                    'classification_item': p_detail.classification_item
+                    'classification_item': p_detail.classification_item if p_detail.classification_item != None else None
                 })
         else:
             # for i in self.item_idx:
@@ -3404,6 +3408,7 @@ class item_position_detail(Resource):
             self.image_frame = image_modify_frame.position
             position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
             for p_detail in position_detail:
+                # if p_detail.draw_item_type == 2:
                 objects.append({
                     'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
@@ -3416,7 +3421,7 @@ class item_position_detail(Resource):
                     'y': p_detail.y,
                     'width': p_detail.width,
                     'height': p_detail.height,
-                    'classification_item': p_detail.classification_item
+                    'classification_item': p_detail.classification_item if p_detail.classification_item != None else None
                 })
         return result(200, "item_position_detail get success", objects, None, COMPANY_NAME)
 

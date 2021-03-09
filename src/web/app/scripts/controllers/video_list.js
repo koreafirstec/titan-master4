@@ -396,26 +396,29 @@ angular.module('titanApp')
         var width;
         var height;
         var margin;
-        // 페이지 로드시 자동실행
-        $(window).ready(function () {
-            $scope.change_video_list_height();
-        });
 
+        let contents = document.getElementById("contents")
+        if(contents){
+            // 페이지 로드시 자동실행
+            $(window).ready(function () {
+                $scope.change_video_list_height();
+            });
 
-        // 화면 리사이즈시 실행
-        $(window).resize(function () {
-            $scope.change_video_list_height();
-        });
+            // 화면 리사이즈시 실행
+            $(window).resize(function () {
+                $scope.change_video_list_height();
+            });
+        }
 
         $scope.change_video_list_height = function() {
-            width = document.getElementById("contents").offsetWidth;
-            margin = document.getElementById("contents").offsetLeft;
+            width = contents.offsetWidth;
+            margin = contents.offsetLeft;
             if (margin == 260){
-                height = document.getElementById("contents").offsetHeight - 195 +'px';
+                height = contents.offsetHeight - 195 +'px';
                 document.getElementById("library-table-wrap").style.maxHeight = height;
             }
             else if (width <= 768) {
-                height = document.getElementById("contents").offsetHeight - 135 +'px';
+                height = contents.offsetHeight - 135 +'px';
                 document.getElementById("library-table-wrap").style.maxHeight = height;
             }
         }
