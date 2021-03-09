@@ -136,24 +136,6 @@
     border-bottom: solid 0.3px #b4b4b4;
     position: relative;
 }
-.make_ai > .make_ai_item_select > div:nth-child(3){
-    height: 38px;
-    box-sizing: unset;
-    line-height: 38px;
-}
-.make_ai > .make_ai_item_select > div:nth-child(3) > button[type="button"]{
-    height: 38px;
-    position: absolute;
-    right: 20px;
-    padding: 7px 40px;
-    background-color: #4d20a3;
-    border: none;
-    font-size: 16px;
-    letter-spacing: -0.19px;
-    text-align: center;
-    color: #ffffff;
-    line-height: 0;
-}
 .make_ai > .make_ai_item_select > div > h1{
     display: inline-block;
     font-size: 16px;
@@ -222,7 +204,6 @@
     line-height: 14px;
     height: 28px;
     text-decoration: none;
-    position: relative;
 }
 .make_ai > .make_ai_item_select > .make_ai_item_list > ul > li > button > div > p:nth-child(2){
     margin: 0.6px auto 0 8.5px;
@@ -388,7 +369,6 @@
     height: 366px;
     padding: 13px 0 30px 48.5px;
     background-color: #707070;
-    position: relative;
 }
 .make_ai_model_edit_item_time> input[type="text"]{
     padding: 0 0 0 10px;
@@ -416,31 +396,10 @@
     color: #ffffff;
     margin-left: 8px;
 }
-#edit_item_scrollbar{
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 200px;
-}
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > #make_ai_model_edit_item_scroll::-webkit-scrollbar-thumb{
-    display: none;
-}
-/*.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > #make_ai_model_edit_item_scroll > .make_ai_model_edit_item_scroll_item{*/
-/*    display: none;*/
-/*    position: absolute;*/
-/*    width: 100px;*/
-/*    height: 40px;*/
-/*    line-height: 40px;*/
-/*    background-color: #000000;*/
-/*    color: #fff;*/
-/*    text-align: center;*/
-/*    bottom: 0;*/
-/*}*/
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2){
-    position: relative;
     margin: 22px 0 22px -48.5px;
     height: 123px;
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
 }
 .make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(2) > div{
@@ -466,14 +425,14 @@
     text-align: left;
     color: #b4b4b4;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(4) > p{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > p{
     font-size: 14px;
     letter-spacing: -0.17px;
     text-align: left;
     color: #ffffff;
     margin-bottom: 20px;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(4) > p > button[type="button"]{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > p > button[type="button"]{
     height: 26px;
     /*margin: 0 5.8px 0 12px;*/
     padding: 4px 14px;
@@ -484,7 +443,7 @@
     letter-spacing: -0.14px;
     color: #ffffff;
 }
-.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(4) > img{
+.make_ai > .make_ai_model_edit > .make_ai_model_edit_item > div:nth-child(3) > img{
     width: 130px;
     height: 74px;
     margin: 0 19px 0 0;
@@ -546,36 +505,4 @@
 .advertising_number > button[type="button"].selected{
     border: solid 1px #4d20a3;
     color: #4d20a3;
-}
-
-
-.make_ai_item_chk {
-    display: none;
-}
-
-.make_ai_item_chk + label{
-    cursor: pointer;
-    padding-left: 12px;
-}
-
-.make_ai_item_chk + label:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 12px;
-    height: 12px;
-    line-height: 9px;
-    border-radius: 2px;
-    border: solid 0.4px #cbcbcb;
-    background-color: #ffffff;
-}
-
-.make_ai_item_chk:checked + label:before{
-    content: "\2714";
-    font-size: 1px;
-    color: #fff;
-    text-align: center;
-    border: solid 0.4px #4d20a3;
-    background-color: #4d20a3;
 }

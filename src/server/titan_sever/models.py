@@ -65,6 +65,7 @@ class TB_ITEM_DETAIL(db.Model):
     make_type = db.Column('make_type', db.Integer)
     draw_item_type = db.Column('draw_item_type', db.Integer)
     fk_video_idx = db.Column('fk_video_idx', db.Integer)
+    classification_item = db.Column('classification_item', db.String(256))
 
 
 class TB_EDITOR(db.Model):

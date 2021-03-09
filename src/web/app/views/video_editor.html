@@ -88,13 +88,14 @@
                     <h1>모델링 화면</h1>
                     <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
                         <i class="fa fa-spinner fa-spin" style="color: #fff;"></i><br/>
-                        상품연결중…<br/>
+                        {{progress_title}}<br/>
                         {{modeling_progress}}%
                     </span>
                     <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">
                     <button type="button" ng-click="start_modeling()">AI 모델링 시작</button>
+                    <button type="button" ng-click="classification_model(selected_video, selected_item)">상품 분류 시작</button>
                     <p>
                         AI 모델링 시작 버튼을 누르면<br/>
                         상품 연결을 시작합니다.
@@ -109,18 +110,17 @@
                 </div>
             </div>
         </div>
-
         <div class="make_ai_model_edit" ng-show="make_ai_level == 4">
             <div class="make_ai_model_edit_video">
                 <span class="make_ai_model_edit_link_video">
                     <h1>연결된 동영상</h1>
                     <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
-<!--                    <img ng-show="modify_success_list != null" ng-src="{{img_modify_url_current}}">-->
+<!--                    <img ng-show="modify_list != null" ng-src="{{img_modify_url_current}}">-->
                 </span>
                 <span style="position: relative;">
                     <h1>AI 자동지정 편집</h1>
-                    <img ng-show="modify_success_list.length == 0" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
-                    <img ng-show="modify_success_list.length != 0" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
+                    <img ng-show="modify_list.length == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-show="modify_list.length != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
@@ -171,28 +171,34 @@
                 </p>
 
                 <div id="make_ai_model_edit_item_scroll">
-                    <div id="make_ai_model_edit_item_scroll_list">
+                    <div id="make_ai_model_edit_item_scroll_list" ng-show="modify_success_list.length !== 0">
                         <ul>
-                            <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>
+                            <li ng-repeat="image in modify_list">Position: {{image.position}}</li>
                         </ul>
-                        <img ng-repeat="image in modify_success_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
+                        <img ng-repeat="image in modify_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
                         <ul>
-                            <li ng-repeat="image in modify_success_list">{{image.position_time_d}}</li>
+                            <li ng-repeat="image in modify_list">{{image.position_time_d}}</li>
                         </ul>
                     </div>
+<!--                    <div id="make_ai_model_edit_item_detail_none" ng-show="modify_success_list.length === 0">-->
+<!--                        결과가 존재하지 않습니다.-->
+<!--                    </div>-->
 <!--                    <div id="make_ai_model_edit_item_scroll_item" class="make_ai_model_edit_item_scroll_item">-->
 <!--                        00:01-->
 <!--                    </div>-->
                 </div>
-                <input type="range" min="0" max="{{modify_success_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
+                <input type="range" min="0" max="{{modify_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
                 <div>
                     <p>
                         연결된 상품
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
-<!--                    <img ng-repeat="item in selected_item" ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
-                    <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
+                    <div ng-show="classification_item_list != null">
+<!--                         ng-show="item.classification_item != null"-->
+                        <button ng-repeat="item in classification_item_list" ng-show="item.classification_item != null" ng-click="highlight_rect(item)">{{item.classification_item}}</button>
+                    </div>
+                    <img ng-show="classification_item_list == null" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>

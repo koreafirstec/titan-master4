@@ -1,20 +1,20 @@
 'use strict';
 
 angular.module('titanApp')
-    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video, $interval, Modal) {
-
-//         $scope.user_id = AuthService.getUserId();
-//         $scope.user_idx = AuthService.getIdx();
-//
-//         $rootScope.selectedItem = '';
+    .controller('VideoEditorCtrl', function ($scope, $window, $http, $filter, $route, $rootScope, $location, ENV, AuthService, api_video, api_item_position_detail, $timeout, api_item, api_video_capture, api_item_detail, api_progress_process, api_make_titan_video, api_acgan_classification, $interval, Modal) {
         $scope.make_ai_level = 1;
         $scope.show_videoList = '';
         $scope.searchTitle = '';
         $scope.show_itemList = '';
         $scope.user_video_list = '';
         $scope.make_ai_video_search = '';
+        $scope.classification_item_list = null;
         $scope.make_ai_item_search = '';
+        $scope.progress_title = '상품연결중…';
+        $scope.modify_list = null;
+        $scope.modify_rect = null;
         $scope.modify_success_list = [];
+        $scope.rectPosition = [];
         $scope.item_list_checked = [];
         $scope.selected_video = '';
         $scope.check_item = [];
@@ -33,11 +33,9 @@ angular.module('titanApp')
 
     //  광고 부분
         $scope.edit_item_scroll = function () {
-            $scope.start_time = $scope.modify_success_list[$scope.edit_item_range].position_time_d;
-            // $("#StartTime").val($scope.start_time)
-            $scope.end_time = $scope.modify_success_list[$scope.modify_success_list.length-1].position_time_d;
-            // $("#EndTime").val($scope.end_time)
-            var x = $scope.edit_item_range / $scope.modify_success_list.length * 100;
+            $scope.start_time = $scope.modify_list[$scope.edit_item_range].position_time_d;
+            $scope.end_time = $scope.modify_list[$scope.modify_list.length-1].position_time_d;
+            var x = $scope.edit_item_range / ($scope.modify_list.length-1) * 100;
             var make_ai_model_edit_item_scroll = $('#make_ai_model_edit_item_scroll_list');
             var y = make_ai_model_edit_item_scroll.width();
             var z = y * (x/100);
@@ -45,27 +43,32 @@ angular.module('titanApp')
         }
 
         $scope.enter_status = false;
-        $scope.modify_rect_down = function(item, enter_status){
+        $scope.modify_rect_down = function(item, all_detail, enter_status){
             $scope.position_order = item.position_order;
             $scope.enter_status = true;
             $("#meta_data_editor_btn").css('display', 'block');
             $("#meta_data_editor_btn").css('left', item.x/(1920/$scope.width_img));
             $("#meta_data_editor_btn").css('top', item.y/(1080/$scope.height_img));
+//            var api_params = {};
+//            api_params['draw_item_type'] = item.draw_item_type;
+//            api_params['all_detail'] = all_detail
+//            api_acgan_classification.save(api_params, function(data){});
         }
 
         $scope.position_molra = function(s, e){
             if(s !== '' && e !== ''){
-                var st = $scope.modify_success_list.findIndex(i => i.position_time_d == s);
-                var et = $scope.modify_success_list.findIndex(i => i.position_time_d == e);
+                var st = $scope.modify_list.findIndex(i => i.position_time_d == s);
+                var et = $scope.modify_list.findIndex(i => i.position_time_d == e);
 
-                $scope.position_modify = $scope.modify_success_list.slice(st, (et+1))
-                $scope.modify_success_list = $scope.position_modify
+                $scope.position_modify = $scope.modify_list.slice(st, (et+1))
+                $scope.modify_list = $scope.position_modify
 
                 $scope.edit_item_range = 0;
                 $('#make_ai_model_edit_item_scroll').scrollLeft(0);
-            }else{
-                console.log($scope.modify_success_list)
             }
+//            else{
+//                console.log($scope.modify_list)
+//            }
         }
 
         $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
@@ -88,7 +91,6 @@ angular.module('titanApp')
                     }
                 }
             });
-//            $scope.videoDetails();
             $("#meta_data_editor_btn").css('display', 'none');
         }
 
@@ -148,15 +150,27 @@ angular.module('titanApp')
             $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
             $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
             $scope.modify_success_list = [];
+            $scope.modify_list = null;
+            $scope.modify_rect_position = null;
+            $scope.classification_item_list = null;
             $scope.modify_rect = null;
+            $scope.start_time = '';
+            $scope.end_time = '';
+            $("#meta_data_editor_btn").css('display', 'none');
         }
 
         $scope.item_selected = function(){
             $scope.make_ai_level = 2;
             $scope.selected_item = null;
             $scope.modify_success_list = [];
+            $scope.modify_list = null;
+            $scope.modify_rect_position = null;
+            $scope.classification_item_list = null;
             $('.make_ai_item_chk').prop('checked', false);
             $scope.modify_rect = null;
+            $scope.start_time = '';
+            $scope.end_time = '';
+            $("#meta_data_editor_btn").css('display', 'none');
         }
 
         $scope.item_list_click = function(item_idx){
@@ -185,6 +199,7 @@ angular.module('titanApp')
 
         $scope.start_modeling = function () {
             $scope.modeling_loading = true;
+            $scope.progress_title = '상품연결중…';
             let api_item_params = {};
             api_item_params['video_idx'] = $scope.selected_video.idx;
             api_item_params['video_url'] = $scope.selected_video.video_url;
@@ -192,20 +207,24 @@ angular.module('titanApp')
 
             api_make_titan_video.save(api_item_params, function(data){
                 if(data.status == 200) {
+                    $scope.modeling_loading = false;
+//                    $scope.classification_model($scope.selected_video, $scope.selected_item)
                     $scope.make_ai_level = 4;
                     $scope.video_capture_func($scope.selected_video, $scope.selected_item);
                 }
             });
 
             let api_params2 = {};
+            let api_params_class = {};
             let image_path = ENV.webs + '/make_image/' + $scope.selected_video.idx + '/';
             let video_image_path = image_path + 'images/';
             let draw_image_path = image_path + 'draw_images/';
             api_params2['fk_video_idx'] = $scope.selected_video.idx;
+            api_params2['item_idx'] = $scope.selected_item.idx;
             $scope.progressTimer = $interval(function () {
                 api_progress_process.get(api_params2, function (data) {
                     if (data.status == 200) {
-                        let datas = data.objects[0];
+                        let datas = data.objects[0].objects[0];
                         if (datas.draw_img_name != '') {
                             $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
                             $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
@@ -220,61 +239,91 @@ angular.module('titanApp')
             }, 500);
         }
 
+        $scope.classification_model = function(video, item){
+            var api_params = {};
+            var api_params_class = {};
+            api_params['video_idx'] = video.idx;
+            api_params['fk_item_idx'] = item.idx;
+            api_item_detail.get(api_params, function (data) {
+                if (data.status == 200) {
+                    api_params_class['draw_item_type'] = 2;
+                    api_params_class['all_detail'] = JSON.stringify(data.objects[0].objects);
+                    api_params_class['fk_video_idx'] = video.idx;
+                    api_params_class['item_idx'] = item.idx;
+                    api_acgan_classification.save(api_params_class, function(data){
+                        if(data.status == 200){
+                            $scope.make_ai_level = 4;
+                            $scope.video_capture_func(video, item);
+                        }
+                    });
+                }
+            });
+        }
 
         $scope.video_capture_func = function(video, item){
             $scope.make_ai_level = 4;
             var api_params = {};
-            if(item != null){
-            //     for(var i in item) {
-                $scope.detail_list = '';
-                $scope.detail_selected = '';
-                api_params['video_idx'] = video.idx;
-                api_params['fk_item_idx'] = item.idx;
-                api_item_detail.get(api_params, function (data) {
-                    if (data.status == 200) {
-                        $scope.detail_list = data.objects;
-                        $scope.detail_selected = $scope.detail_list[0];
-                        $scope.get_position_all(video, $scope.detail_list);
-                    }
-                });
+            if($scope.modify_list == null){
+                if(item != null){
+                //     for(var i in item) {
+                    $scope.detail_list = '';
+                    $scope.detail_selected = '';
+                    $scope.modify_rect = null;
+                    api_params['video_idx'] = video.idx;
+                    api_params['fk_item_idx'] = item.idx;
+                    api_item_detail.get(api_params, function (data) {
+                        if (data.status == 200) {
+    //                        if(data.objects != null && data.objects != ''){
+                            $scope.detail_list = data.objects[0].objects_set;
+                            $scope.detail_all_position = JSON.stringify(data.objects[0].objects);
+                            $scope.get_position_all(video, $scope.detail_list);
+    //                        }
+                        }
+                    });
+                }
             }
             // }
         }
 
         $scope.position_all = function(all_position){
-            $scope.modify_success_list = all_position;
-            $scope.start_time = '';
-            $scope.end_time = '';
+            if(all_position != null){
+                $scope.modify_list = all_position;
+                $scope.start_time = all_position[0].position_time_d;
+                $scope.end_time = all_position[all_position.length-1].position_time_d;
+            }
         }
 
 
         $scope.get_position_all = function(video, item){
+            $scope.modify_success_list = [];
+            $scope.modify_list = null;
             $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
             $scope.height_img = $('#current_modify_editor_img')[0].clientHeight;
-            var api_params = {};
-            $scope.modify_success_list = [];
             $scope.image_frame = item.position;
-            api_params['image_frame']= item.position;
-            api_params['item_idx']= item.fk_item_idx;
-            api_params['video_idx']= video.idx;
-
-            for(var j in $scope.detail_list){
-                $scope.modify_item_idx = $scope.detail_list[j].fk_item_idx;
-                $scope.editor_i = $scope.detail_list[j].position_order;
-                $scope.img_modify_url_current = ENV.webs + $scope.detail_list[j].draw_img_name;
+            $scope.img_modify_url_current = ENV.webs + item[0].draw_img_name;
+            for(var j in item){
+                $scope.modify_item_idx = item[j].fk_item_idx;
+                $scope.editor_i = item[j].position_order;
                 $scope.modify_success_list.push({
-                    "position": $scope.detail_list[j].position,
-                    "detail_index": $scope.detail_list[j].index,
-                    "position_time": $scope.detail_list[j].position_time,
-                    "position_time_d": $scope.detail_list[j].position_time_d,
-                    "draw_img_name": $scope.detail_list[j].draw_img_name,
+                    "position": item[j].position,
+                    "detail_index": item[j].index,
+                    "position_time": item[j].position_time,
+                    "image_time": item[j].image_time,
+                    "position_time_d": item[j].position_time_d,
+                    "draw_item_type": item[j].draw_item_type,
+                    "draw_img_name": item[j].draw_img_name,
+                    "classification_item": item[j].classification_item,
                     "display": "none",
                 });
             }
+            $scope.modify_list = $scope.modify_success_list;
+            if($scope.modify_list.length !== 0)
+                $scope.start_time = $scope.modify_list[0].position_time_d;
+                $scope.end_time = $scope.modify_list[$scope.modify_list.length-1].position_time_d;
             $scope.modify_rect_position = $scope.modify_success_list;
 
-            for(var i in $scope.modify_success){
-                $scope.rect_position_modify_func($scope.modify_success, i);
+            for(var i in $scope.modify_success_list){
+                $scope.rect_position_modify_func($scope.modify_success_list, i);
             }
         }
 
@@ -297,15 +346,17 @@ angular.module('titanApp')
              });
         }
 
-        $scope.item_position_rect_list = function(item_idx, item_position, video_idx){
+        $scope.item_position_rect_list = function(item_idx, item_position, video_idx, item_time){
             $scope.width_img = $('#current_modify_editor_img')[0].clientWidth;
             $scope.height_img = $('#current_modify_editor_img')[0].clientHeight;
             var api_params = {}
             api_params['item_idx'] = item_idx;
             api_params['video_idx'] = video_idx;
             api_params['image_frame'] = parseInt(item_position);
+            api_params['position_time'] = item_time;
             api_item_position_detail.save(api_params, function(data){
                 if(data.status == 200){
+                    $scope.classification_item_list = data.objects;
                     $scope.modify_rect = data.objects;
                     var Objects = data.objects;
                     $scope.rectPosition = [];
@@ -334,15 +385,18 @@ angular.module('titanApp')
         }
 
         $scope.ItemModifyEditor = function(item, video_idx, item_idx){
-            // const list = document.querySelector('#modify_list');
-
-//            function doSomething(diff) {
-//              list.scrollLeft += (diff);
-//            }
+            $("#meta_data_editor_btn").css('display', 'none');
             $scope.item_idx = item_idx;
             $scope.image_frame = parseInt(item.position);
+            $scope.image_time = item.image_time;
             $scope.img_modify_url_current = ENV.webs + item.draw_img_name;
-            $scope.item_position_rect_list(item_idx, $scope.image_frame, video_idx);
+            $scope.start_time = item.position_time_d;
+            $scope.item_position_rect_list(item_idx, $scope.image_frame, video_idx, $scope.image_time);
+        }
+
+        $scope.highlight_rect = function(item){
+            $(".modify__div").css("border", "1px solid #fff");
+            $("#item_modify_div_"+item.position_order).css("border", "1px solid red");
         }
 
 
@@ -1120,6 +1174,7 @@ angular.module('titanApp')
                     }
                 }
             });
+
             $("#meta_data_editor_btn").css('display', 'none');
             // var image_path = ENV.webs + '/make_image/' + item_idx;
             // api_item_detail.delete(api_params, function(data){
