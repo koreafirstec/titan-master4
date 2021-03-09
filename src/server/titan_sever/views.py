@@ -73,6 +73,10 @@ from .ai.models.plots import plot_one_box
 from .ai.models.torch_utils import select_device
 #############################################################################
 
+############# ACGAN #########################################################
+from .acgan import discriminator_bottom
+#############################################################################
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
@@ -1919,6 +1923,7 @@ class item_detail(Resource):
         fk_item_idx = request.args.get('fk_item_idx')
         index = 0
         objects = []
+        all_objects = []
         items_idx = []
 
         if (video_idx == None):
@@ -1937,41 +1942,55 @@ class item_detail(Resource):
             item_detail_list = TB_ITEM_DETAIL.query.filter_by(fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
             for item_detail in item_detail_list:
                 objects.append({
+                    'index': index,
                     'idx': item_detail.idx,
                     'fk_item_idx': item_detail.fk_item_idx,
+                    'fk_video_idx': item_detail.fk_video_idx,
                     'position': item_detail.position,
-                    'position_time': item_detail.position_time,
                     'position_order': item_detail.position_order,
+                    'position_time': int(item_detail.position_time),
+                    'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
+                    'draw_item_type': item_detail.draw_item_type,
+                    # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
+                    'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                     'x': item_detail.x,
                     'y': item_detail.y,
                     'width': item_detail.width,
                     'height': item_detail.height,
-                    'draw_item_type': item_detail.draw_item_type
+                    'classification_item': item_detail.classification_item
                 })
             return result(200, '[GET] Select item_detail successful', objects, None, COMPANY_NAME)
         else:
             item_detail_video_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=fk_item_idx, fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
-            for item_detail in item_detail_video_list:
-                if item_detail.position_order == 1:
+            if item_detail_video_list is not None:
+                for item_detail in item_detail_video_list:
+                # if item_detail.position_order == 1:
                     index += 1
                     objects.append({
                         'index': index,
                         'idx': item_detail.idx,
                         'fk_item_idx': item_detail.fk_item_idx,
+                        'fk_video_idx': item_detail.fk_video_idx,
                         'position': item_detail.position,
                         'position_order': item_detail.position_order,
                         'position_time': int(item_detail.position_time),
                         'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
+                        'draw_item_type': item_detail.draw_item_type,
                         # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
                         'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                         'x': item_detail.x,
                         'y': item_detail.y,
                         'width': item_detail.width,
-                        'height': item_detail.height
+                        'height': item_detail.height,
+                        'classification_item': item_detail.classification_item
                     })
-            a = list({timeP['position_time']: timeP for timeP in objects}.values())
-            return result(200, '[GET] Select item_detail successful', a, None, COMPANY_NAME)
-        # return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
+                a = list({timeP['position_time']: timeP for timeP in objects}.values())
+                all_objects.append({
+                    "objects": objects,
+                    "objects_set": a
+                })
+                return result(200, '[GET] Select item_detail successful', all_objects, None, COMPANY_NAME)
+            return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
 
     def post(self):
         objects = []
@@ -3340,58 +3359,66 @@ class item_position_detail(Resource):
     def __init__(self):
         print("item_position_detail INIT")
         self.parser = reqparse.RequestParser()
-        self.position_detail = ''
+        self.parser.add_argument("item_idx", type=str, location="json")
+        # self.parser.add_argument("item_idx", type=str, location="json", action="append")
+        self.parser.add_argument("image_frame", type=str, location="json")
+        self.parser.add_argument("video_idx", type=str, location="json")
+
         self.token_manager = TokenManager.instance()
+        self.item_idx = self.parser.parse_args()["item_idx"]
+        self.image_frame = self.parser.parse_args()["image_frame"]
+        self.video_idx = self.parser.parse_args()["video_idx"]
+        self.position_detail = ''
         super(item_position_detail, self).__init__()
 
-    def get(self):
+    def post(self):
         objects = []
-        image_frame = request.args.get('image_frame')
-        item_idx = request.args.get('item_idx')
-        video_idx = request.args.get('video_idx')
-        next_position = request.args.get('next_position')
+        # image_frame = request.args.get('image_frame')
+        # item_idx = request.args.get('item_idx')
+        # video_idx = request.args.get('video_idx')
 
-        if next_position is not None:
-            next_position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).first()
-            if next_position_detail is not None:
-                print('하하하하')
-            return result(200, "item_position_detail get success", None, None, COMPANY_NAME)
-        if image_frame != None:
-            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).all()
+        if self.image_frame != None:
+            # for i in self.item_idx:
+            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
             for p_detail in position_detail:
                 objects.append({
-                    'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
+                    'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
                     'position_time': p_detail.position_time,
                     'position_order': p_detail.position_order,
+                    'draw_item_type': p_detail.draw_item_type,
                     'fk_item_idx': p_detail.fk_item_idx,
                     'fk_video_idx': p_detail.fk_video_idx,
                     'x': p_detail.x,
                     'y': p_detail.y,
                     'width': p_detail.width,
-                    'height': p_detail.height
+                    'height': p_detail.height,
+                    'classification_item': p_detail.classification_item
                 })
         else:
-            image_modify_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx).first()
+            # for i in self.item_idx:
+            #     print(i)
+            image_modify_frame = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx).first()
             if image_modify_frame == None:
                 return result(404, "item_modify_frame not found", None, None, COMPANY_NAME)
-            image_frame = image_modify_frame.position
-            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx, position=image_frame).all()
+            self.image_frame = image_modify_frame.position
+            position_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.item_idx, fk_video_idx=self.video_idx, position=self.image_frame).all()
             for p_detail in position_detail:
                 objects.append({
-                    'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
+                    'draw_img_name': '/modify_images/' + str(self.video_idx) + "/" + str(self.item_idx) + '_images/' + str(p_detail.position).zfill(5) + '.jpg',
                     'position': p_detail.position,
                     'position_time': p_detail.position_time,
                     'position_order': p_detail.position_order,
+                    'draw_item_type': p_detail.draw_item_type,
                     'fk_item_idx': p_detail.fk_item_idx,
                     'fk_video_idx': p_detail.fk_video_idx,
                     'x': p_detail.x,
                     'y': p_detail.y,
                     'width': p_detail.width,
-                    'height': p_detail.height
+                    'height': p_detail.height,
+                    'classification_item': p_detail.classification_item
                 })
         return result(200, "item_position_detail get success", objects, None, COMPANY_NAME)
-
 
 class video_capture(Resource):
     def __init__(self):
@@ -5180,6 +5207,63 @@ class SearchYoutube(Resource):
             return result(404, "search fail", objects, None, COMPANY_NAME)
         return result(200, "search success", objects, None, COMPANY_NAME)
 
+class acgan_classification(Resource):
+    def __init__(self):
+        print("acgan_classification")
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument("draw_item_type", type=str, location="json")
+        self.parser.add_argument("all_detail", type=str, location="json")
+        self.parser.add_argument("fk_video_idx", type=str, location="json")
+        self.parser.add_argument("item_idx", type=str, location="json")
+        self.token_manager = TokenManager.instance()
+
+        self.draw_item_type = self.parser.parse_args()["draw_item_type"]
+        self.all_detail = self.parser.parse_args()["all_detail"]
+        self.fk_video_idx = self.parser.parse_args()["fk_video_idx"]
+        self.item_idx = self.parser.parse_args()["item_idx"]
+        super(acgan_classification, self).__init__()
+
+    def post(self):
+        objects = []
+        image_detection = ['shirt', 'pants', 'skirt', 'shoes', 'cap', 'golfball', 'golfbag', 'golfclub']
+        dis = discriminator_bottom.Discriminator(image_detection[int(self.draw_item_type)], "model/netD_epoch_6000.pth", self.draw_item_type, self.all_detail, self.fk_video_idx, self.item_idx)
+        check = dis.imageCrop()
+        if check:
+           index = 0
+           j = 0
+           path, pred, item_idx, video_idx = dis.discriminator_func()
+           for i in path:
+               position = i.split('\\')[len(i.split('\\'))-1]
+               position_name = int(position.split(".")[0])
+               order = int(position.split(".")[1])
+               update_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, position=position_name, position_order=order, fk_video_idx=video_idx, draw_item_type=self.draw_item_type).first()
+               update_detail.classification_item = pred[j]
+               db.session.add(update_detail)
+               db.session.commit()
+               j+=1
+           detail_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=item_idx, fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
+           for item_detail in detail_list:
+               index += 1
+               objects.append({
+                   'index': index,
+                   'idx': item_detail.idx,
+                   'fk_item_idx': item_detail.fk_item_idx,
+                   'fk_video_idx': item_detail.fk_video_idx,
+                   'position': item_detail.position,
+                   'position_order': item_detail.position_order,
+                   'position_time': int(item_detail.position_time),
+                   'position_time_d': str(int((item_detail.position_time % 3600) / 60)).zfill(2) + ":" + str(
+                       int(item_detail.position_time % 60)).zfill(2),
+                   'draw_item_type': item_detail.draw_item_type,
+                   'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(
+                       item_detail.position).zfill(5) + '.jpg',
+                   'x': item_detail.x,
+                   'y': item_detail.y,
+                   'width': item_detail.width,
+                   'height': item_detail.height,
+                   'classification_item': item_detail.classification_item
+               })
+           return result(200, "Aㅏ", objects, None, COMPANY_NAME)
 #############################################################################################################
 api = Api(app)
 api.add_resource(Login, '/api/login')
@@ -5218,4 +5302,5 @@ api.add_resource(TemporaryPassword, '/api/temporary_password')
 api.add_resource(auth, '/api/auth')
 api.add_resource(model_request, '/api/model_request')
 api.add_resource(SearchYoutube, '/api/search_youtube')
+api.add_resource(acgan_classification, '/api/acgan_classification')
 #############################################################################################################

@@ -3,8 +3,8 @@
     <h1 class="title">AI 만들기</h1>
     <div class="make_ai">
         <ul class="make_ai_level">
-            <li class="" ng-click="make_ai_level = 1" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
-            <li class="" ng-click="make_ai_level = 2" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
+            <li class="" ng-click="video_selected()" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
+            <li class="" ng-click="item_selected()" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
             <li class="" ng-click="make_ai_level = 3" ng-class="{'selected': make_ai_level == 3}">AI 모델링</li>
             <li class="" ng-click="video_capture_func(selected_video, selected_item)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
         </ul>
@@ -56,15 +56,17 @@
             </div>
             <div>
                 필터
+                <button type="button" class="make_ai_item_select_btn" ng-click="item_check()">확인</button>
             </div>
             <div class="make_ai_item_list">
                 <ul>
                     <li ng-repeat="item in show_itemList | filter: make_ai_item_search">
-                        <button type="button" ng-click="item_click(item, selected_video)">
+                        <button type="button" ng-click="item_list_click(item)">
                             <img ng-src="../images/uploads/{{item.idx}}_product.jpg">
                             <div>
                                 <p>
-                                     <input type="checkbox" ng-click="video_check_one(item.idx)">
+                                    <input type="checkbox" id="make_ai_item-{{item.idx}}" class="make_ai_item_chk">
+                                    <label class=""></label>
                                     {{item.item_title}}
                                 </p>
                                 <p>{{item.item_price}}</p>
@@ -86,13 +88,14 @@
                     <h1>모델링 화면</h1>
                     <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
                         <i class="fa fa-spinner fa-spin" style="color: #fff;"></i><br/>
-                        상품연결중…<br/>
+                        {{progress_title}}<br/>
                         {{modeling_progress}}%
                     </span>
                     <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">
                     <button type="button" ng-click="start_modeling()">AI 모델링 시작</button>
+                    <button type="button" ng-click="classification_model(selected_video, selected_item)">상품 분류 시작</button>
                     <p>
                         AI 모델링 시작 버튼을 누르면<br/>
                         상품 연결을 시작합니다.
@@ -102,28 +105,29 @@
             <div class="make_ai_modeling_item">
                 <p>연결할 상품</p>
                 <div>
+<!--                    <img ng-repeat="item in selected_item" ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
                     <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>
-
         <div class="make_ai_model_edit" ng-show="make_ai_level == 4">
             <div class="make_ai_model_edit_video">
                 <span class="make_ai_model_edit_link_video">
                     <h1>연결된 동영상</h1>
                     <img ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
-<!--                    <img ng-show="modify_success_list != null" ng-src="{{img_modify_url_current}}">-->
+<!--                    <img ng-show="modify_list != null" ng-src="{{img_modify_url_current}}">-->
                 </span>
                 <span style="position: relative;">
                     <h1>AI 자동지정 편집</h1>
-<!--                    <img ng-show="modify_success_list == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">-->
-                    <img ng-show="modify_success_list != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
+                    <img ng-show="modify_list.length == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-show="modify_list.length != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
 <!--                    -item.x/(1920/width_img)-->
-                    <modify-Editposition ng-repeat="item in modify_rect" ng-click="modify_rect_down(item, enter_status)" class="modify__div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
-                    <ul id="meta_data_editor_btn" class="context_back" style="display: none;left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);">
+                    <modify-Editposition ng-repeat="item in modify_rect" ng-click="modify_rect_down(item, detail_all_position, enter_status)" class="modify__div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
+<!--                    <modify-Editposition ng-click="modify_rect_down(item, detail_all_position, enter_status)" class="modify__div" id="item_modify_div_{{modify_rect.position_order}}" style="display: flex; left:{{modify_rect.x/(1920/width_img) | number:0}}px; top:{{modify_rect.y/(1080/height_img) | number:0}}px; height:{{(modify_rect.height/(1080/height_img)) | number:0}}px; width:{{(modify_rect.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>-->
+                    <ul id="meta_data_editor_btn" class="context_back" style="display: none;position:absolute;">
                         <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">수정</button></li>
                         <li><button ng-click="position_editor_delete(image_frame, selected_item.idx, position_order, selected_video.idx)">삭제</button></li>
                     </ul>
@@ -138,24 +142,37 @@
                 <button class="make_ai_model_edit_save_btn" ng-click="videoDetails()">저장</button>
             </div>
             <div class="make_ai_model_edit_item">
-                <p class="make_ai_model_edit_item_time">연결된 동영상 구간 <input type="text" ng-model="start_time" placeholder="00:00"> - <input type="text" ng-model="end_time" placeholder="00:00"><button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button><button ng-click="position_all(modify_rect_position)">전체보기</button></p>
-                <div>
-                    <div>
+                <p class="make_ai_model_edit_item_time">연결된 동영상 구간
+                    <input type="text" id="StartTime" ng-model="start_time" placeholder="00:00"> - <input type="text" id="EndTime" ng-model="end_time" placeholder="00:00">
+                    <button id="btn-search_position" ng-click="position_molra(start_time, end_time)">이동</button>
+                    <button ng-click="position_all(modify_rect_position)">전체보기</button>
+                </p>
+
+                <div id="make_ai_model_edit_item_scroll">
+                    <div id="make_ai_model_edit_item_scroll_list" ng-show="modify_success_list.length !== 0">
                         <ul>
-                            <li ng-repeat="image in modify_success_list">Position: {{image.position}}</li>
+                            <li ng-repeat="image in modify_list">Position: {{image.position}}</li>
                         </ul>
-                        <img ng-repeat="image in modify_success_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
+                        <img ng-repeat="image in modify_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx)" ng-src="{{image.draw_img_name}}">
                         <ul>
-                            <li ng-repeat="image in modify_success_list">{{image.position_time_d}}</li>
+                            <li ng-repeat="image in modify_list">{{image.position_time_d}}</li>
                         </ul>
                     </div>
+<!--                    <div id="make_ai_model_edit_item_detail_none" ng-show="modify_success_list.length === 0">-->
+<!--                        결과가 존재하지 않습니다.-->
+<!--                    </div>-->
+<!--                    <div id="make_ai_model_edit_item_scroll_item" class="make_ai_model_edit_item_scroll_item">-->
+<!--                        00:01-->
+<!--                    </div>-->
                 </div>
+                <input type="range" min="0" max="{{modify_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
                 <div>
                     <p>
                         연결된 상품
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
+<!--                    <img ng-repeat="item in selected_item" ng-src="../images/uploads/{{item.idx}}_product.jpg">-->
                     <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
