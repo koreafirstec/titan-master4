@@ -1965,32 +1965,26 @@ class item_detail(Resource):
             item_detail_video_list = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=fk_item_idx, fk_video_idx=video_idx).order_by(TB_ITEM_DETAIL.position.asc()).all()
             if item_detail_video_list is not None:
                 for item_detail in item_detail_video_list:
-                # if item_detail.position_order == 1:
-                    index += 1
-                    objects.append({
-                        'index': index,
-                        'idx': item_detail.idx,
-                        'fk_item_idx': item_detail.fk_item_idx,
-                        'fk_video_idx': item_detail.fk_video_idx,
-                        'position': item_detail.position,
-                        'position_order': item_detail.position_order,
-                        'image_time': item_detail.position_time,
-                        'position_time': int(item_detail.position_time),
-                        'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
-                        'draw_item_type': item_detail.draw_item_type,
-                        # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
-                        'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
-                        'x': item_detail.x,
-                        'y': item_detail.y,
-                        'width': item_detail.width,
-                        'height': item_detail.height,
-                        'classification_item': item_detail.classification_item
-                    })
+                    if item_detail.position_order == 1:
+                        index += 1
+                        objects.append({
+                            'index': index,
+                            'idx': item_detail.idx,
+                            'fk_item_idx': item_detail.fk_item_idx,
+                            'position': item_detail.position,
+                            'position_order': item_detail.position_order,
+                            'position_time': int(item_detail.position_time),
+                            'position_time_d': str(int((item_detail.position_time % 3600) / 60)).zfill(2) + ":" + str(
+                                int(item_detail.position_time % 60)).zfill(2),
+                            # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
+                            'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(
+                                item_detail.position).zfill(5) + '.jpg',
+                            'x': item_detail.x,
+                            'y': item_detail.y,
+                            'width': item_detail.width,
+                            'height': item_detail.height
+                        })
                 a = list({timeP['position_time']: timeP for timeP in objects}.values())
-                all_objects.append({
-                    "objects": objects,
-                    "objects_set": a
-                })
                 return result(200, '[GET] Select item_detail successful', all_objects, None, COMPANY_NAME)
             return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
 

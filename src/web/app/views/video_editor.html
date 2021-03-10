@@ -119,18 +119,38 @@
                 </span>
                 <span style="position: relative;">
                     <h1>AI 자동지정 편집</h1>
-                    <img ng-show="modify_list.length == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
-                    <img ng-show="modify_list.length != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
+                    <img ng-show="modify_list == null" ng-src="https://img.youtube.com/vi/{{selected_video.video_url.substr(32, 11)}}/hqdefault.jpg">
+                    <img ng-show="modify_list != null" ng-src="{{img_modify_url_current}}" id="current_modify_editor_img">
                     <div>
                         <div id="canvas_modify_editor" style="width: 100%; height: 100%;"></div>
                     </div>
 <!--                    -item.x/(1920/width_img)-->
-<!--                     ng-show="item.classification_item != null"-->
-                    <modify-Editposition ng-repeat="item in modify_rect" ng-click="modify_rect_down(item, detail_all_position, enter_status)" class="modify__div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
-<!--                    <modify-Editposition ng-repeat="item in modify_rect" ng-click="modify_rect_down(item, detail_all_position, enter_status)" class="modify__div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{rectLeft | number:0}}px; top:{{rectTop | number:0}}px; height:{{rectHeight | number:0}}px; width:{{rectWidth | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>-->
-<!--                    <modify-Editposition ng-click="modify_rect_down(item, detail_all_position, enter_status)" class="modify__div" id="item_modify_div_{{modify_rect.position_order}}" style="display: flex; left:{{modify_rect.x/(1920/width_img) | number:0}}px; top:{{modify_rect.y/(1080/height_img) | number:0}}px; height:{{(modify_rect.height/(1080/height_img)) | number:0}}px; width:{{(modify_rect.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>-->
-                    <ul id="meta_data_editor_btn" class="context_back" style="display: none;position:absolute;">
-                        <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx, image_time)">수정</button></li>
+                    <script src="scripts/controllers/swipe.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            console.log('준비');
+                            $("#current_modify_editor_img").swipe({
+                                PreventDefault: true,
+                                EnableMouse: true,
+                                Distance: 100,
+                                OnTouch: function (detail) {
+                                  console.log("Touch Details : { clientX : " + detail.client.x + ", clientY : " + detail.client.x + ", pageX : " + detail.page.x + ", pageY : " + detail.page.y + ", screenX : " + detail.screen.x + ", screenY : " + detail.screen.y + "}");
+                                },
+                                OnMove: function (detail) {
+                                  console.log("Move Details : { xchange:" + detail.diffx + ", ychange : " + detail.diffy + ", clientX : " + detail.client.x + ", clientY : " + detail.client.x + ", pageX : " + detail.page.x + ", pageY : " + detail.page.y + ", screenX : " + detail.screen.x + ", screenY : " + detail.screen.y + "}");
+                                },
+                                OnSwipe: function (detail) {
+                                  console.log("Swipe Details : { direction :" + detail.direction + ", distance : " + detail.distance + ", speed : " + detail.speed + ", time: " + detail.time + "}");
+                                },
+                                OnEnd: function () {
+                                    console.log('end');
+                                }
+                            });
+                        });
+                    </script>
+                    <modify-Editposition ng-repeat="item in modify_rect" ng-click="modify_rect_down(item, enter_status)" class="modify__div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></modify-Editposition>
+                    <ul id="meta_data_editor_btn" class="context_back" style="display: none;position:absolute;z-index: 999">
+                        <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, width_img, height_img, selected_item.idx, position_order, selected_video.idx)">수정</button></li>
                         <li><button ng-click="position_editor_delete(image_frame, selected_item.idx, position_order, selected_video.idx)">삭제</button></li>
                     </ul>
                 </span>
@@ -160,12 +180,6 @@
                             <li ng-repeat="image in modify_list">{{image.position_time_d}}</li>
                         </ul>
                     </div>
-<!--                    <div id="make_ai_model_edit_item_detail_none" ng-show="modify_success_list.length === 0">-->
-<!--                        결과가 존재하지 않습니다.-->
-<!--                    </div>-->
-<!--                    <div id="make_ai_model_edit_item_scroll_item" class="make_ai_model_edit_item_scroll_item">-->
-<!--                        00:01-->
-<!--                    </div>-->
                 </div>
                 <input type="range" min="0" max="{{modify_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
                 <div>
@@ -184,208 +198,3 @@
         </div>
     </div>
 </section>
-<!--<article id="video_Editors_content" class="modal__content">-->
-<!--    <div id="video_Editors_Time_Line" class="video_editor_wrap">-->
-<!--        <div id="editors_LNB_wrap" class="editors_LNB_wrap">-->
-<!--            <div id="editors_LNB" style="background-color:#272731;">-->
-<!--                <ul>-->
-<!--                    <li class="lib_btn" style="line-height: 60px;height: 60px;color: #fff;padding-top: unset;font-weight: bold;background: #258cd1 radial-gradient(circle, transparent 1%, #258cd1 1%) center/20000%;">-->
-<!--                        <p>TITANS</p>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn" ng-click="back_editor()" ng-show="selectedItem != '' && make_titan_status === 200 && ai_status != 100 && !showlib">-->
-<!--                        <button><i class="fa fa-arrow-left"></i>-->
-<!--                            <p>이전</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn add_ai" ng-show="ai_status == 0 && !show_item_lib" ng-click="VideoList()">-->
-<!--                        <button><i class="fa fa-video"></i>-->
-<!--                            <p>내 동영상</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn add_ai" ng-show="ai_status == 0 && !show_item_lib" ng-click="VideoShared()">-->
-<!--                        <button><i class="fa fa-share-alt"></i>-->
-<!--                            <p>공유된 영상</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn" ng-show="ai_status == 100 && !drawing" id="adding_position" style="display: none;" ng-click="multiDraw(editor_i)">-->
-<!--                        <button><i class="far fa-object-ungroup"></i>-->
-<!--                            <p>영역 추가</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn" id="cancel_position" style="display: none;" ng-click="CancelDraw()">-->
-<!--                        <button><i class="far fa-object-ungroup"></i>-->
-<!--                            <p>추가 취소</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--&lt;!&ndash;                    <li class="lib_btn add_ai" ng-show="ai_status == 0 && !show_item_lib" ng-click="AIList(selectedItem.video_url)">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button><i class="fa fa-brain"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <p>A.I.선택</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                    </li>&ndash;&gt;-->
-<!--                    <li class="lib_btn" ng-show="ai_status == 100" ng-click="first_work()">-->
-<!--                        <button><i class="fa fa-fast-backward"></i>-->
-<!--                            <p>처음으로</p>-->
-<!--                        </button>-->
-<!--                    </li>-->
-<!--                    <li class="lib_btn" style="position: absolute; bottom: 0;">-->
-
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--&lt;!&ndash;        <div id="AIList" class="alert_modal 모델리스트div">&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="title">A.I. 선택하기&ndash;&gt;-->
-<!--&lt;!&ndash;                <i class="fa fa-close" ng-click="AIList()" style="cursor: pointer;"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="에디터검색">&ndash;&gt;-->
-<!--&lt;!&ndash;                <input type="text" name="search" class="" ng-model="search.item" placeholder="검색어 입력">&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <ul class="모델리스트다">&ndash;&gt;-->
-<!--&lt;!&ndash;                <li ng-repeat="main in item_model_type | filter:search" ng-click="main_model_click(selectedItem, main)">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <button style="color:{{main.text_color}}; font-weight: bolder;">{{main.item}}</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                </li>&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;                <li><button ng-click="">사용 중인 모델: {{make_model_title}}</button></li>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;            </ul>&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--        <div class="editors_header">-->
-<!--            <input type="text" class="editor_title" value="{{editor_title}}" disabled>-->
-<!--            <button ng-click="close(make_titan_status)" class="editor_close">-->
-<!--                <i class="fa fa-sign-out-alt"></i>-->
-<!--                닫기-->
-<!--            </button>-->
-<!--        </div>-->
-<!--        <div class="editors_content">-->
-<!--            <div class="editors_above">-->
-<!--                <div id="editors_none" class="editors_none">-->
-<!--                    <div class="editors_video-select" ng-show="showlib">-->
-<!--                        <div>-->
-<!--&lt;!&ndash;                            <span style="display:block;color:#fff; font-size: 1.0rem;" ng-show="showlib">{{prev_model_item}}: {{make_model_title}}</span>&ndash;&gt;-->
-
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="editors_video-select" ng-show="show_item_lib" id="editors_video_div">-->
-<!--                        <span style="display:block;color:#fff; font-size: 1.0rem;" ng-show="show_item_lib">선택된 상품 아이템: {{make_item_title}}</span>-->
-<!--                        <div ng-repeat="item in show_itemList" style="display: inline">-->
-<!--                            <button ng-click="item_idx_click(item)" ng-disabled="item.request_status">-->
-<!--                                <div ng-show="item.request_status" class="fa fa-lock item_lock"></div>-->
-<!--                                <img ng-src="{{item.item_img_path}}">-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="video_add_container" ng-show="show_video_add">-->
-<!--                        <form method="post" name="video_search" ng-submit="VideoSearch(searchTitle)" novalidate form-autofill-fix>-->
-<!--                            <div class="form-group">-->
-<!--                                <input type="text" style="width: 70%;" class="form-control input-field inline-block" placeholder="검색" ng-model="searchTitle" ng-keypress="($event.which === 13)?login(searchTitle):0" required />-->
-<!--                                <input type="submit" class="btn inline-block" value="검색" />-->
-<!--                            </div>-->
-
-<!--                        </form>-->
-<!--                        <div ng-repeat="video in video_list" class="video_search_list">-->
-<!--                            <div ng-click="addDetail(video)" class="video_add_item">-->
-<!--                                <section class="detail__editor__preview">-->
-<!--                                    <img ng-src="https://img.youtube.com/vi/{{video.id}}/hqdefault.jpg" alt="썸네일">-->
-<!--                                </section>-->
-<!--                                <div>-->
-<!--                                    <p class="ellipsis2">{{video.title}}</p>-->
-<!--                                    <p class="ellipsis2">{{video.channel}}</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div ng-show="search_status">-->
-<!--                            검색 중...-->
-<!--                        </div>-->
-<!--                        <div ng-show="search_value_status">-->
-<!--                            검색 결과가 존재하지 않습니다.-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <button id="insert_video_item" ng-click="VideoAdd()" ng-show="showlib" style="display: inline-block; position: absolute;bottom: 12px;right: 30px;padding: 6px 25px;background-color: rgba(255, 255, 255,0.05);border-radius: 4px;color: #eeeeee;">영상 추가</button>-->
-<!--                </div>-->
-<!--                <div class="editors_title" id="editors_title">-->
-<!--                    <div id="editors_meta" style="position: relative;">-->
-<!--                        <div>-->
-<!--                            <img ng-src="{{img_url_current}}" src="{{img_url_current}}" class="current_editor_img" id="current_editor_img" ng-show="img_url_current != '' && img_url_current != undefined" style="max-width: 947px;">-->
-<!--                            <div style="position: absolute; width:100%; height: 100%; top: 0;">-->
-<!--                                <div id="canvas_editor" style="max-width: 947px; width: 100%; height: 100%;"></div>-->
-<!--                            </div>-->
-<!--                            <div class="item_div" ng-repeat="item in EditorObjects" id="item_div_{{item.total_position}}" style="display: {{modify_rect_display}}; left:{{item.x/(1920/w) | number:0}}px; top:{{item.y/(1080/h) | number:0}}px; height:{{(item.height/(1080/h)-item.y/(1080/h)) | number:0}}px; width:{{(item.width/(1920/w)-item.x/(1920/w)) | number:0}}px; position: absolute; border: 1px solid white; background-color: rgba(0,0,0,0.3);"></div>-->
-<!--                            <editor-position ng-repeat="item in modify_rect" class="item_modify_div" id="item_modify_div_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/w) | number:0}}px; top:{{item.y/(1080/h) | number:0}}px; height:{{(item.height/(1080/h)-item.y/(1080/h)) | number:0}}px; width:{{(item.width/(1920/w)-item.x/(1920/w)) | number:0}}px; position: absolute; border: 1px solid white; background-color: rgba(0,0,0,0.3);" ng-mousedown="modify_rect_down(item, enter_status)" context="context2" ng-right-click=""></editor-position>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div id="editors_insert_video" class="editors_insert_video">-->
-<!--&lt;!&ndash;                    <div id="video_canvas" class="video_canvas"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div style="position:absolute; width: 45%; height: 45% border: 1px solid #fff;" ng-show="loading_alert">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div id="" class="alert_modal">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="title">&ndash;&gt;-->
-<!--&lt;!&ndash;                                {{loading_title}}&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="msg" ng-show="loading_title == '로딩 중'">&ndash;&gt;-->
-<!--&lt;!&ndash;                                상품 아이템의 영역을 찾는 중입니다 (1~3분정도 소요될 수 있습니다.)&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="loader"><span class="loader__dot">.</span><span class="loader__dot">.</span><span class="loader__dot">.</span></div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="msg" ng-show="loading_title == '서버 에러'">&ndash;&gt;-->
-<!--&lt;!&ndash;                                페이지 관리자에게 문의해주세요.&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="msg" ng-show="loading_title == '모델 없음'">&ndash;&gt;-->
-<!--&lt;!&ndash;                                모델이 존재하지 않습니다. 이전 작업으로 이동하시거나 종료해주세요.&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <div class="msg" ng-show="loading_title == '시간 초과'">&ndash;&gt;-->
-<!--&lt;!&ndash;                                작업 시간이 오래 걸려 종료합니다. 이전 작업으로 이동하시거나 종료해주세요.&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                    <youtube id="youtube_if" videoid="{{selectedItem.video_url.substr(32, 11)}}" videoidx="{{selectedItem.idx}}"-->
-<!--                             itemdetection="{{item_detection}}" modeltitle="{{main_model.value}}" iscontrols="0"></youtube>-->
-<!--                    <div class="editor__rect" tooltip="{{make_item_title}}" tooltip-placement="right" ng-repeat="item in item_rect_detection" style="display: {{rect_display}}; left:{{(item.left/(1920/youtube_width)) + calc_value | number:0}}px; top:{{item.top/(1080/youtube_height) | number:0}}px; height:{{(item.height/(1080/youtube_height)-item.top/(1080/youtube_height)) | number:0}}px; width:{{(item.width/(1920/youtube_width)-item.left/(1920/youtube_width)) | number:0}}px; position: absolute; border: 1px solid white; background-color: rgba(0,0,0,0.3);"></div>-->
-<!--                    <div ng-repeat="item in modify_rect" id="item_modify_div_video_{{item.position_order}}" class="item_modify_div" style="display: flex; left:{{item.x/(1920/youtube_width) + calc_value | number:0}}px; top:{{item.y/(1080/youtube_height) | number:0}}px; height:{{(item.height/(1080/youtube_height)-item.y/(1080/youtube_height)) | number:0}}px; width:{{(item.width/(1920/youtube_width)-item.x/(1920/youtube_width)) | number:0}}px; position: absolute; border: 1px solid white; background-color: rgba(0,0,0,0.3);"></div>-->
-<!--&lt;!&ndash;                    <div class="editor_btn_line">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button ng-show="make_titan_status == 403" ng-click="metaDataCancel(make_titan_status)" class="position_cancel_btn">상품 영역 추가 취소</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button id="backward_btn" ng-disabled="meta_data_insert"><i class="fas fa-backward"></i></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button id="play_btn" data-seek="{{current_time}}" style="display: inline-block;" ng-disabled="meta_data_insert"><i class="fa fa-play" data-seek="{{current_time}}"></i></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button id="pause_btn" style="display: none;" tooltip="정지 하시거나 상품 아이템을 클릭하시면 찾은 영역을 보실 수 있습니다." tooltip-placement="bottom"><i class="fa fa-pause"></i></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button id="forward_btn" ng-disabled="meta_data_insert"><i class="fas fa-forward" ng-disabled="meta_data_insert"></i></button>&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;                        <button ng-show="make_titan_status != 403" id="meta_data_detector" ng-click="ItemEditorDetection(main_model.value)" ng-disabled="meta_data_insert">검출</button>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="editors_timeline">-->
-<!--                <div class="positionList">-->
-<!--                    <div style="position: absolute; left: 0;">-->
-<!--&lt;!&ndash;                        <button class="position_btn" ng-click="position_selected(2)" ng-disabled="ai_status != 100">전체</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button class="position_btn" ng-click="position_selected(0)" ng-disabled="ai_status != 100">추가되지 않은 영역</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <button class="position_btn" ng-click="position_selected(1)" ng-disabled="ai_status != 100">추가된 영역</button>&ndash;&gt;-->
-<!--                        <button class="position_btn" ng-click="position_selected(2)">전체</button>-->
-<!--                        <button class="position_btn" ng-click="position_selected(0)">추가되지 않은 영역</button>-->
-<!--                        <button class="position_btn" ng-click="position_selected(1)">추가된 영역</button>-->
-<!--                    </div>-->
-<!--                    <div style="display: none;"><div id="current-time" style="display: inline-block; color: #eee;">00:00:00</div>/<div id="duration" style="display: inline-block">00:00:00</div></div>-->
-<!--                </div>-->
-<!--                <div id="editors_list_tab">-->
-<!--                    <ul id="editor_list" class="menu-area" style="top: 0; height: 94%;">-->
-<!--                        <li ng-repeat="item in editor_locker" class="editor_li">-->
-<!--                            <p style="margin-bottom: 75px;font-weight: bolder;font-size: 15px;">{{item.position_time.toFixed(1)}}</p>-->
-<!--                            <i class="fa fa-angle-down editor_icon" id="editor_icon_{{item.image_frame}}" style="display:{{item.display}}; color:#fff;"></i>-->
-<!--                            <button ng-click="ItemEditor(item, selectedItem.idx)" style="border: {{item.border_color}};" id="meta_editor_li_{{item.image_frame}}" class="meta_editor_li">-->
-<!--                                <img ng-src="{{item.draw_image}}" style="width: 180px; height: 130px;">-->
-<!--                            </button>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--&lt;!&ndash;                <div class="progress" style="display: none; height: 6%;">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div id="progress_bar" class="progress-bar progress-bar-success Netflix-Logo-4-hex" style="width:{{ai_status}}%">&ndash;&gt;-->
-<!--&lt;!&ndash;                        {{ai_status}}%&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <ul id="context2" class="context_back">-->
-<!--        <li style="background-color: blue; color: #fff;">영역 수정</li>-->
-<!--        <li>{{position_order}}번째 영역</li>-->
-<!--        <li><button ng-click="position_editor_modify(rectLeft, rectTop, rectWidth, rectHeight, image_frame, w, h, item_idx, position_order, selectedItem.idx)">수정</button></li>-->
-<!--        <li><button ng-click="position_editor_delete(image_frame, item_idx, position_order, selectedItem.idx)">삭제</button></li>-->
-<!--        <li ng-show="rectPosition.length > 1"><button ng-click="position_editor_all_drop(rectPosition, item_idx, image_frame, selectedItem.idx)">모두 삭제</button></li>-->
-<!--    </ul>-->
-<!--</article>-->
