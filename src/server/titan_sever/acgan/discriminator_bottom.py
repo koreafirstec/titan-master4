@@ -59,6 +59,34 @@ class Discriminator:
                 cv2.imwrite(item_image_path + str(i['position']).zfill(5) + "." + str(i['position_order']) + ".jpg", crop_images)
         return True
 
+    def add_process_ai(self):
+        progress = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.fk_video_idx).first()
+        if progress is None:
+            new_process = TB_PROCCESS_AI()
+            new_process.fk_video_idx = self.video_idx
+            new_process.progress = 0
+            new_process.draw_img_name = ''
+            new_process.draw_img_time = 0
+            new_process.ai_status = 0
+            db.session.add(new_process)
+            db.session.commit()
+
+    def update_process_ai(self, draw_img, current_time, progress_num, ai_status):
+        progress = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.video_idx).first()
+        if progress is not None:
+            progress.fk_video_idx = self.video_idx
+            progress.progress = progress_num
+            progress.draw_img_name = draw_img
+            progress.draw_img_time = current_time
+            progress.ai_status = ai_status
+            db.session.commit()
+
+    def delete_process_ai(self):
+        delete_ai = TB_PROCCESS_AI.query.filter_by(fk_video_idx=self.fk_video_idx).first()
+        if delete_ai is not None:
+            db.session.query(TB_PROCCESS_AI).filter_by(fk_video_idx=self.fk_video_idx).delete()
+            db.session.commit()
+
     def discriminator_func(self):
         paths = []
         predict_name = []
@@ -79,7 +107,7 @@ class Discriminator:
         classes_name = ['여성 WL 스트레치 슬릿 큐롯', '여성 컨피던스 블럭', '여성 컨피던스 플리츠 큐롯', '남성 CF 간절 멜란지 팬츠', '와이드앵글 남성 WL 뱀부 향균 팬츠', '여성 슈퍼 스트레치 베이직 팬츠', 'pink', 'RWPCI5531', '블랙 삼선뒷밴딩 여성골프 스커트', '여성 웰딩 포인트 큐롯', 'RWPCJ7511-500_G', 'WWU18Q31W3', 'WWM19Q02Z1']
 
         os.environ['CUDA_VISIBLE_DEVICES'] = str(0)
-        cudnn.benchmark = False
+        cudnn.benchmark = True
 
         dataset = ImageFolder(
             root="./titan_sever/acgan/images/"+self.detection+"_"+self.fk_item_idx+"_"+self.fk_video_idx+"_"+self.draw_item_type,
@@ -151,7 +179,15 @@ class Discriminator:
             _, pred = torch.max(aux.data, 1)
             predict = (i for i in pred)
             for i in predict:
-                predict_name.append(classes_name[int(i)])
+                position = data[2].split('\\')[len(data[2].split('\\')) - 1]
+                position_name = int(position.split(".")[0])
+                order = int(position.split(".")[1])
+                update_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.fk_item_idx, position=position_name,
+                                                               position_order=order, fk_video_idx=self.fk_video_idx,
+                                                               draw_item_type=self.draw_item_type).first()
+                update_detail.classification_item = classes_name[int(i)]
+                db.session.add(update_detail)
+                db.session.commit()
                 predict_class.append(classes_name[i]+str(image_len)+"\n")
                 if classes_name[int(i)] not in predict_cnt.keys():
                     predict_cnt[classes_name[int(i)]] = 1

@@ -6,7 +6,7 @@
             <li class="" ng-click="modeling_loading === true || video_selected()" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
             <li class="" ng-click="modeling_loading === true || item_selected()" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
             <li class="" ng-click="modeling_loading === true || detect_seleted()" ng-class="{'selected': make_ai_level == 3}">AI 모델링</li>
-            <li class="" ng-click="modeling_loading === true || video_capture_func(selected_video, selected_item)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
+            <li class="" ng-click="modeling_loading === true || video_capture_func(selected_video, selected_item, item_title_is)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
         </ul>
 
         <div class="make_ai_video_select" ng-show="make_ai_level == 1">
@@ -86,12 +86,13 @@
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
-                    <span class="make_ai_modeling_spinner" ng-if="modeling_loading">
+                    <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
                         <i class="fa fa-spinner fa-spin" style="color: #fff;"></i><br/>
                         {{progress_title}}<br/>
-                        {{modeling_progress}}%
+                        {{modeling_progress}}
                     </span>
-                    <img ng-src="{{draw_image}}">
+                    <img id="make_ai_model_draw_img" ng-src="{{draw_image}}">
+                    <div ng-repeat="item in drawing_rect" ng-show="classification_draw && item.draw_item_type === draw_item_type_is && item.classification_item === item_detail_title" class="modify__div" id="item_draw_{{item.position_order}}" style="display: flex; left:{{item.x/(1920/width_img) | number:0}}px; top:{{item.y/(1080/height_img) | number:0}}px; height:{{(item.height/(1080/height_img)) | number:0}}px; width:{{(item.width/(1920/width_img)) | number:0}}px; position: absolute; border: 1px solid #fff; background-color: rgba(0,0,0,0.3);"></div>
                 </span>
                 <span class="make_ai_modeling_video_start">
                     <button type="button" ng-click="start_modeling()">Detection</button>
@@ -175,24 +176,25 @@
                         <ul>
                             <li ng-repeat="image in modify_list">Position: {{image.position}}</li>
                         </ul>
-                        <img ng-repeat="image in modify_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx, width_img, height_img)" ng-src="{{image.draw_img_name}}">
+                        <img ng-repeat="image in modify_list" ng-click="ItemModifyEditor(image, selected_video.idx, selected_item.idx, selected_item.item_title, width_img, height_img)" ng-src="{{image.draw_img_name}}">
                         <ul>
                             <li ng-repeat="image in modify_list">{{image.position_time_d}}</li>
                         </ul>
                     </div>
                 </div>
-                <input type="range" min="0" max="{{modify_list.length -1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
+                <input type="range" min="0" max="{{modify_list.length-1}}" step="1" value="0" id="edit_item_scrollbar" ng-model="edit_item_range" ng-change="edit_item_scroll()">
                 <div>
                     <p>
                         연결된 상품
                         <button type="button">전체삭제</button>
                         <button type="button">선택삭제</button>
                     </p>
-                    <div ng-show="classification_item_list != null">
-<!--                         ng-show="item.classification_item != null"-->
-                        <button ng-repeat="item in classification_item_list" ng-show="item.classification_item != null" ng-click="highlight_rect(item)">{{item.classification_item}}</button>
-                    </div>
-                    <img ng-show="classification_item_list == null" ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
+<!--                    <div ng-show="classification_item_list != null">-->
+<!--&lt;!&ndash;                         ng-show="item.classification_item != null"&ndash;&gt;-->
+<!--                        <button ng-repeat="item in classification_item_list" ng-show="item.classification_item != null" ng-click="highlight_rect(item)">{{item.classification_item}}</button>-->
+<!--                    </div>-->
+<!--                     ng-show="classification_item_list == null"-->
+                    <img ng-src="../images/uploads/{{selected_item.idx}}_product.jpg">
                 </div>
             </div>
         </div>
