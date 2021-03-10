@@ -1,7 +1,10 @@
 <div id="popup_new_election_common" class="popup_new_election" style="width: 960px;height: 536px;position: relative;">
-    <youtube id="playerWrap" videoid="{{video_id}}" videoidx="{{video_idx}}" itemlist="{{item_list}}" open="{{open}}"></youtube>
-<!--    <div id="item_list" class="item_video_rect" ng-repeat="item in item_list">-->
-    <div id="item_list" class="item_video_rect">
+    <youtube id="playerWrap" videoid="{{video_id}}" videoidx="{{video_idx}}" itemlist="{{item_list}}" open="{{open}}" classification="{{classification}}"></youtube>
+<!--    <div ng-if="classification" class="item_video_rect" ng-repeat="item in item_list">-->
+<!--        <div id="item_{{item.idx}}" class="video_item_position"></div>-->
+<!--    </div>-->
+<!--    <div ng-if="!classification" class="item_video_rect">-->
+    <div class="item_video_rect">
 <!--        <div id="item_{{item.idx}}" class="video_item_position" ng-click="openItem(item.idx)"></div>-->
 <!--        <div id="item_{{item.idx}}" class="video_item_position"></div>-->
         <div id="item_0" style="display: none;position: absolute;background-color: rgba(0, 0, 0, 0.3);border: 1px solid;"></div>

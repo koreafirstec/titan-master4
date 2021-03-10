@@ -20,7 +20,8 @@ angular.module('titanApp')
       seektime: "@",
       rightstatus: "@",
       firsttime: "@",
-      isfs: "@"
+      isfs: "@",
+      classification: "@",
     },
 
     template: '<div></div>',
@@ -255,8 +256,15 @@ angular.module('titanApp')
 
            // console.log(prevTime + " / " +  dataObjects[0].position_time + " / "  + futureTime);
 
-           let item_list = dataObjects.filter( d=> {return (d.position_time >= prevTime && d.position_time <= futureTime)})
-           // console.log(item_list.length);
+           if(scope.classification === 't') {
+               item_list = dataObjects.filter(d => {
+                   return (d.image_time >= prevTime && d.image_time <= futureTime && d.classification_item !== null)
+               })
+           } else {
+               item_list = dataObjects.filter(d => {
+                   return (d.image_time >= prevTime && d.image_time <= futureTime)
+               })
+           }
 
            drawRect(item_list);
 
@@ -621,7 +629,7 @@ angular.module('titanApp')
     }
   };
 })
-.controller('PopupYoutubeCtrl', function ($scope, $rootScope, $window, Modal, $modalInstance, api_item_position_detail, AuthService, api_video_capture, item, video_status, api_item, $timeout, api_item_history, ENV) {
+.controller('PopupYoutubeCtrl', function ($scope, $rootScope, $window, Modal, $modalInstance, api_item_position_detail, AuthService, api_video_capture, item, video_status, api_item, $timeout, api_item_history, ENV, classification) {
     $scope.title = item.video_title;
     $rootScope.item_list;
     $scope.rightStatus = 0;
@@ -636,6 +644,7 @@ angular.module('titanApp')
     $scope.current_position = 0;
     $scope.idx = 0;
     $scope.user_idx = AuthService.getIdx();
+    $scope.classification = classification;
 
     var api_params = {};
     var history_param = {};

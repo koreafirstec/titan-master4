@@ -3,10 +3,10 @@
     <h1 class="title">AI 만들기</h1>
     <div class="make_ai">
         <ul class="make_ai_level">
-            <li class="" ng-click="video_selected()" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
-            <li class="" ng-click="item_selected()" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
-            <li class="" ng-click="make_ai_level = 3" ng-class="{'selected': make_ai_level == 3}">AI 모델링</li>
-            <li class="" ng-click="video_capture_func(selected_video, selected_item)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
+            <li class="" ng-click="modeling_loading === true || video_selected()" ng-class="{'selected': make_ai_level == 1}">동영상 선택</li>
+            <li class="" ng-click="modeling_loading === true || item_selected()" ng-class="{'selected': make_ai_level == 2}">상품 선택</li>
+            <li class="" ng-click="modeling_loading === true || detect_seleted()" ng-class="{'selected': make_ai_level == 3}">AI 모델링</li>
+            <li class="" ng-click="modeling_loading === true || video_capture_func(selected_video, selected_item)" ng-class="{'selected': make_ai_level == 4}">AI 편집</li>
         </ul>
 
         <div class="make_ai_video_select" ng-show="make_ai_level == 1">
@@ -86,7 +86,7 @@
                 </span>
                 <span>
                     <h1>모델링 화면</h1>
-                    <span class="make_ai_modeling_spinner" ng-show="modeling_loading">
+                    <span class="make_ai_modeling_spinner" ng-if="modeling_loading">
                         <i class="fa fa-spinner fa-spin" style="color: #fff;"></i><br/>
                         {{progress_title}}<br/>
                         {{modeling_progress}}%
@@ -94,8 +94,8 @@
                     <img ng-src="{{draw_image}}">
                 </span>
                 <span class="make_ai_modeling_video_start">
-                    <button type="button" ng-click="start_modeling()">AI 모델링 시작</button>
-                    <button type="button" ng-click="classification_model(selected_video, selected_item)">상품 분류 시작</button>
+                    <button type="button" ng-click="start_modeling()">Detection</button>
+                    <button type="button" ng-click="classification_model(selected_video, selected_item)">Classification</button>
                     <p>
                         AI 모델링 시작 버튼을 누르면<br/>
                         상품 연결을 시작합니다.

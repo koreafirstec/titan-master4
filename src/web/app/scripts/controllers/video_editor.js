@@ -26,6 +26,7 @@ angular.module('titanApp')
         $scope.start_time = '';
         $scope.end_time = '';
         $scope.edit_item_range = '';
+        $scope.classification_end = 'f';
 
 
     //  광고 부분
@@ -107,6 +108,9 @@ angular.module('titanApp')
                     },
                     video_status: function () {
                         return 0;
+                    },
+                    classification: function () {
+                        return $scope.classification_end;
                     }
                 }
             );
@@ -149,8 +153,6 @@ angular.module('titanApp')
             $scope.selected_video = null;
             $scope.selected_item = null;
             $('.make_ai_item_chk').prop('checked', false);
-            $scope.video_image = 'https://img.youtube.com/vi//hqdefault.jpg';
-            $scope.draw_image = 'https://img.youtube.com/vi//hqdefault.jpg';
             $scope.modify_success_list = [];
             $scope.modify_list = null;
             $scope.modify_rect_position = null;
@@ -173,6 +175,10 @@ angular.module('titanApp')
             $scope.start_time = '';
             $scope.end_time = '';
             $("#meta_data_editor_btn").css('display', 'none');
+        }
+
+        $scope.detect_seleted = function(){
+            $scope.make_ai_level = 3;
         }
 
         $scope.item_list_click = function(item_idx){
@@ -200,6 +206,7 @@ angular.module('titanApp')
         };
 
         $scope.start_modeling = function () {
+            $scope.classification_end = 'f';
             $scope.modeling_loading = true;
             $scope.progress_title = '상품연결중…';
             let api_item_params = {};
@@ -222,7 +229,6 @@ angular.module('titanApp')
             let video_image_path = image_path + 'images/';
             let draw_image_path = image_path + 'draw_images/';
             api_params2['fk_video_idx'] = $scope.selected_video.idx;
-            api_params2['item_idx'] = $scope.selected_item.idx;
             $scope.progressTimer = $interval(function () {
                 api_progress_process.get(api_params2, function (data) {
                     if (data.status == 200) {
@@ -259,6 +265,7 @@ angular.module('titanApp')
                             $scope.modeling_loading = false;
                             $scope.make_ai_level = 4;
                             $scope.video_capture_func(video, item);
+                            $scope.classification_end = 't';
                         }
                     });
                 }

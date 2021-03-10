@@ -251,6 +251,9 @@ angular.module('titanApp')
                     },
                     video_status: function () {
                         return video_status;
+                    },
+                    classification: function () {
+                        return 't';
                     }
                 }
             );
