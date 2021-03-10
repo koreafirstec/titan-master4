@@ -1971,20 +1971,26 @@ class item_detail(Resource):
                             'index': index,
                             'idx': item_detail.idx,
                             'fk_item_idx': item_detail.fk_item_idx,
+                            'fk_video_idx': item_detail.fk_video_idx,
                             'position': item_detail.position,
                             'position_order': item_detail.position_order,
+                            'image_time': item_detail.position_time,
                             'position_time': int(item_detail.position_time),
-                            'position_time_d': str(int((item_detail.position_time % 3600) / 60)).zfill(2) + ":" + str(
-                                int(item_detail.position_time % 60)).zfill(2),
+                            'position_time_d': str(int((item_detail.position_time%3600)/60)).zfill(2)+":"+str(int(item_detail.position_time%60)).zfill(2),
+                            'draw_item_type': item_detail.draw_item_type,
                             # 'draw_img_name': '/modify_images/' + str(video_idx) + "/" + str(fk_item_idx) + '_images/' + str(item_detail.position).zfill(5) + '.jpg',
-                            'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(
-                                item_detail.position).zfill(5) + '.jpg',
+                            'draw_img_name': '/make_image/' + str(video_idx) + "/images/" + str(item_detail.position).zfill(5) + '.jpg',
                             'x': item_detail.x,
                             'y': item_detail.y,
                             'width': item_detail.width,
-                            'height': item_detail.height
+                            'height': item_detail.height,
+                            'classification_item': item_detail.classification_item
                         })
                 a = list({timeP['position_time']: timeP for timeP in objects}.values())
+                all_objects.append({
+                    "objects": objects,
+                    "objects_set": a
+                })
                 return result(200, '[GET] Select item_detail successful', all_objects, None, COMPANY_NAME)
             return result(404, '[GET] item_detail is not found', None, None, COMPANY_NAME)
 
@@ -2041,9 +2047,8 @@ class item_detail(Resource):
 
     def put(self):
         objects = []
-        print(self.fk_item_idx, self.item_position, self.p_order)
         rect_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.fk_item_idx, fk_video_idx=self.fk_video_idx, position=self.item_position,
-                                                     position_order=self.p_order, position_time=self.p_time).first()
+                                                     position_order=self.p_order).first()
         if rect_detail is not None:
             rect_detail.x = int(float(self.rect_x))
             rect_detail.y = int(float(self.rect_y))

@@ -226,7 +226,7 @@ angular.module('titanApp')
             $scope.progressTimer = $interval(function () {
                 api_progress_process.get(api_params2, function (data) {
                     if (data.status == 200) {
-                        let datas = data.objects[0].objects[0];
+                        let datas = data.objects[0];
                         if (datas.draw_img_name != '') {
                             $scope.video_image = video_image_path + datas.draw_img_name + '.jpg';
                             $scope.draw_image = draw_image_path + datas.draw_img_name + '.jpg';
