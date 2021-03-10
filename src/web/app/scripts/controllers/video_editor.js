@@ -71,11 +71,13 @@ angular.module('titanApp')
 //            }
         }
 
-        $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx){
+        $scope.position_editor_modify = function(x, y, w, h, position, iw, ih, item_idx, p_order, video_idx, time){
             var api_params = {};
+            console.log(x, y, w, h)
             api_params['fk_item_idx'] = item_idx;
             api_params['fk_video_idx'] = video_idx;
             api_params['item_position'] = position;
+            api_params['p_time'] = time;
             api_params['p_order'] = p_order;
             api_params['rect_x'] = x * (1920/iw);
             api_params['rect_y'] = y * (1080/ih);
@@ -312,6 +314,10 @@ angular.module('titanApp')
                     "position_time_d": item[j].position_time_d,
                     "draw_item_type": item[j].draw_item_type,
                     "draw_img_name": item[j].draw_img_name,
+                    "x": item[j].x,
+                    "y": item[j].y,
+                    "w": item[j].width,
+                    "h": item[j].height,
                     "classification_item": item[j].classification_item,
                     "display": "none",
                 });
@@ -384,13 +390,17 @@ angular.module('titanApp')
             });
         }
 
-        $scope.ItemModifyEditor = function(item, video_idx, item_idx){
+        $scope.ItemModifyEditor = function(item, video_idx, item_idx, w, h){
             $("#meta_data_editor_btn").css('display', 'none');
             $scope.item_idx = item_idx;
             $scope.image_frame = parseInt(item.position);
             $scope.image_time = item.image_time;
             $scope.img_modify_url_current = ENV.webs + item.draw_img_name;
             $scope.start_time = item.position_time_d;
+            $scope.rectLeft = item.x/(1920/w);
+            $scope.rectTop = item.y/(1080/h);
+            $scope.rectWidth = item.w/(1920/w);
+            $scope.rectHeight = item.h/(1080/h);
             $scope.item_position_rect_list(item_idx, $scope.image_frame, video_idx, $scope.image_time);
         }
 

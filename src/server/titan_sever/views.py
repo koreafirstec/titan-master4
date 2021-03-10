@@ -2049,7 +2049,7 @@ class item_detail(Resource):
         objects = []
         print(self.fk_item_idx, self.item_position, self.p_order)
         rect_detail = TB_ITEM_DETAIL.query.filter_by(fk_item_idx=self.fk_item_idx, fk_video_idx=self.fk_video_idx, position=self.item_position,
-                                                     position_order=self.p_order).first()
+                                                     position_order=self.p_order, position_time=self.p_time).first()
         if rect_detail is not None:
             rect_detail.x = int(float(self.rect_x))
             rect_detail.y = int(float(self.rect_y))
@@ -2063,6 +2063,7 @@ class item_detail(Resource):
                 'fk_item_idx': mody.fk_item_idx,
                 'position': mody.position,
                 'position_order': mody.position_order,
+                'image_time': mody.position_time,
                 'x': mody.x,
                 'y': mody.y,
                 'width': mody.width,
