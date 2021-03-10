@@ -242,6 +242,8 @@ angular.module('titanApp')
         }
 
         $scope.classification_model = function(video, item){
+            $scope.progress_title = '상품분류중…';
+            $scope.modeling_loading = true;
             var api_params = {};
             var api_params_class = {};
             api_params['video_idx'] = video.idx;
@@ -254,6 +256,7 @@ angular.module('titanApp')
                     api_params_class['item_idx'] = item.idx;
                     api_acgan_classification.save(api_params_class, function(data){
                         if(data.status == 200){
+                            $scope.modeling_loading = false;
                             $scope.make_ai_level = 4;
                             $scope.video_capture_func(video, item);
                         }
@@ -263,6 +266,7 @@ angular.module('titanApp')
         }
 
         $scope.video_capture_func = function(video, item){
+            $scope.modeling_loading = false;
             $scope.make_ai_level = 4;
             var api_params = {};
             if($scope.modify_list == null){
