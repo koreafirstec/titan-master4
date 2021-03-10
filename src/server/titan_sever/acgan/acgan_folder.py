@@ -22,13 +22,13 @@ def is_image_file(filename):
 
 def find_classes(dir, classes_idx=None):
     classes = [d for d in os.listdir(dir) if os.path.isdir(os.path.join(dir, d))]
+    # print(classes)
     classes.sort()
     if classes_idx is not None:
         assert type(classes_idx) == tuple
         start, end = classes_idx
         classes = classes
     class_to_idx = {classes[i]: i for i in range(len(classes))}
-    print(class_to_idx)
     return classes, class_to_idx
 
 
@@ -107,7 +107,6 @@ class ImageFolder(data.Dataset):
         classes, class_to_idx = find_classes(root, self.classes_idx)
         imgs = make_dataset(root, class_to_idx)
         if len(imgs) == 0:
-            print("ddd")
             raise(RuntimeError("Found 0 images in subfolders of: " + root + "\n"
                                "Supported image extensions are: " + ",".join(IMG_EXTENSIONS)))
         self.root = root

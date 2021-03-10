@@ -248,20 +248,22 @@
     position: relative;
     width: 100%;
     max-width: 1280px;
-    /*min-width: 1200px;*/
     height: 336.2px;
-    padding: 27.5px 0 30px 48.5px;
+    padding: 47px 0 30px 48.5px;
     border: solid 0.3px #cbcbcb;
     background-color: #3d3d3d;
 }
 .make_ai > .make_ai_modeling > .make_ai_modeling_video > span {
     display: inline-block;
     position: relative;
+    margin-right: 25px;
 }
 .make_ai > .make_ai_modeling > .make_ai_modeling_video > span > h1 {
     font-size: 14px;
     letter-spacing: -0.17px;
     color: #ffffff;
+    position: absolute;
+    top: -20px;
 }
 .make_ai > .make_ai_modeling > .make_ai_modeling_video > span > img {
     width: 450px;
