@@ -1973,6 +1973,7 @@ angular.module('titanApp')
                 scope.check_left_top(newPosY, newPosX);
             });
             elem.draggable({containment: "#current_modify_editor_img"});
+            elem.draggable();
         }
     }
 }]);
