@@ -5334,7 +5334,7 @@ class Discriminator:
         model_path = "./titan_sever/acgan/"+str(self.detection)+"model"
         if not os.path.exists(model_path):
             os.mkdir(model_path)
-        device = torch.device('cpu')
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         netD = _netD_result(1, num_classes)
         # GPU
         # netD.load_state_dict(torch.load("./titan_sever/acgan/"+str(self.model_name)))

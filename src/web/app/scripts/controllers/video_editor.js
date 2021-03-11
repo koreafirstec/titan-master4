@@ -1925,6 +1925,24 @@ angular.module('titanApp')
         link: function postLink(scope, elem, attrs) {
             let position_order = $(this).data('position');
             elem.resizable({ handles: " n, e, s, w, ne, se, sw, nw"});
+            elem.resizable();
+            // elem.on('touchstart', function (event) {
+            //     console.log(11);
+            // });
+            // elem.on('touchmove', function (event) {
+            //     var touch = event.originalEvent.changedTouches[0];
+            //     var posOff = scope.offset(),
+            //     newPosW = touch.radiusX * 2,
+            //     newPosH = touch.radiusY  * 2;
+            //     scope.check_wid_hei(newPosW, newPosH);
+            // });
+            // elem.on('touchend', function (event) {
+            //     var touch = event.originalEvent.changedTouches[0];
+            //     var posOff = scope.offset(),
+            //     newPosW = touch.radiusX * 2,
+            //     newPosH = touch.radiusY  * 2;
+            //     scope.check_wid_hei(newPosW, newPosH);
+            // });
             elem.on('resizestop', function (event, ui) {
                 var posOff = scope.offset(),
                 newPosW = ui.size.width,

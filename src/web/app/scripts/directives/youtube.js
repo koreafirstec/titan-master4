@@ -258,7 +258,8 @@ angular.module('titanApp')
 
            if(scope.classification === 't') {
                item_list = dataObjects.filter(d => {
-                   return (d.image_time >= prevTime && d.image_time <= futureTime && d.classification_item !== null)
+                   // return (d.image_time >= prevTime && d.image_time <= futureTime && d.classification_item !== null)
+                   return (d.image_time >= prevTime && d.image_time <= futureTime && d.classification_item === "여성 WL 스트레치 슬릿 분홍 큐롯")
                })
            } else {
                item_list = dataObjects.filter(d => {
