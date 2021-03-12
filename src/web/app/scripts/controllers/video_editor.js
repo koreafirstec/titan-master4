@@ -51,8 +51,11 @@ angular.module('titanApp')
             $scope.position_order = item.position_order;
             $scope.enter_status = true;
             $("#meta_data_editor_btn").css('display', 'block');
-            $("#meta_data_editor_btn").css('left', item.x/(1920/$scope.width_img));
-            $("#meta_data_editor_btn").css('top', item.y/(1080/$scope.height_img));
+            let item_pos = document.getElementById("item_modify_div_" + item.position_order);
+            let left = parseInt(item_pos.style.left, 10);
+            let top = parseInt(item_pos.style.top, 10);
+            $("#meta_data_editor_btn").css('left', left);
+            $("#meta_data_editor_btn").css('top', top);
 //            var api_params = {};
 //            api_params['draw_item_type'] = item.draw_item_type;
 //            api_params['all_detail'] = all_detail
@@ -1925,7 +1928,7 @@ angular.module('titanApp')
         link: function postLink(scope, elem, attrs) {
             let position_order = $(this).data('position');
             elem.resizable({ handles: " n, e, s, w, ne, se, sw, nw"});
-            elem.resizable();
+            // elem.resizable();
             // elem.on('touchstart', function (event) {
             //     console.log(11);
             // });
@@ -1954,7 +1957,7 @@ angular.module('titanApp')
                 newPosH = ui.size.height;
                 scope.check_wid_hei(newPosW, newPosH);
             });
-            elem.on('mouseover',function() {
+            elem.on('mouseover',function(event) {
                 elem.addClass('enter');
             });
             elem.on('mouseleave',function() {
@@ -1972,8 +1975,17 @@ angular.module('titanApp')
                 newPosY = ui.position.top;
                 scope.check_left_top(newPosY, newPosX);
             });
+            elem.on('touchend',function(event,ui) {
+                $("#meta_data_editor_btn").css('display', 'block');
+                let item_pos = document.getElementById(event.target.id);
+                if(item_pos !== null) {
+                    let left = parseInt(item_pos.style.left, 10);
+                    let top = parseInt(item_pos.style.top, 10);
+                    $("#meta_data_editor_btn").css('left', left);
+                    $("#meta_data_editor_btn").css('top', top);
+                }
+            });
             elem.draggable({containment: "#current_modify_editor_img"});
-            elem.draggable();
         }
     }
 }]);
